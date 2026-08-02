@@ -1,0 +1,6 @@
+# Google AdSense Production Authorization File
+# Replace pub-0000000000000000 with your real Google AdSense Publisher ID after approval
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+
+# Third-Party Ad Networks (Adsterra / Monetag / PropellerAds) Placeholders
+# Add additional authorized publisher lines below if needed

@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Navbar from '../components/Navbar';
 import CategoryBar from '../components/CategoryBar';
 import WallpaperCard from '../components/WallpaperCard';
 import WallpaperModal from '../components/WallpaperModal';
+import { HeaderAd, InFeedAd, FooterAd } from '../components/AdComponents';
 import { INITIAL_WALLPAPERS, Wallpaper } from '../data/wallpapers';
+import { getStoredFavorites, saveStoredFavorites } from '../lib/db';
 import { Sparkles, Flame, Search, ShieldCheck, FileText, Info, Compass, AlertCircle } from 'lucide-react';
 
 export default function Home() {
@@ -16,11 +18,21 @@ export default function Home() {
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null);
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
 
-  // Toggle favorite wallpapers
+  // Load persistent favorites from localStorage on component mount
+  useEffect(() => {
+    const savedFavs = getStoredFavorites();
+    if (savedFavs && savedFavs.length > 0) {
+      setFavoriteIds(savedFavs);
+    }
+  }, []);
+
+  // Toggle favorite wallpapers and save to localStorage
   const handleFavoriteToggle = (id: string) => {
-    setFavoriteIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+    setFavoriteIds((prev) => {
+      const updated = prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id];
+      saveStoredFavorites(updated);
+      return updated;
+    });
   };
 
   // Filter wallpapers based on search, category, and AI toggle
@@ -56,8 +68,13 @@ export default function Home() {
         favoriteCount={favoriteIds.length}
       />
 
+      {/* Universal Header Ad Placement */}
+      <div className="pt-4">
+        <HeaderAd />
+      </div>
+
       {/* Hero Section */}
-      <section className="relative py-12 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center overflow-hidden">
+      <section className="relative py-10 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center overflow-hidden">
         {/* Glow Effects Background */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-indigo-600/15 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute top-1/3 left-1/4 w-[300px] h-[200px] bg-purple-600/10 blur-[100px] rounded-full pointer-events-none" />
@@ -106,11 +123,6 @@ export default function Home() {
           onToggleAiOnly={() => setShowAiOnly(!showAiOnly)}
         />
 
-        {/* Top AdSense Banner Placeholder */}
-        <div className="w-full my-6 h-20 rounded-2xl bg-slate-900/50 border border-dashed border-slate-800/80 flex items-center justify-center text-xs text-slate-600 uppercase tracking-widest">
-          <span>Advertisement Area (Header AdSense Banner)</span>
-        </div>
-
         {/* Section Title & Results Info */}
         <div className="flex items-center justify-between my-6 border-b border-slate-800/60 pb-4">
           <div className="flex items-center gap-2">
@@ -124,18 +136,25 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Wallpapers Grid */}
+        {/* Wallpapers Grid with Integrated Native Ads */}
         {filteredWallpapers.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredWallpapers.map((wallpaper) => (
-              <WallpaperCard
-                key={wallpaper.id}
-                wallpaper={wallpaper}
-                onSelect={setSelectedWallpaper}
-                onFavoriteToggle={handleFavoriteToggle}
-                isFavorite={favoriteIds.includes(wallpaper.id)}
-              />
-            ))}
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredWallpapers.map((wallpaper, index) => (
+                <React.Fragment key={wallpaper.id}>
+                  <WallpaperCard
+                    wallpaper={wallpaper}
+                    onSelect={setSelectedWallpaper}
+                    onFavoriteToggle={handleFavoriteToggle}
+                    isFavorite={favoriteIds.includes(wallpaper.id)}
+                  />
+                  {/* Insert In-Feed Ad Unit After Every 3rd Card */}
+                  {(index + 1) % 3 === 0 && (
+                    <InFeedAd className="col-span-1" />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="py-20 text-center space-y-4 rounded-3xl bg-slate-900/30 border border-slate-800">
@@ -156,6 +175,11 @@ export default function Home() {
             </button>
           </div>
         )}
+
+        {/* Footer Ad Placement */}
+        <div className="pt-8">
+          <FooterAd />
+        </div>
       </main>
 
       {/* Fullscreen Wallpaper Popup Modal */}

@@ -1,0 +1,14 @@
+name: Daily Wallpaper Auto Import
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  auto-import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Auto Import Cron API
+        run: |
+          curl -X GET "https://ai-wallpaper-website.vercel.app/api/cron/auto-import"
