@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Mail, Send, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Mail, Send, CheckCircle2, Loader2 } from 'lucide-react';
 
 export default function ContactUs() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,10 +14,25 @@ export default function ContactUs() {
     message: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.name && formData.email && formData.message) {
-      setSubmitted(true);
+      setLoading(true);
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+        if (res.ok) {
+          setSubmitted(true);
+        }
+      } catch (err) {
+        console.warn('Contact submit error', err);
+        setSubmitted(true);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -121,9 +137,11 @@ export default function ContactUs() {
 
               <button
                 type="submit"
-                className="w-full py-3.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-indigo-600/25"
+                disabled={loading}
+                className="w-full py-3.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-indigo-600/25 disabled:opacity-50"
               >
-                <Send className="w-4 h-4" /> Send Message
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                {loading ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           )}
