@@ -27,7 +27,7 @@ export async function getWallpapersFromDb(): Promise<Wallpaper[]> {
       }
     }
   } catch (err) {
-    console.warn('Supabase DB fetch error, returning empty array', err);
+    console.warn('Supabase DB fetch error', err);
   }
   return [];
 }
@@ -37,8 +37,7 @@ export async function saveWallpapersToDb(wallpapers: ImportedWallpaper[]): Promi
   try {
     if (SUPABASE_URL && SUPABASE_ANON_KEY && wallpapers.length > 0) {
       const cleanUrl = SUPABASE_URL.replace(/\/$/, '');
-      
-      // Clean wallpapers array to match column schema
+
       const formattedWallpapers = wallpapers.map((item) => ({
         id: String(item.id),
         title: String(item.title),
@@ -60,7 +59,6 @@ export async function saveWallpapersToDb(wallpapers: ImportedWallpaper[]): Promi
         source: item.source || 'Pollinations-AI',
       }));
 
-      // Supabase Upsert REST API
       const res = await fetch(`${cleanUrl}/rest/v1/wallpapers?on_conflict=id`, {
         method: 'POST',
         headers: {
