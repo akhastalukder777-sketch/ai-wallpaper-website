@@ -19,15 +19,17 @@ export default function WallpaperCard({
 }: WallpaperCardProps) {
   const [downloadCount, setDownloadCount] = useState(wallpaper.downloads);
   const [isHovered, setIsHovered] = useState(false);
+  const [imgSrc, setImgSrc] = useState(
+    wallpaper.thumbnailUrl || wallpaper.imageUrl || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop'
+  );
 
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
     setDownloadCount((prev) => prev + 1);
 
-    // Trigger image download
     const link = document.createElement('a');
-    link.href = wallpaper.imageUrl;
-    link.download = `${wallpaper.slug}-4k-wallpaper.jpg`;
+    link.href = wallpaper.imageUrl || imgSrc;
+    link.download = `${wallpaper.slug || 'wallpaper'}-4k.jpg`;
     link.target = '_blank';
     document.body.appendChild(link);
     link.click();
@@ -51,9 +53,13 @@ export default function WallpaperCard({
       {/* Image Container */}
       <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-slate-900">
         <img
-          src={wallpaper.thumbnailUrl}
+          src={imgSrc}
           alt={wallpaper.title}
           loading="lazy"
+          onError={() => {
+            // Instant HD Fallback if AI image generation streams slowly
+            setImgSrc('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop');
+          }}
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
         />
 
@@ -100,7 +106,7 @@ export default function WallpaperCard({
 
         {/* Resolution Tag */}
         <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded bg-slate-950/80 backdrop-blur-md border border-slate-800 text-[10px] font-mono text-slate-400">
-          {wallpaper.resolution}
+          {wallpaper.resolution || '3840 x 2160'}
         </div>
       </div>
 
@@ -120,7 +126,7 @@ export default function WallpaperCard({
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1 hover:text-slate-200">
               <Eye className="w-3.5 h-3.5 text-slate-500" />
-              {wallpaper.views.toLocaleString()}
+              {(wallpaper.views || 100).toLocaleString()}
             </span>
             <span className="flex items-center gap-1 hover:text-slate-200">
               <Download className="w-3.5 h-3.5 text-slate-500" />

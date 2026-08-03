@@ -24,7 +24,13 @@ export default function Home() {
     const loadInitialData = async () => {
       const dbWallpapers = await getWallpapersFromDb();
       if (dbWallpapers && dbWallpapers.length > 0) {
-        setWallpapers(dbWallpapers);
+        // Merge Supabase DB wallpapers with initial fallback wallpapers
+        const merged = [...dbWallpapers, ...INITIAL_WALLPAPERS];
+        // Deduplicate by ID
+        const unique = merged.filter((item, index, self) =>
+          index === self.findIndex((t) => t.id === item.id)
+        );
+        setWallpapers(unique);
       } else {
         setWallpapers(INITIAL_WALLPAPERS);
       }
