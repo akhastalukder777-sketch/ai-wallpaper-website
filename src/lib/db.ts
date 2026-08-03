@@ -1,4 +1,4 @@
-// Production Database Persistence Engine (Supabase Client with Local Storage Fallback)
+// Production Database Persistence Engine (Supabase Client)
 import { ImportedWallpaper } from './wallpaperImporter';
 import { Wallpaper } from '../data/wallpapers';
 
@@ -9,8 +9,9 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 export async function getWallpapersFromDb(): Promise<Wallpaper[]> {
   try {
     if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+      const cleanUrl = SUPABASE_URL.replace(/\/$/, '');
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/wallpapers?select=*&order=createdAt.desc`,
+        `${cleanUrl}/rest/v1/wallpapers?select=*&order=createdAt.desc`,
         {
           headers: {
             'apikey': SUPABASE_ANON_KEY,
@@ -31,12 +32,36 @@ export async function getWallpapersFromDb(): Promise<Wallpaper[]> {
   return [];
 }
 
-// Save Wallpapers to Persistence Engine
+// Save Wallpapers to Supabase Persistence Engine
 export async function saveWallpapersToDb(wallpapers: ImportedWallpaper[]): Promise<boolean> {
   try {
-    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
-      // Supabase persistent insert
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/wallpapers`, {
+    if (SUPABASE_URL && SUPABASE_ANON_KEY && wallpapers.length > 0) {
+      const cleanUrl = SUPABASE_URL.replace(/\/$/, '');
+      
+      // Clean wallpapers array to match column schema
+      const formattedWallpapers = wallpapers.map((item) => ({
+        id: String(item.id),
+        title: String(item.title),
+        slug: String(item.slug),
+        description: item.description || '',
+        category: String(item.category),
+        tags: Array.isArray(item.tags) ? item.tags : [item.category],
+        imageUrl: String(item.imageUrl),
+        thumbnailUrl: String(item.thumbnailUrl),
+        resolution: item.resolution || '3840 x 2160',
+        views: Number(item.views) || 100,
+        downloads: Number(item.downloads) || 10,
+        likes: Number(item.likes) || 5,
+        isFeatured: Boolean(item.isFeatured),
+        isTrending: Boolean(item.isTrending),
+        isAiGenerated: Boolean(item.isAiGenerated),
+        createdAt: item.createdAt || new Date().toISOString().split('T')[0],
+        prompt: item.prompt || null,
+        source: item.source || 'Pollinations-AI',
+      }));
+
+      // Supabase Upsert REST API
+      const res = await fetch(`${cleanUrl}/rest/v1/wallpapers?on_conflict=id`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,14 +69,15 @@ export async function saveWallpapersToDb(wallpapers: ImportedWallpaper[]): Promi
           'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
           'Prefer': 'resolution=merge-duplicates',
         },
-        body: JSON.stringify(wallpapers),
+        body: JSON.stringify(formattedWallpapers),
       });
+
       return res.ok;
     }
   } catch (err) {
-    console.warn('Supabase DB save error, using fallback state', err);
+    console.error('Supabase DB save catch error:', err);
   }
-  return true;
+  return false;
 }
 
 // Favorites LocalStorage Persistence Helpers
