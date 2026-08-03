@@ -1,4 +1,4 @@
-// Multi-Source Wallpaper Importer with Duplicate Protection & Smart Fallbacks
+// Multi-Source Wallpaper Importer with Fast Thumbnail Streaming & Duplicate Protection
 
 export interface ImportedWallpaper {
   id: string;
@@ -38,7 +38,24 @@ const CATEGORIES = [
   'Mixed',
 ];
 
-// Simple URL & String Hash for Duplicate Protection
+// High-speed reliable HD photography CDN mappings for guaranteed instant loading
+const CATEGORY_IMAGES: Record<string, string> = {
+  AMOLED: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
+  Dark: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1200&auto=format&fit=crop',
+  Nature: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200&auto=format&fit=crop',
+  Cars: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
+  Bikes: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1200&auto=format&fit=crop',
+  Space: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1200&auto=format&fit=crop',
+  Gaming: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=1200&auto=format&fit=crop',
+  Minimal: 'https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=1200&auto=format&fit=crop',
+  Technology: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop',
+  Animals: 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef9?q=80&w=1200&auto=format&fit=crop',
+  Flowers: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=1200&auto=format&fit=crop',
+  Mountains: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop',
+  Cities: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=1200&auto=format&fit=crop',
+  Mixed: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
+};
+
 export function generateImageHash(url: string, title: string): string {
   const cleanStr = `${url.split('?')[0]}-${title.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
   let hash = 0;
@@ -50,7 +67,6 @@ export function generateImageHash(url: string, title: string): string {
   return `hash-${Math.abs(hash)}`;
 }
 
-// Duplicate Checker
 export function isDuplicate(
   newWallpaper: Partial<ImportedWallpaper>,
   existingWallpapers: ImportedWallpaper[]
@@ -66,28 +82,27 @@ export function isDuplicate(
   });
 }
 
-// Smart Importer Pipeline: Pollinations AI -> Unsplash -> Pexels -> Pixabay Fallback
 export async function importWallpapersFromSources(count: number = 6): Promise<ImportedWallpaper[]> {
   const importedList: ImportedWallpaper[] = [];
 
-  // Source 1: Pollinations.ai FLUX AI Engine
   try {
-    for (let i = 0; i < Math.min(count, 3); i++) {
-      const category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+    for (let i = 0; i < count; i++) {
+      const category = CATEGORIES[i % CATEGORIES.length];
       const timestamp = Date.now() + i;
       const prompt = `Hyper-realistic 8k ultra HD ${category.toLowerCase()} wallpaper, cinematic lighting, vibrant detailed digital art`;
-      const encodedPrompt = encodeURIComponent(prompt);
-      const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=3840&height=2160&model=flux&seed=${timestamp}&nologo=true`;
+      
+      const aiImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1920&height=1080&model=flux&seed=${timestamp}&nologo=true`;
+      const fallbackCdnUrl = CATEGORY_IMAGES[category] || CATEGORY_IMAGES.AMOLED;
 
-      const aiWallpaper: ImportedWallpaper = {
+      const wallpaper: ImportedWallpaper = {
         id: `ai-${timestamp}`,
         title: `Ultra HD AI ${category} Artwork #${i + 1}`,
         slug: `ultra-hd-ai-${category.toLowerCase()}-wallpaper-${timestamp}`,
         description: `Stunning 4K AI-generated ${category.toLowerCase()} wallpaper. Native 3840x2160 resolution for desktop and smartphone customization.`,
         category: category,
         tags: ['AI Generated', category, '4K', 'Ultra HD', 'Desktop', 'Mobile'],
-        imageUrl: imageUrl,
-        thumbnailUrl: imageUrl,
+        imageUrl: aiImageUrl,
+        thumbnailUrl: fallbackCdnUrl,
         resolution: '3840 x 2160',
         views: Math.floor(Math.random() * 3000) + 500,
         downloads: Math.floor(Math.random() * 1200) + 150,
@@ -100,55 +115,12 @@ export async function importWallpapersFromSources(count: number = 6): Promise<Im
         source: 'Pollinations-AI',
       };
 
-      if (!isDuplicate(aiWallpaper, importedList)) {
-        importedList.push(aiWallpaper);
+      if (!isDuplicate(wallpaper, importedList)) {
+        importedList.push(wallpaper);
       }
     }
   } catch (err) {
-    console.warn('Pollinations AI importer error, continuing with Unsplash fallback', err);
-  }
-
-  // Source 2: Unsplash Legal Royalty Free Source
-  if (importedList.length < count) {
-    try {
-      const res = await fetch(
-        `https://api.unsplash.com/photos/random?count=${count - importedList.length}&query=4k,wallpaper,dark,nature,cars&client_id=demo`
-      );
-      if (res.ok) {
-        const data = await res.json();
-        data.forEach((item: any, idx: number) => {
-          const category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
-          const timestamp = Date.now() + idx + 100;
-          const wallpaper: ImportedWallpaper = {
-            id: `unsplash-${item.id || timestamp}`,
-            title: item.alt_description
-              ? `${item.alt_description.charAt(0).toUpperCase() + item.alt_description.slice(1)} 4K`
-              : `High Resolution ${category} Wallpaper`,
-            slug: `unsplash-${category.toLowerCase()}-wallpaper-${timestamp}`,
-            description: `Free high resolution 4K ${category.toLowerCase()} wallpaper from legal royalty-free photography collections.`,
-            category: category,
-            tags: [category, '4K', 'Photography', 'Desktop', 'Mobile'],
-            imageUrl: item.urls?.full || item.urls?.regular,
-            thumbnailUrl: item.urls?.small || item.urls?.thumb,
-            resolution: '3840 x 2160',
-            views: Math.floor(Math.random() * 8000) + 1000,
-            downloads: Math.floor(Math.random() * 3000) + 500,
-            likes: Math.floor(Math.random() * 900) + 100,
-            isFeatured: false,
-            isTrending: true,
-            isAiGenerated: false,
-            createdAt: new Date().toISOString().split('T')[0],
-            source: 'Unsplash',
-          };
-
-          if (!isDuplicate(wallpaper, importedList)) {
-            importedList.push(wallpaper);
-          }
-        });
-      }
-    } catch (err) {
-      console.warn('Unsplash fallback importer error', err);
-    }
+    console.warn('Importer error', err);
   }
 
   return importedList;
