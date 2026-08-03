@@ -8,7 +8,7 @@ import WallpaperCard from '../components/WallpaperCard';
 import WallpaperModal from '../components/WallpaperModal';
 import { HeaderAd, InFeedAd, FooterAd } from '../components/AdComponents';
 import { INITIAL_WALLPAPERS, Wallpaper } from '../data/wallpapers';
-import { getStoredFavorites, saveStoredFavorites } from '../lib/db';
+import { getStoredFavorites, saveStoredFavorites, getWallpapersFromDb } from '../lib/db';
 import { Sparkles, Flame, Search, ShieldCheck, FileText, Info, Compass, AlertCircle } from 'lucide-react';
 
 export default function Home() {
@@ -17,13 +17,25 @@ export default function Home() {
   const [showAiOnly, setShowAiOnly] = useState(false);
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null);
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [wallpapers, setWallpapers] = useState<Wallpaper[]>(INITIAL_WALLPAPERS);
 
-  // Load persistent favorites from localStorage on component mount
+  // Load Wallpapers from Supabase DB & persistent favorites on mount
   useEffect(() => {
-    const savedFavs = getStoredFavorites();
-    if (savedFavs && savedFavs.length > 0) {
-      setFavoriteIds(savedFavs);
-    }
+    const loadInitialData = async () => {
+      const dbWallpapers = await getWallpapersFromDb();
+      if (dbWallpapers && dbWallpapers.length > 0) {
+        setWallpapers(dbWallpapers);
+      } else {
+        setWallpapers(INITIAL_WALLPAPERS);
+      }
+
+      const savedFavs = getStoredFavorites();
+      if (savedFavs && savedFavs.length > 0) {
+        setFavoriteIds(savedFavs);
+      }
+    };
+
+    loadInitialData();
   }, []);
 
   // Toggle favorite wallpapers and save to localStorage
@@ -37,7 +49,7 @@ export default function Home() {
 
   // Filter wallpapers based on search, category, and AI toggle
   const filteredWallpapers = useMemo(() => {
-    return INITIAL_WALLPAPERS.filter((wallpaper) => {
+    return wallpapers.filter((wallpaper) => {
       // Category filter
       if (selectedCategory !== 'All' && wallpaper.category !== selectedCategory) {
         return false;
@@ -49,15 +61,15 @@ export default function Home() {
       // Search query filter
       if (searchQuery.trim() !== '') {
         const query = searchQuery.toLowerCase();
-        const matchesTitle = wallpaper.title.toLowerCase().includes(query);
-        const matchesDescription = wallpaper.description.toLowerCase().includes(query);
-        const matchesCategory = wallpaper.category.toLowerCase().includes(query);
-        const matchesTags = wallpaper.tags.some((tag) => tag.toLowerCase().includes(query));
+        const matchesTitle = wallpaper.title ? wallpaper.title.toLowerCase().includes(query) : false;
+        const matchesDescription = wallpaper.description ? wallpaper.description.toLowerCase().includes(query) : false;
+        const matchesCategory = wallpaper.category ? wallpaper.category.toLowerCase().includes(query) : false;
+        const matchesTags = wallpaper.tags ? wallpaper.tags.some((tag) => tag.toLowerCase().includes(query)) : false;
         return matchesTitle || matchesDescription || matchesCategory || matchesTags;
       }
       return true;
     });
-  }, [searchQuery, selectedCategory, showAiOnly]);
+  }, [wallpapers, searchQuery, selectedCategory, showAiOnly]);
 
   return (
     <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col selection:bg-indigo-500 selection:text-white">
