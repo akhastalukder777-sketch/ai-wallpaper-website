@@ -9,7 +9,7 @@ import WallpaperModal from '../components/WallpaperModal';
 import { HeaderAd, InFeedAd, FooterAd } from '../components/AdComponents';
 import { INITIAL_WALLPAPERS, Wallpaper } from '../data/wallpapers';
 import { getStoredFavorites, saveStoredFavorites, getWallpapersFromDb } from '../lib/db';
-import { Sparkles, Flame, Search, ShieldCheck, FileText, Info, Compass, AlertCircle } from 'lucide-react';
+import { Sparkles, Flame, Search, ShieldCheck, FileText, Info, Compass, AlertCircle, ChevronDown } from 'lucide-react';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,13 +18,13 @@ export default function Home() {
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null);
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [wallpapers, setWallpapers] = useState<Wallpaper[]>(INITIAL_WALLPAPERS);
+  const [visibleCount, setVisibleCount] = useState(30);
 
   // Load Wallpapers from Supabase DB & persistent favorites on mount
   useEffect(() => {
     const loadInitialData = async () => {
       const dbWallpapers = await getWallpapersFromDb();
       if (dbWallpapers && dbWallpapers.length > 0) {
-        // Use ONLY database wallpapers when present
         setWallpapers(dbWallpapers);
       } else {
         setWallpapers(INITIAL_WALLPAPERS);
@@ -38,6 +38,11 @@ export default function Home() {
 
     loadInitialData();
   }, []);
+
+  // Reset pagination count when category, search, or AI filter changes
+  useEffect(() => {
+    setVisibleCount(30);
+  }, [searchQuery, selectedCategory, showAiOnly]);
 
   // Toggle favorite wallpapers and save to localStorage
   const handleFavoriteToggle = (id: string) => {
@@ -71,6 +76,11 @@ export default function Home() {
       return true;
     });
   }, [wallpapers, searchQuery, selectedCategory, showAiOnly]);
+
+  // Slice displayed wallpapers based on Load More visible count
+  const displayedWallpapers = useMemo(() => {
+    return filteredWallpapers.slice(0, visibleCount);
+  }, [filteredWallpapers, visibleCount]);
 
   return (
     <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col selection:bg-indigo-500 selection:text-white">
@@ -144,16 +154,16 @@ export default function Home() {
               {selectedCategory === 'All' ? 'Featured Wallpapers' : `${selectedCategory} Wallpapers`}
             </h2>
             <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800/80 text-slate-400 border border-slate-700/50 ml-1">
-              {filteredWallpapers.length}
+              Showing {displayedWallpapers.length} of {filteredWallpapers.length}
             </span>
           </div>
         </div>
 
         {/* Wallpapers Grid with Integrated Native Ads */}
-        {filteredWallpapers.length > 0 ? (
+        {displayedWallpapers.length > 0 ? (
           <div className="space-y-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredWallpapers.map((wallpaper, index) => (
+              {displayedWallpapers.map((wallpaper, index) => (
                 <React.Fragment key={wallpaper.id}>
                   <WallpaperCard
                     wallpaper={wallpaper}
@@ -168,6 +178,22 @@ export default function Home() {
                 </React.Fragment>
               ))}
             </div>
+
+            {/* Load More Button */}
+            {visibleCount < filteredWallpapers.length && (
+              <div className="text-center pt-8">
+                <button
+                  onClick={() => setVisibleCount((prev) => prev + 30)}
+                  className="px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all shadow-lg shadow-indigo-600/30 hover:scale-105 active:scale-95 inline-flex items-center gap-2"
+                >
+                  <span>Load More Wallpapers</span>
+                  <ChevronDown className="w-4 h-4" />
+                  <span className="text-xs bg-indigo-800/80 px-2 py-0.5 rounded-full border border-indigo-400/30 ml-1">
+                    +{filteredWallpapers.length - visibleCount} remaining
+                  </span>
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="py-20 text-center space-y-4 rounded-3xl bg-slate-900/30 border border-slate-800">
