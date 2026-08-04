@@ -31,7 +31,7 @@ export default function Navbar({
             </div>
             <div>
               <span className="text-xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent tracking-tight">
-                AI Wallpapers<span className="text-indigo-500">.</span>
+                Wallpapers<span className="text-indigo-500">.</span>
               </span>
               <span className="hidden sm:block text-[10px] font-medium text-indigo-400 uppercase tracking-widest -mt-1">
                 4K & Ultra HD
@@ -70,12 +70,6 @@ export default function Navbar({
               <Grid className="w-4 h-4 text-indigo-400" />
               Categories
             </a>
-
-            {/* AI Generator Badge */}
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
-              AI Powered
-            </div>
 
             {/* Favorites Icon Button */}
             <button
