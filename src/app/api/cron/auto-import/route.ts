@@ -1,22 +1,24 @@
+
 import { NextResponse } from 'next/server';
 import { importWallpapersFromSources } from '../../../../lib/wallpaperImporter';
 import { saveWallpapersToDb } from '../../../../lib/db';
 
 export async function GET(request: Request) {
   try {
-    // 1. Secret authorization check for production cron jobs
     const { searchParams } = new URL(request.url);
     const secret = searchParams.get('secret');
+    const isVercelCron = request.headers.get('x-vercel-cron') === '1';
     const CRON_SECRET = process.env.CRON_SECRET || 'ai-wallpaper-secret-key';
 
-    if (process.env.NODE_ENV === 'production' && secret !== CRON_SECRET) {
+    // Allow Vercel Cron system header OR valid secret key parameter
+    if (process.env.NODE_ENV === 'production' && !isVercelCron && secret !== CRON_SECRET) {
       return NextResponse.json({ status: 'unauthorized', message: 'Invalid Cron Secret Key' }, { status: 401 });
     }
 
-    // 2. Run multi-source auto-importer (Pollinations AI, Unsplash, Pexels, Pixabay)
+    // Run multi-source auto-importer (Pollinations AI, Unsplash, Pexels, Pixabay)
     const importedWallpapers = await importWallpapersFromSources(6);
 
-    // 3. Save permanently to DB Persistence Engine
+    // Save permanently to Supabase DB Persistence Engine
     await saveWallpapersToDb(importedWallpapers);
 
     return NextResponse.json({
