@@ -1,8 +1,9 @@
 import { MetadataRoute } from 'next';
+import { getWallpapersFromDb } from '../lib/db';
 import { INITIAL_WALLPAPERS } from '../data/wallpapers';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://aiwallpapershub.com';
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai-wallpaper-website.vercel.app';
 
   // Base essential pages
   const routes = [
@@ -19,10 +20,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === '' ? 1.0 : 0.6,
   }));
 
-  // Add individual wallpapers to sitemap for maximum Google Image SEO
-  const wallpaperRoutes = INITIAL_WALLPAPERS.map((wallpaper) => ({
-    url: `${baseUrl}/#${wallpaper.slug}`,
-    lastModified: new Date(wallpaper.createdAt),
+  // Fetch wallpapers for dynamic sitemap indexing
+  const dbWallpapers = await getWallpapersFromDb();
+  const wallpapers = dbWallpapers.length > 0 ? dbWallpapers : INITIAL_WALLPAPERS;
+
+  const wallpaperRoutes = wallpapers.map((wallpaper) => ({
+    url: `${baseUrl}/?wallpaper=${wallpaper.slug || wallpaper.id}`,
+    lastModified: new Date(wallpaper.createdAt || Date.now()),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
