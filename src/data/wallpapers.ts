@@ -20,6 +20,7 @@ export interface Wallpaper {
 
 export const CATEGORIES = [
   'All',
+  'Anime',
   'AMOLED',
   'Dark',
   'Nature',
