@@ -89,6 +89,8 @@ export default function Home() {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         favoriteCount={favoriteIds.length}
+        activeCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
       />
 
       {/* Universal Header Ad Placement */}

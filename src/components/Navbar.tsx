@@ -2,20 +2,26 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Search, Sparkles, Heart, Menu, X, Flame, Grid } from 'lucide-react';
+import { Search, Sparkles, Heart, Menu, X, Flame, Grid, ChevronDown } from 'lucide-react';
+import { CATEGORIES } from '../data/wallpapers';
 
 interface NavbarProps {
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
   favoriteCount?: number;
+  activeCategory?: string;
+  onSelectCategory?: (category: string) => void;
 }
 
 export default function Navbar({
   searchQuery = '',
   onSearchChange,
   favoriteCount = 0,
+  activeCategory = 'All',
+  onSelectCategory,
 }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 glass-effect border-b border-slate-800/60 transition-all duration-300">
@@ -63,13 +69,43 @@ export default function Navbar({
               Trending
             </a>
 
-            <a
-              href="#categories"
-              className="hidden lg:flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all"
-            >
-              <Grid className="w-4 h-4 text-indigo-400" />
-              Categories
-            </a>
+            {/* Categories Dropdown Toggle */}
+            <div className="relative hidden lg:block">
+              <button
+                onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
+                className="flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all"
+              >
+                <Grid className="w-4 h-4 text-indigo-400" />
+                Categories
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isCategoryDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Categories Dropdown Menu */}
+              {isCategoryDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-60 bg-slate-900/95 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-xl p-2 z-50 grid grid-cols-2 gap-1 animate-fade-in">
+                  {CATEGORIES.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        if (onSelectCategory) onSelectCategory(cat);
+                        setIsCategoryDropdownOpen(false);
+                        const categoriesElement = document.getElementById('categories');
+                        if (categoriesElement) {
+                          categoriesElement.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className={`text-left px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                        activeCategory === cat
+                          ? 'bg-indigo-600 text-white font-semibold shadow-md shadow-indigo-600/30'
+                          : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Favorites Icon Button */}
             <button
@@ -117,14 +153,31 @@ export default function Navbar({
                 <Flame className="w-4 h-4 text-amber-500" />
                 Trending Wallpapers
               </a>
-              <a
-                href="#categories"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800/50 rounded-lg"
-              >
-                <Grid className="w-4 h-4 text-indigo-400" />
-                Browse Categories
-              </a>
+              <div className="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-500">
+                Categories
+              </div>
+              <div className="grid grid-cols-2 gap-1 px-2">
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      if (onSelectCategory) onSelectCategory(cat);
+                      setIsMobileMenuOpen(false);
+                      const categoriesElement = document.getElementById('categories');
+                      if (categoriesElement) {
+                        categoriesElement.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    className={`text-left px-3 py-2 rounded-xl text-xs font-medium ${
+                      activeCategory === cat
+                        ? 'bg-indigo-600 text-white font-semibold'
+                        : 'text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}
