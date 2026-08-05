@@ -88,6 +88,9 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
         />
+         {/* Adsterra Live Popunder Monetization Script */}
+        <script src="https://delvefencescrewdriver.com/81/76/55/817655ea60fd547b547e4fc1f9c49737.js"></script>
+
       </head>
       <body className="antialiased bg-[#090d16] text-slate-100 min-h-screen">
         {children}
