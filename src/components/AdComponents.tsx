@@ -6,7 +6,44 @@ interface AdUnitProps {
   className?: string;
 }
 
-// Banner 300x250 Live Adsterra Script Component
+// 1. Banner 728x90 Live Adsterra Script Component (Header & Footer Leaderboard)
+function Banner728x90() {
+  const adRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (adRef.current && !adRef.current.hasChildNodes()) {
+      try {
+        const confScript = document.createElement('script');
+        confScript.type = 'text/javascript';
+        confScript.innerHTML = `
+          atOptions = {
+            'key' : 'cb9df03cc5821be7ab9bee326d859dca',
+            'format' : 'iframe',
+            'height' : 90,
+            'width' : 728,
+            'params' : {}
+          };
+        `;
+        const adScript = document.createElement('script');
+        adScript.type = 'text/javascript';
+        adScript.src = 'https://delvefencescrewdriver.com/cb9df03cc5821be7ab9bee326d859dca/invoke.js';
+
+        adRef.current.appendChild(confScript);
+        adRef.current.appendChild(adScript);
+      } catch (e) {
+        console.warn('728x90 Adsterra error', e);
+      }
+    }
+  }, []);
+
+  return (
+    <div className="w-full max-w-[728px] h-[90px] mx-auto flex items-center justify-center overflow-hidden rounded-2xl bg-slate-900/40 border border-slate-800/80 my-2">
+      <div ref={adRef} className="w-[728px] h-[90px]"></div>
+    </div>
+  );
+}
+
+// 2. Banner 300x250 Live Adsterra Script Component (Modal & Sidebar)
 function Banner300x250() {
   const adRef = useRef<HTMLDivElement>(null);
 
@@ -43,7 +80,7 @@ function Banner300x250() {
   );
 }
 
-// Native Banner Live Adsterra Script Component
+// 3. Native Banner Live Adsterra Script Component (InFeed Cards)
 function NativeBannerUnit() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -68,16 +105,36 @@ function NativeBannerUnit() {
   );
 }
 
-// 1. Header Ad Unit (Live Adsterra Native Banner)
+// 4. Social Bar Floating Live Adsterra Script
+function SocialBarAd() {
+  useEffect(() => {
+    try {
+      const existingScript = document.getElementById('adsterra-social-bar');
+      if (!existingScript) {
+        const script = document.createElement('script');
+        script.id = 'adsterra-social-bar';
+        script.src = 'https://delvefencescrewdriver.com/4c/93/23/4c9323abd01b9aafb49b65a4bfc4c546.js';
+        script.async = true;
+        document.body.appendChild(script);
+      }
+    } catch (e) {
+      console.warn('Social Bar Adsterra error', e);
+    }
+  }, []);
+
+  return null;
+}
+
+// 1. Header Ad Unit (728x90 Leaderboard Banner)
 export function HeaderAd({ className = '' }: AdUnitProps) {
   return (
     <div className={`max-w-7xl mx-auto px-4 ${className}`}>
-      <NativeBannerUnit />
+      <Banner728x90 />
     </div>
   );
 }
 
-// 2. Sidebar Ad Unit (Live 300x250 Adsterra Banner)
+// 2. Sidebar Ad Unit (300x250 Square Banner)
 export function SidebarAd({ className = '' }: AdUnitProps) {
   return (
     <div className={`my-2 ${className}`}>
@@ -86,7 +143,7 @@ export function SidebarAd({ className = '' }: AdUnitProps) {
   );
 }
 
-// 3. InFeed Grid Ad Unit (Live Adsterra Native Banner)
+// 3. InFeed Grid Ad Unit (Native Sponsored Banner Card)
 export function InFeedAd({ className = '' }: AdUnitProps) {
   return (
     <div className={className}>
@@ -95,7 +152,7 @@ export function InFeedAd({ className = '' }: AdUnitProps) {
   );
 }
 
-// 4. Modal Ad Unit (Live 300x250 Adsterra Banner inside 4K Wallpaper Popup)
+// 4. Modal Ad Unit (300x250 Square Banner inside 4K Wallpaper Popup)
 export function ModalAd({ className = '' }: AdUnitProps) {
   return (
     <div className={`my-2 ${className}`}>
@@ -104,11 +161,12 @@ export function ModalAd({ className = '' }: AdUnitProps) {
   );
 }
 
-// 5. Footer Ad Unit (Live Adsterra Native Banner)
+// 5. Footer Ad Unit (728x90 Leaderboard Banner + Floating Social Bar)
 export function FooterAd({ className = '' }: AdUnitProps) {
   return (
     <div className={`max-w-7xl mx-auto px-4 ${className}`}>
-      <NativeBannerUnit />
+      <Banner728x90 />
+      <SocialBarAd />
     </div>
   );
 }
