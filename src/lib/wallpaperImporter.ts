@@ -1,4 +1,4 @@
-// Multi-Source Wallpaper Importer with Wallpapers.com Anime API Integration
+// Multi-Source Wallpaper Importer with Enhanced Anime & Multi-Category Pipeline
 
 export interface ImportedWallpaper {
   id: string;
@@ -39,6 +39,55 @@ const CATEGORIES = [
   'Mixed',
 ];
 
+const CATEGORY_IMAGES: Record<string, string[]> = {
+  Anime: [
+    'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1000&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=1000&auto=format&fit=crop',
+  ],
+  AMOLED: [
+    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Dark: [
+    'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Nature: [
+    'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Cars: [
+    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Bikes: [
+    'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Space: [
+    'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Gaming: [
+    'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Minimal: [
+    'https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Technology: [
+    'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Animals: [
+    'https://images.unsplash.com/photo-1564349683136-77e08dba1ef9?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Flowers: [
+    'https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Mountains: [
+    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Cities: [
+    'https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=1000&auto=format&fit=crop',
+  ],
+  Mixed: [
+    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1000&auto=format&fit=crop',
+  ],
+};
+
 export function generateImageHash(url: string, title: string): string {
   const cleanStr = `${url.split('?')[0]}-${title.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
   let hash = 0;
@@ -68,7 +117,7 @@ export function isDuplicate(
   });
 }
 
-// Smart Importer Engine: Wallpapers.com (Anime API) -> Pexels -> Pixabay -> Pollinations AI
+// Smart Importer Engine: Wallpapers.com (Anime) -> Pexels -> Pixabay -> Pollinations AI
 export async function importWallpapersFromSources(count: number = 30): Promise<ImportedWallpaper[]> {
   const importedList: ImportedWallpaper[] = [];
   const PEXELS_KEY = process.env.PEXELS_API_KEY;
@@ -77,7 +126,10 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
   // Source 1: Wallpapers.com Free API (Exclusively for Anime Wallpapers)
   try {
     const res = await fetch('https://wallpapers.com/api/v1/keyword/anime?limit=15', {
-      headers: { 'Accept': 'application/json' },
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
       cache: 'no-store',
     });
     
@@ -161,7 +213,7 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
     }
   }
 
-  // Source 3: Pollinations AI Generation Engine
+  // Source 3: Pollinations AI Generation Engine (Guaranteed Category Match)
   if (importedList.length < count) {
     try {
       const needed = count - importedList.length;
@@ -169,7 +221,9 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
         const category = CATEGORIES[i % CATEGORIES.length];
         const timestamp = Date.now() + i;
         const seed = Math.floor(Math.random() * 900000) + 100000;
-        const prompt = `Hyper-realistic 8k ultra HD ${category.toLowerCase()} wallpaper, cinematic lighting, vibrant detailed digital art, seed ${seed}`;
+        const prompt = category === 'Anime'
+          ? `Masterpiece 8k ultra HD anime style wallpaper, vibrant anime artwork, cinematic lighting, seed ${seed}`
+          : `Hyper-realistic 8k ultra HD ${category.toLowerCase()} wallpaper, cinematic lighting, vibrant detailed digital art, seed ${seed}`;
         
         const aiImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1920&height=1080&model=flux&seed=${seed}&nologo=true`;
 
