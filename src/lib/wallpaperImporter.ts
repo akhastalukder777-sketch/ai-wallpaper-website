@@ -1,4 +1,4 @@
-// Multi-Source Wallpaper Importer with 100% Accurate Category Matching
+// Maximum Daily Multi-Source Importer with Category-Exact Matching
 
 export interface ImportedWallpaper {
   id: string;
@@ -18,7 +18,7 @@ export interface ImportedWallpaper {
   isAiGenerated: boolean;
   createdAt: string;
   prompt?: string;
-  source: 'Unsplash' | 'Pexels' | 'Pixabay' | 'Wallpapers.com';
+  source: 'Unsplash' | 'Pexels' | 'Pixabay' | 'Pollinations-AI' | 'Wallpapers.com';
 }
 
 const CATEGORIES = [
@@ -39,7 +39,6 @@ const CATEGORIES = [
   'Mixed',
 ];
 
-// Specific search keywords for each category to guarantee 100% accurate image content
 const CATEGORY_SEARCH_QUERIES: Record<string, string> = {
   Anime: 'anime wallpaper 4k',
   AMOLED: 'amoled dark OLED black 4k',
@@ -87,7 +86,7 @@ export function isDuplicate(
   });
 }
 
-// 100% Accurate Importer Engine: Category-Specific Pexels/Pixabay Queries
+// Category-Exact Importer Engine
 export async function importWallpapersFromSources(count: number = 30): Promise<ImportedWallpaper[]> {
   const importedList: ImportedWallpaper[] = [];
   const PEXELS_KEY = process.env.PEXELS_API_KEY;
@@ -96,10 +95,12 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
   for (let i = 0; i < count; i++) {
     const category = CATEGORIES[i % CATEGORIES.length];
     const searchQuery = CATEGORY_SEARCH_QUERIES[category] || `${category} wallpaper 4k`;
-    const randomPage = Math.floor(Math.random() * 40) + 1;
+    const randomPage = Math.floor(Math.random() * 50) + 1;
+    const timestamp = Date.now() + i + Math.floor(Math.random() * 10000);
+    const seed = Math.floor(Math.random() * 900000) + 100000;
     let imported = false;
 
-    // Special Source for Anime Category: Wallpapers.com API
+    // Anime Category Special Handling via Wallpapers.com API
     if (category === 'Anime' && !imported) {
       try {
         const res = await fetch(`https://wallpapers.com/api/v1/keyword/anime?limit=10`, {
@@ -114,12 +115,12 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
           const items = Array.isArray(data) ? data : (data.wallpapers || data.data || []);
           const item = items[i % (items.length || 1)];
           if (item && (item.high || item.thumb)) {
-            const itemId = item.id || Math.floor(Math.random() * 900000) + 100000;
-            const rawTitle = item.title || item.alt || 'Anime 4K Ultra HD Wallpaper';
+            const itemId = item.id || seed;
+            const rawTitle = item.title || item.alt || 'Anime Ultra HD 4K Wallpaper';
             const wallpaper: ImportedWallpaper = {
-              id: `wpc-anime-${itemId}`,
+              id: `wpc-${itemId}-${timestamp}`,
               title: rawTitle.length > 55 ? `${rawTitle.slice(0, 52)}...` : rawTitle,
-              slug: `wallpaperscom-anime-wallpaper-${itemId}`,
+              slug: `wallpaperscom-anime-wallpaper-${itemId}-${timestamp}`,
               description: `High resolution 4K Anime wallpaper free download.`,
               category: 'Anime',
               tags: ['Anime', '4K', 'Ultra HD', 'Desktop', 'Wallpapers.com'],
@@ -147,7 +148,7 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
       }
     }
 
-    // Source for Photography Categories: Pexels API (Category Specific)
+    // Pexels API Category Search
     if (PEXELS_KEY && !imported) {
       try {
         const res = await fetch(
@@ -160,9 +161,9 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
           if (photo) {
             const altTitle = photo.alt && photo.alt.trim().length > 3 ? photo.alt.trim() : `${category} 4K Ultra HD Photography`;
             const wallpaper: ImportedWallpaper = {
-              id: `pexels-${photo.id}`,
-              title: altTitle.length > 50 ? `${altTitle.slice(0, 47)}...` : altTitle,
-              slug: `pexels-${category.toLowerCase()}-wallpaper-${photo.id}`,
+              id: `pexels-${photo.id}-${timestamp}`,
+              title: altTitle.length > 50 ? `${altTitle.slice(0, 45)}... #${seed.toString().slice(-3)}` : `${altTitle} #${seed.toString().slice(-3)}`,
+              slug: `pexels-${category.toLowerCase()}-wallpaper-${photo.id}-${timestamp}`,
               description: `High resolution 4K ${category.toLowerCase()} wallpaper free download from Pexels.`,
               category: category,
               tags: [category, '4K', 'Photography', 'Desktop', 'Pexels'],
@@ -186,11 +187,11 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
           }
         }
       } catch (err) {
-        console.warn('Pexels category search error', err);
+        console.warn('Pexels query error', err);
       }
     }
 
-    // Source for Photography Categories: Pixabay API (Category Specific)
+    // Pixabay API Category Search
     if (PIXABAY_KEY && !imported) {
       try {
         const res = await fetch(
@@ -202,9 +203,9 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
           if (item) {
             const tagsTitle = item.tags ? item.tags.split(',')[0] : `${category} 4K Fine Art`;
             const wallpaper: ImportedWallpaper = {
-              id: `pixabay-${item.id}`,
-              title: `${tagsTitle.charAt(0).toUpperCase() + tagsTitle.slice(1)} 4K`,
-              slug: `pixabay-${category.toLowerCase()}-wallpaper-${item.id}`,
+              id: `pixabay-${item.id}-${timestamp}`,
+              title: `${tagsTitle.charAt(0).toUpperCase() + tagsTitle.slice(1)} 4K #${seed.toString().slice(-3)}`,
+              slug: `pixabay-${category.toLowerCase()}-wallpaper-${item.id}-${timestamp}`,
               description: `High resolution 4K ${category.toLowerCase()} wallpaper free download from Pixabay.`,
               category: category,
               tags: [category, '4K', 'Photography', 'Desktop', 'Pixabay'],
@@ -228,7 +229,7 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
           }
         }
       } catch (err) {
-        console.warn('Pixabay category search error', err);
+        console.warn('Pixabay query error', err);
       }
     }
   }
