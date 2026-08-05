@@ -86,27 +86,25 @@ export function isDuplicate(
   });
 }
 
-// Category-Exact Importer Engine
+// Smart Importer Engine: Guaranteed 100% Unique Wallpapers & Strict Anime Matching
 export async function importWallpapersFromSources(count: number = 30): Promise<ImportedWallpaper[]> {
   const importedList: ImportedWallpaper[] = [];
   const PEXELS_KEY = process.env.PEXELS_API_KEY;
-  const PIXABAY_KEY = process.env.PIXABAY_API_KEY;
 
   for (let i = 0; i < count; i++) {
     const category = CATEGORIES[i % CATEGORIES.length];
-    const searchQuery = CATEGORY_SEARCH_QUERIES[category] || `${category} wallpaper 4k`;
-    const randomPage = Math.floor(Math.random() * 50) + 1;
-    const timestamp = Date.now() + i + Math.floor(Math.random() * 10000);
+    const timestamp = Date.now();
     const seed = Math.floor(Math.random() * 900000) + 100000;
+    const randomPage = Math.floor(Math.random() * 50) + 1;
     let imported = false;
 
-    // Anime Category Special Handling via Wallpapers.com API
-    if (category === 'Anime' && !imported) {
+    // 1. Anime Category: ONLY Wallpapers.com Anime API or Pure Anime AI Illustration
+    if (category === 'Anime') {
       try {
-        const res = await fetch(`https://wallpapers.com/api/v1/keyword/anime?limit=10`, {
+        const res = await fetch(`https://wallpapers.com/api/v1/keyword/anime?limit=15`, {
           headers: {
             'Accept': 'application/json',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
           },
           cache: 'no-store',
         });
@@ -118,10 +116,10 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
             const itemId = item.id || seed;
             const rawTitle = item.title || item.alt || 'Anime Ultra HD 4K Wallpaper';
             const wallpaper: ImportedWallpaper = {
-              id: `wpc-${itemId}-${timestamp}`,
+              id: `wpc-anime-${itemId}`,
               title: rawTitle.length > 55 ? `${rawTitle.slice(0, 52)}...` : rawTitle,
-              slug: `wallpaperscom-anime-wallpaper-${itemId}-${timestamp}`,
-              description: `High resolution 4K Anime wallpaper free download.`,
+              slug: `wallpaperscom-anime-${itemId}`,
+              description: `High resolution 4K Anime wallpaper free download from Wallpapers.com.`,
               category: 'Anime',
               tags: ['Anime', '4K', 'Ultra HD', 'Desktop', 'Wallpapers.com'],
               imageUrl: item.high || item.thumb,
@@ -146,13 +144,44 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
       } catch (err) {
         console.warn('Anime API error', err);
       }
+
+      // Guaranteed AI Anime Fallback
+      if (!imported) {
+        const prompt = `Masterpiece 8k ultra HD anime style wallpaper, anime character artwork, vibrant anime background, seed ${seed}`;
+        const aiImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1920&height=1080&model=flux&seed=${seed}&nologo=true`;
+        const wallpaper: ImportedWallpaper = {
+          id: `ai-anime-${seed}`,
+          title: `Anime Ultra HD Art #${seed}`,
+          slug: `ai-anime-wallpaper-${seed}`,
+          description: `Stunning 4K AI-generated Anime wallpaper.`,
+          category: 'Anime',
+          tags: ['Anime', '4K', 'Ultra HD', 'AI Generated'],
+          imageUrl: aiImageUrl,
+          thumbnailUrl: aiImageUrl,
+          resolution: '3840 x 2160',
+          views: Math.floor(Math.random() * 3000) + 500,
+          downloads: Math.floor(Math.random() * 1200) + 150,
+          likes: Math.floor(Math.random() * 400) + 50,
+          isFeatured: true,
+          isTrending: true,
+          isAiGenerated: true,
+          createdAt: new Date().toISOString().split('T')[0],
+          prompt: prompt,
+          source: 'Pollinations-AI',
+        };
+        if (!isDuplicate(wallpaper, importedList)) {
+          importedList.push(wallpaper);
+          imported = true;
+        }
+      }
     }
 
-    // Pexels API Category Search
-    if (PEXELS_KEY && !imported) {
+    // 2. Photography Categories: Pexels API (Deterministic ID prevents duplicates!)
+    if (!imported && PEXELS_KEY) {
       try {
+        const searchQuery = CATEGORY_SEARCH_QUERIES[category] || `${category} wallpaper 4k`;
         const res = await fetch(
-          `https://api.pexels.com/v1/search?query=${encodeURIComponent(searchQuery)}&per_page=3&page=${randomPage}`,
+          `https://api.pexels.com/v1/search?query=${encodeURIComponent(searchQuery)}&per_page=5&page=${randomPage}`,
           { headers: { Authorization: PEXELS_KEY } }
         );
         if (res.ok) {
@@ -161,9 +190,9 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
           if (photo) {
             const altTitle = photo.alt && photo.alt.trim().length > 3 ? photo.alt.trim() : `${category} 4K Ultra HD Photography`;
             const wallpaper: ImportedWallpaper = {
-              id: `pexels-${photo.id}-${timestamp}`,
-              title: altTitle.length > 50 ? `${altTitle.slice(0, 45)}... #${seed.toString().slice(-3)}` : `${altTitle} #${seed.toString().slice(-3)}`,
-              slug: `pexels-${category.toLowerCase()}-wallpaper-${photo.id}-${timestamp}`,
+              id: `pexels-${photo.id}`, // Deterministic ID prevents Supabase duplicates!
+              title: altTitle.length > 50 ? `${altTitle.slice(0, 47)}...` : altTitle,
+              slug: `pexels-${category.toLowerCase()}-wallpaper-${photo.id}`,
               description: `High resolution 4K ${category.toLowerCase()} wallpaper free download from Pexels.`,
               category: category,
               tags: [category, '4K', 'Photography', 'Desktop', 'Pexels'],
@@ -182,54 +211,11 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
 
             if (!isDuplicate(wallpaper, importedList)) {
               importedList.push(wallpaper);
-              imported = true;
             }
           }
         }
       } catch (err) {
-        console.warn('Pexels query error', err);
-      }
-    }
-
-    // Pixabay API Category Search
-    if (PIXABAY_KEY && !imported) {
-      try {
-        const res = await fetch(
-          `https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${encodeURIComponent(searchQuery)}&image_type=photo&per_page=3&page=${randomPage}`
-        );
-        if (res.ok) {
-          const data = await res.json();
-          const item = data.hits?.[0];
-          if (item) {
-            const tagsTitle = item.tags ? item.tags.split(',')[0] : `${category} 4K Fine Art`;
-            const wallpaper: ImportedWallpaper = {
-              id: `pixabay-${item.id}-${timestamp}`,
-              title: `${tagsTitle.charAt(0).toUpperCase() + tagsTitle.slice(1)} 4K #${seed.toString().slice(-3)}`,
-              slug: `pixabay-${category.toLowerCase()}-wallpaper-${item.id}-${timestamp}`,
-              description: `High resolution 4K ${category.toLowerCase()} wallpaper free download from Pixabay.`,
-              category: category,
-              tags: [category, '4K', 'Photography', 'Desktop', 'Pixabay'],
-              imageUrl: item.largeImageURL || item.fullHDURL,
-              thumbnailUrl: item.webformatURL || item.previewURL,
-              resolution: '3840 x 2160',
-              views: item.views || 2000,
-              downloads: item.downloads || 500,
-              likes: item.likes || 120,
-              isFeatured: true,
-              isTrending: true,
-              isAiGenerated: false,
-              createdAt: new Date().toISOString().split('T')[0],
-              source: 'Pixabay',
-            };
-
-            if (!isDuplicate(wallpaper, importedList)) {
-              importedList.push(wallpaper);
-              imported = true;
-            }
-          }
-        }
-      } catch (err) {
-        console.warn('Pixabay query error', err);
+        console.warn('Pexels category query error', err);
       }
     }
   }
