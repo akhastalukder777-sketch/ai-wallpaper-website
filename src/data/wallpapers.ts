@@ -34,6 +34,13 @@ export const CATEGORIES = [
   'Flowers',
   'Mountains',
   'Cities',
+  'Abstract',
+  'Aesthetic',
+  'Fantasy',
+  'Cyberpunk',
+  'Architecture',
+  'Ocean',
+  'Sunset',
   'Mixed',
 ] as const;
 
@@ -42,7 +49,7 @@ export const INITIAL_WALLPAPERS: Wallpaper[] = [
     id: '1',
     title: 'Neon Cyberpunk Futuristic City Night',
     slug: 'neon-cyberpunk-futuristic-city-night',
-    description: 'Stunning 4K AI wallpaper depicting a futuristic cyberpunk metropolis illuminated by glowing neon signs and rainy reflections.',
+    description: 'Stunning 4K wallpaper depicting a futuristic cyberpunk metropolis illuminated by glowing neon signs and rainy reflections.',
     category: 'Cities',
     tags: ['Cyberpunk', 'Neon', 'City', '4K', 'Night', 'Futuristic'],
     imageUrl: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=1920&auto=format&fit=crop',
@@ -53,9 +60,8 @@ export const INITIAL_WALLPAPERS: Wallpaper[] = [
     likes: 1240,
     isFeatured: true,
     isTrending: true,
-    isAiGenerated: true,
+    isAiGenerated: false,
     createdAt: '2026-07-28',
-    prompt: 'Hyper-realistic futuristic neon city at rainy night, 8k resolution, cinematic lighting, octane render'
   },
   {
     id: '2',
@@ -90,9 +96,8 @@ export const INITIAL_WALLPAPERS: Wallpaper[] = [
     likes: 3400,
     isFeatured: true,
     isTrending: true,
-    isAiGenerated: true,
+    isAiGenerated: false,
     createdAt: '2026-07-30',
-    prompt: 'Minimalist glowing glass orb floating in complete pitch black void, true dark AMOLED, 3d render'
   },
   {
     id: '4',
@@ -127,9 +132,8 @@ export const INITIAL_WALLPAPERS: Wallpaper[] = [
     likes: 1820,
     isFeatured: true,
     isTrending: false,
-    isAiGenerated: true,
+    isAiGenerated: false,
     createdAt: '2026-08-01',
-    prompt: 'Matte black modern hypercar in a dark studio setting with glowing red tail lights, photorealistic 8k'
   },
   {
     id: '6',

@@ -1,4 +1,4 @@
-// Maximum Daily Multi-Source Importer with Category-Exact Matching
+// All-Star 4-Source Pure Photography & Wallhaven Importer Engine (Wallhaven, Pexels, Pixabay, Unsplash)
 
 export interface ImportedWallpaper {
   id: string;
@@ -18,7 +18,7 @@ export interface ImportedWallpaper {
   isAiGenerated: boolean;
   createdAt: string;
   prompt?: string;
-  source: 'Unsplash' | 'Pexels' | 'Pixabay' | 'Pollinations-AI' | 'Wallpapers.com';
+  source: 'Unsplash' | 'Pexels' | 'Pixabay' | 'Wallhaven';
 }
 
 const CATEGORIES = [
@@ -36,25 +36,39 @@ const CATEGORIES = [
   'Flowers',
   'Mountains',
   'Cities',
+  'Abstract',
+  'Aesthetic',
+  'Fantasy',
+  'Cyberpunk',
+  'Architecture',
+  'Ocean',
+  'Sunset',
   'Mixed',
 ];
 
 const CATEGORY_SEARCH_QUERIES: Record<string, string> = {
-  Anime: 'anime wallpaper 4k',
-  AMOLED: 'amoled dark OLED black 4k',
-  Dark: 'dark aesthetic black 4k',
-  Nature: 'nature landscape 4k',
-  Cars: 'supercar sports car 4k',
-  Bikes: 'motorcycle superbike 4k',
-  Space: 'space galaxy nebula 4k',
-  Gaming: 'gaming setup neon 4k',
-  Minimal: 'minimalist simple wallpaper 4k',
-  Technology: 'technology cyber digital 4k',
-  Animals: 'wildlife animal 4k',
-  Flowers: 'blooming flower flora 4k',
-  Mountains: 'mountain peak landscape 4k',
-  Cities: 'city skyline night 4k',
-  Mixed: 'abstract colorful art 4k',
+  Anime: 'anime 4k wallpaper',
+  AMOLED: 'amoled dark OLED black',
+  Dark: 'dark aesthetic black',
+  Nature: 'nature landscape',
+  Cars: 'supercar sports car',
+  Bikes: 'motorcycle superbike',
+  Space: 'space galaxy nebula',
+  Gaming: 'gaming setup neon',
+  Minimal: 'minimalist simple',
+  Technology: 'technology cyber digital',
+  Animals: 'wildlife animal',
+  Flowers: 'blooming flower flora',
+  Mountains: 'mountain peak landscape',
+  Cities: 'city skyline night',
+  Abstract: 'abstract colorful art',
+  Aesthetic: 'aesthetic chill retro',
+  Fantasy: 'fantasy magical landscape',
+  Cyberpunk: 'cyberpunk neon futuristic city',
+  Architecture: 'modern architecture building',
+  Ocean: 'deep ocean sea beach',
+  Sunset: 'sunset golden hour sky',
+  Mixed: 'stunning 4k wallpaper',
 };
 
 export function generateImageHash(url: string, title: string): string {
@@ -86,102 +100,64 @@ export function isDuplicate(
   });
 }
 
-// Smart Importer Engine: Guaranteed 100% Unique Wallpapers & Strict Anime Matching
+// 4-Source Importer Engine: Wallhaven -> Pexels -> Pixabay -> Unsplash
 export async function importWallpapersFromSources(count: number = 30): Promise<ImportedWallpaper[]> {
   const importedList: ImportedWallpaper[] = [];
   const PEXELS_KEY = process.env.PEXELS_API_KEY;
+  const PIXABAY_KEY = process.env.PIXABAY_API_KEY;
 
   for (let i = 0; i < count; i++) {
     const category = CATEGORIES[i % CATEGORIES.length];
-    const timestamp = Date.now();
-    const seed = Math.floor(Math.random() * 900000) + 100000;
-    const randomPage = Math.floor(Math.random() * 50) + 1;
+    const searchQuery = CATEGORY_SEARCH_QUERIES[category] || `${category} 4k`;
+    const randomPage = Math.floor(Math.random() * 30) + 1;
+    const timestamp = Date.now() + i;
     let imported = false;
 
-    // 1. Anime Category: ONLY Wallpapers.com Anime API or Pure Anime AI Illustration
-    if (category === 'Anime') {
-      try {
-        const res = await fetch(`https://wallpapers.com/api/v1/keyword/anime?limit=15`, {
-          headers: {
-            'Accept': 'application/json',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          },
-          cache: 'no-store',
-        });
-        if (res.ok) {
-          const data = await res.json();
-          const items = Array.isArray(data) ? data : (data.wallpapers || data.data || []);
-          const item = items[i % (items.length || 1)];
-          if (item && (item.high || item.thumb)) {
-            const itemId = item.id || seed;
-            const rawTitle = item.title || item.alt || 'Anime Ultra HD 4K Wallpaper';
-            const wallpaper: ImportedWallpaper = {
-              id: `wpc-anime-${itemId}`,
-              title: rawTitle.length > 55 ? `${rawTitle.slice(0, 52)}...` : rawTitle,
-              slug: `wallpaperscom-anime-${itemId}`,
-              description: `High resolution 4K Anime wallpaper free download from Wallpapers.com.`,
-              category: 'Anime',
-              tags: ['Anime', '4K', 'Ultra HD', 'Desktop', 'Wallpapers.com'],
-              imageUrl: item.high || item.thumb,
-              thumbnailUrl: item.thumb || item.high,
-              resolution: '3840 x 2160',
-              views: Math.floor(Math.random() * 5000) + 1000,
-              downloads: Math.floor(Math.random() * 2000) + 300,
-              likes: Math.floor(Math.random() * 500) + 100,
-              isFeatured: true,
-              isTrending: true,
-              isAiGenerated: false,
-              createdAt: new Date().toISOString().split('T')[0],
-              source: 'Wallpapers.com',
-            };
+    // Source 1: Wallhaven.cc Free Keyless API (Great for Anime, Cyberpunk, Gaming, AMOLED, Space)
+    try {
+      const res = await fetch(`https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(searchQuery)}&purity=100&sorting=random&page=${randomPage}`, {
+        headers: { 'Accept': 'application/json' },
+        cache: 'no-store',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const item = data.data?.[0];
+        if (item && item.path) {
+          const wallpaper: ImportedWallpaper = {
+            id: `wallhaven-${item.id}`,
+            title: `${category} Ultra HD Wallhaven #${item.id}`,
+            slug: `wallhaven-${category.toLowerCase()}-wallpaper-${item.id}`,
+            description: `High resolution 4K ${category.toLowerCase()} wallpaper from Wallhaven collection.`,
+            category: category,
+            tags: [category, '4K', 'Wallhaven', 'Desktop'],
+            imageUrl: item.path,
+            thumbnailUrl: item.thumbs?.large || item.thumbs?.original || item.path,
+            resolution: item.resolution || '3840 x 2160',
+            views: item.views || Math.floor(Math.random() * 5000) + 1000,
+            downloads: item.favorites || Math.floor(Math.random() * 2000) + 300,
+            likes: item.favorites || 150,
+            isFeatured: true,
+            isTrending: true,
+            isAiGenerated: false,
+            createdAt: new Date().toISOString().split('T')[0],
+            source: 'Wallhaven',
+          };
 
-            if (!isDuplicate(wallpaper, importedList)) {
-              importedList.push(wallpaper);
-              imported = true;
-            }
+          if (!isDuplicate(wallpaper, importedList)) {
+            importedList.push(wallpaper);
+            imported = true;
           }
         }
-      } catch (err) {
-        console.warn('Anime API error', err);
       }
-
-      // Guaranteed AI Anime Fallback
-      if (!imported) {
-        const prompt = `Masterpiece 8k ultra HD anime style wallpaper, anime character artwork, vibrant anime background, seed ${seed}`;
-        const aiImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1920&height=1080&model=flux&seed=${seed}&nologo=true`;
-        const wallpaper: ImportedWallpaper = {
-          id: `ai-anime-${seed}`,
-          title: `Anime Ultra HD Art #${seed}`,
-          slug: `ai-anime-wallpaper-${seed}`,
-          description: `Stunning 4K AI-generated Anime wallpaper.`,
-          category: 'Anime',
-          tags: ['Anime', '4K', 'Ultra HD', 'AI Generated'],
-          imageUrl: aiImageUrl,
-          thumbnailUrl: aiImageUrl,
-          resolution: '3840 x 2160',
-          views: Math.floor(Math.random() * 3000) + 500,
-          downloads: Math.floor(Math.random() * 1200) + 150,
-          likes: Math.floor(Math.random() * 400) + 50,
-          isFeatured: true,
-          isTrending: true,
-          isAiGenerated: true,
-          createdAt: new Date().toISOString().split('T')[0],
-          prompt: prompt,
-          source: 'Pollinations-AI',
-        };
-        if (!isDuplicate(wallpaper, importedList)) {
-          importedList.push(wallpaper);
-          imported = true;
-        }
-      }
+    } catch (err) {
+      console.warn('Wallhaven API Importer error', err);
     }
 
-    // 2. Photography Categories: Pexels API (Deterministic ID prevents duplicates!)
+    // Source 2: Pexels API
     if (!imported && PEXELS_KEY) {
       try {
-        const searchQuery = CATEGORY_SEARCH_QUERIES[category] || `${category} wallpaper 4k`;
         const res = await fetch(
-          `https://api.pexels.com/v1/search?query=${encodeURIComponent(searchQuery)}&per_page=5&page=${randomPage}`,
+          `https://api.pexels.com/v1/search?query=${encodeURIComponent(searchQuery)}&per_page=3&page=${randomPage}`,
           { headers: { Authorization: PEXELS_KEY } }
         );
         if (res.ok) {
@@ -190,7 +166,7 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
           if (photo) {
             const altTitle = photo.alt && photo.alt.trim().length > 3 ? photo.alt.trim() : `${category} 4K Ultra HD Photography`;
             const wallpaper: ImportedWallpaper = {
-              id: `pexels-${photo.id}`, // Deterministic ID prevents Supabase duplicates!
+              id: `pexels-${photo.id}`,
               title: altTitle.length > 50 ? `${altTitle.slice(0, 47)}...` : altTitle,
               slug: `pexels-${category.toLowerCase()}-wallpaper-${photo.id}`,
               description: `High resolution 4K ${category.toLowerCase()} wallpaper free download from Pexels.`,
@@ -211,11 +187,96 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
 
             if (!isDuplicate(wallpaper, importedList)) {
               importedList.push(wallpaper);
+              imported = true;
             }
           }
         }
       } catch (err) {
         console.warn('Pexels category query error', err);
+      }
+    }
+
+    // Source 3: Pixabay API
+    if (!imported && PIXABAY_KEY) {
+      try {
+        const res = await fetch(
+          `https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${encodeURIComponent(searchQuery)}&image_type=photo&per_page=3&page=${randomPage}`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          const item = data.hits?.[0];
+          if (item) {
+            const tagsTitle = item.tags ? item.tags.split(',')[0] : `${category} 4K Fine Art`;
+            const wallpaper: ImportedWallpaper = {
+              id: `pixabay-${item.id}`,
+              title: `${tagsTitle.charAt(0).toUpperCase() + tagsTitle.slice(1)} 4K`,
+              slug: `pixabay-${category.toLowerCase()}-wallpaper-${item.id}`,
+              description: `High resolution 4K ${category.toLowerCase()} wallpaper free download from Pixabay.`,
+              category: category,
+              tags: [category, '4K', 'Photography', 'Desktop', 'Pixabay'],
+              imageUrl: item.largeImageURL || item.fullHDURL,
+              thumbnailUrl: item.webformatURL || item.previewURL,
+              resolution: '3840 x 2160',
+              views: item.views || 2000,
+              downloads: item.downloads || 500,
+              likes: item.likes || 120,
+              isFeatured: true,
+              isTrending: true,
+              isAiGenerated: false,
+              createdAt: new Date().toISOString().split('T')[0],
+              source: 'Pixabay',
+            };
+
+            if (!isDuplicate(wallpaper, importedList)) {
+              importedList.push(wallpaper);
+              imported = true;
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Pixabay category query error', err);
+      }
+    }
+
+    // Source 4: Unsplash API Fallback
+    if (!imported) {
+      try {
+        const res = await fetch(
+          `https://api.unsplash.com/photos/random?count=1&query=${encodeURIComponent(category)},wallpaper,4k&client_id=demo`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          const item = Array.isArray(data) ? data[0] : data;
+          if (item && item.urls) {
+            const wallpaper: ImportedWallpaper = {
+              id: `unsplash-${item.id || timestamp}`,
+              title: item.alt_description
+                ? `${item.alt_description.charAt(0).toUpperCase() + item.alt_description.slice(1)} 4K`
+                : `${category} Ultra HD Wallpaper`,
+              slug: `unsplash-${category.toLowerCase()}-wallpaper-${timestamp}`,
+              description: `Free high resolution 4K ${category.toLowerCase()} wallpaper from Unsplash collection.`,
+              category: category,
+              tags: [category, '4K', 'Photography', 'Unsplash'],
+              imageUrl: item.urls?.full || item.urls?.regular,
+              thumbnailUrl: item.urls?.small || item.urls?.regular,
+              resolution: '3840 x 2160',
+              views: Math.floor(Math.random() * 8000) + 1000,
+              downloads: Math.floor(Math.random() * 3000) + 500,
+              likes: Math.floor(Math.random() * 900) + 100,
+              isFeatured: false,
+              isTrending: true,
+              isAiGenerated: false,
+              createdAt: new Date().toISOString().split('T')[0],
+              source: 'Unsplash',
+            };
+
+            if (!isDuplicate(wallpaper, importedList)) {
+              importedList.push(wallpaper);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Unsplash API fallback error', err);
       }
     }
   }
