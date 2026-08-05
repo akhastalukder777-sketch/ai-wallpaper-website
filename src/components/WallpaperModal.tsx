@@ -44,8 +44,7 @@ export default function WallpaperModal({
     link.click();
     document.body.removeChild(link);
   };
-
-  const handleShare = () => {
+ const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
@@ -85,13 +84,6 @@ export default function WallpaperModal({
                   {wallpaper.category}
                 </span>
 
-                <button
-                  onClick={handleShare}
-                  className="p-2 rounded-full bg-slate-800/80 border border-slate-700/60 text-slate-300 hover:text-white hover:bg-slate-700 transition-all"
-                  title="Share Pin"
-                >
-                  {copiedLink ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
-                </button>
               </div>
 
               <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
