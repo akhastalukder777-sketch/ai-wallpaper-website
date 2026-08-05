@@ -8,12 +8,10 @@ import {
   Eye,
   Heart,
   Share2,
-  Sparkles,
-  Copy,
-  Check,
   Calendar,
   Monitor,
   Tag,
+  Check,
 } from 'lucide-react';
 
 interface WallpaperModalProps {
@@ -29,10 +27,9 @@ export default function WallpaperModal({
   onFavoriteToggle,
   isFavorite = false,
 }: WallpaperModalProps) {
-  const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
   const [downloadCount, setDownloadCount] = useState(
-    wallpaper ? wallpaper.downloads : 0
+    wallpaper ? wallpaper.downloads || 0 : 0
   );
 
   if (!wallpaper) return null;
@@ -40,20 +37,12 @@ export default function WallpaperModal({
   const handleDownload = (resolutionName: string) => {
     setDownloadCount((prev) => prev + 1);
     const link = document.createElement('a');
-    link.href = wallpaper.imageUrl;
-    link.download = `${wallpaper.slug}-${resolutionName}.jpg`;
+    link.href = wallpaper.imageUrl || wallpaper.thumbnailUrl;
+    link.download = `${wallpaper.slug || 'wallpaper'}-${resolutionName}.jpg`;
     link.target = '_blank';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
-
-  const handleCopyPrompt = () => {
-    if (wallpaper.prompt) {
-      navigator.clipboard.writeText(wallpaper.prompt);
-      setCopiedPrompt(true);
-      setTimeout(() => setCopiedPrompt(false), 2000);
-    }
   };
 
   const handleShare = () => {
@@ -80,7 +69,7 @@ export default function WallpaperModal({
         {/* Left Side: Wallpaper Full Preview */}
         <div className="lg:w-3/5 bg-slate-950 relative flex items-center justify-center min-h-[300px] sm:min-h-[450px] overflow-hidden group">
           <img
-            src={wallpaper.imageUrl}
+            src={wallpaper.imageUrl || wallpaper.thumbnailUrl}
             alt={wallpaper.title}
             className="w-full h-full object-contain max-h-[75vh]"
           />
@@ -93,11 +82,6 @@ export default function WallpaperModal({
             {/* Header / Title */}
             <div>
               <div className="flex items-center gap-2 mb-2">
-                {wallpaper.isAiGenerated && (
-                  <span className="px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5" /> AI Wallpaper
-                  </span>
-                )}
                 <span className="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs font-medium">
                   {wallpaper.category}
                 </span>
@@ -110,38 +94,13 @@ export default function WallpaperModal({
               </p>
             </div>
 
-            {/* AI Prompt Section (If AI Generated) */}
-            {wallpaper.prompt && (
-              <div className="p-3.5 rounded-2xl bg-indigo-950/30 border border-indigo-500/20 space-y-2">
-                <div className="flex items-center justify-between text-xs font-semibold text-indigo-300">
-                  <span className="flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5" /> Generation Prompt
-                  </span>
-                  <button
-                    onClick={handleCopyPrompt}
-                    className="flex items-center gap-1 text-[11px] text-indigo-400 hover:text-indigo-200 transition-colors"
-                  >
-                    {copiedPrompt ? (
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    ) : (
-                      <Copy className="w-3.5 h-3.5" />
-                    )}
-                    {copiedPrompt ? 'Copied!' : 'Copy'}
-                  </button>
-                </div>
-                <p className="text-xs text-slate-300 italic font-mono bg-slate-950/50 p-2.5 rounded-xl border border-slate-800">
-                  "{wallpaper.prompt}"
-                </p>
-              </div>
-            )}
-
             {/* Metadata Stats Grid */}
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="p-3 rounded-xl bg-slate-950/50 border border-slate-800/80 flex items-center gap-2.5">
                 <Monitor className="w-4 h-4 text-indigo-400 shrink-0" />
                 <div>
                   <div className="text-slate-500 text-[10px]">Resolution</div>
-                  <div className="font-semibold text-slate-200">{wallpaper.resolution}</div>
+                  <div className="font-semibold text-slate-200">{wallpaper.resolution || '3840 x 2160'}</div>
                 </div>
               </div>
 
@@ -149,7 +108,7 @@ export default function WallpaperModal({
                 <Eye className="w-4 h-4 text-sky-400 shrink-0" />
                 <div>
                   <div className="text-slate-500 text-[10px]">Total Views</div>
-                  <div className="font-semibold text-slate-200">{wallpaper.views.toLocaleString()}</div>
+                  <div className="font-semibold text-slate-200">{(wallpaper.views || 100).toLocaleString()}</div>
                 </div>
               </div>
 
@@ -165,14 +124,14 @@ export default function WallpaperModal({
                 <Calendar className="w-4 h-4 text-amber-400 shrink-0" />
                 <div>
                   <div className="text-slate-500 text-[10px]">Created Date</div>
-                  <div className="font-semibold text-slate-200">{wallpaper.createdAt}</div>
+                  <div className="font-semibold text-slate-200">{wallpaper.createdAt || '2026-08-05'}</div>
                 </div>
               </div>
             </div>
 
             {/* Tags Pills */}
             <div className="flex flex-wrap gap-1.5 pt-1">
-              {wallpaper.tags.map((tag) => (
+              {(wallpaper.tags || [wallpaper.category]).map((tag) => (
                 <span
                   key={tag}
                   className="px-2.5 py-1 rounded-lg bg-slate-800/60 text-slate-400 text-[11px] font-medium flex items-center gap-1"

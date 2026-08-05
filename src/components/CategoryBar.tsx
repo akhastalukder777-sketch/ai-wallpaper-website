@@ -2,43 +2,24 @@
 
 import React from 'react';
 import { CATEGORIES } from '../data/wallpapers';
-import { Sparkles, Layers } from 'lucide-react';
+import { Layers } from 'lucide-react';
 
 interface CategoryBarProps {
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
-  showAiOnly: boolean;
-  onToggleAiOnly: () => void;
 }
 
 export default function CategoryBar({
   selectedCategory,
   onSelectCategory,
-  showAiOnly,
-  onToggleAiOnly,
 }: CategoryBarProps) {
   return (
     <div id="categories" className="w-full py-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-        <div className="flex items-center gap-2">
-          <Layers className="w-5 h-5 text-indigo-400" />
-          <h2 className="text-lg font-bold text-slate-100 tracking-tight">
-            Explore Categories
-          </h2>
-        </div>
-
-        {/* AI Only Filter Toggle */}
-        <button
-          onClick={onToggleAiOnly}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
-            showAiOnly
-              ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-indigo-400/50 shadow-md shadow-indigo-500/20'
-              : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700'
-          }`}
-        >
-          <Sparkles className={`w-3.5 h-3.5 ${showAiOnly ? 'text-white' : 'text-indigo-400'}`} />
-          AI Generated Only
-        </button>
+      <div className="flex items-center gap-2 mb-4">
+        <Layers className="w-5 h-5 text-indigo-400" />
+        <h2 className="text-lg font-bold text-slate-100 tracking-tight">
+          Explore Categories
+        </h2>
       </div>
 
       {/* Scrollable Categories List */}

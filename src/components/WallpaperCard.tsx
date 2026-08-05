@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Wallpaper } from '../data/wallpapers';
-import { Download, Eye, Heart, Sparkles, Maximize2 } from 'lucide-react';
+import { Download, Eye, Heart, Maximize2 } from 'lucide-react';
 
 interface WallpaperCardProps {
   wallpaper: Wallpaper;
@@ -17,7 +17,7 @@ export default function WallpaperCard({
   onFavoriteToggle,
   isFavorite = false,
 }: WallpaperCardProps) {
-  const [downloadCount, setDownloadCount] = useState(wallpaper.downloads);
+  const [downloadCount, setDownloadCount] = useState(wallpaper.downloads || 0);
   const [isHovered, setIsHovered] = useState(false);
   const [imgSrc, setImgSrc] = useState(
     wallpaper.thumbnailUrl || wallpaper.imageUrl || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop'
@@ -57,7 +57,6 @@ export default function WallpaperCard({
           alt={wallpaper.title}
           loading="lazy"
           onError={() => {
-            // Instant HD Fallback if AI image generation streams slowly
             setImgSrc('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop');
           }}
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
@@ -68,17 +67,9 @@ export default function WallpaperCard({
 
         {/* Top Badges */}
         <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-          <div className="flex items-center gap-1.5">
-            {wallpaper.isAiGenerated && (
-              <span className="px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-indigo-500/30 text-indigo-300 text-[11px] font-semibold flex items-center gap-1 shadow-lg">
-                <Sparkles className="w-3 h-3 text-indigo-400" />
-                AI Generated
-              </span>
-            )}
-            <span className="px-2.5 py-1 rounded-full bg-slate-950/70 backdrop-blur-md border border-slate-700/50 text-slate-300 text-[11px] font-medium">
-              {wallpaper.category}
-            </span>
-          </div>
+          <span className="px-2.5 py-1 rounded-full bg-slate-950/70 backdrop-blur-md border border-slate-700/50 text-slate-300 text-[11px] font-medium">
+            {wallpaper.category}
+          </span>
 
           <button
             onClick={handleLike}

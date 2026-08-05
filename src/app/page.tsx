@@ -14,7 +14,6 @@ import { Sparkles, Flame, Search, ShieldCheck, FileText, Info, Compass, AlertCir
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [showAiOnly, setShowAiOnly] = useState(false);
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null);
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [wallpapers, setWallpapers] = useState<Wallpaper[]>(INITIAL_WALLPAPERS);
@@ -39,10 +38,10 @@ export default function Home() {
     loadInitialData();
   }, []);
 
-  // Reset pagination count when category, search, or AI filter changes
+  // Reset pagination count when category or search changes
   useEffect(() => {
     setVisibleCount(30);
-  }, [searchQuery, selectedCategory, showAiOnly]);
+  }, [searchQuery, selectedCategory]);
 
   // Toggle favorite wallpapers and save to localStorage
   const handleFavoriteToggle = (id: string) => {
@@ -53,15 +52,11 @@ export default function Home() {
     });
   };
 
-  // Filter wallpapers based on search, category, and AI toggle
+  // Filter wallpapers based on search & category
   const filteredWallpapers = useMemo(() => {
     return wallpapers.filter((wallpaper) => {
       // Category filter
       if (selectedCategory !== 'All' && wallpaper.category !== selectedCategory) {
-        return false;
-      }
-      // AI-only filter
-      if (showAiOnly && !wallpaper.isAiGenerated) {
         return false;
       }
       // Search query filter
@@ -75,7 +70,7 @@ export default function Home() {
       }
       return true;
     });
-  }, [wallpapers, searchQuery, selectedCategory, showAiOnly]);
+  }, [wallpapers, searchQuery, selectedCategory]);
 
   // Slice displayed wallpapers based on Load More visible count
   const displayedWallpapers = useMemo(() => {
@@ -108,18 +103,18 @@ export default function Home() {
           {/* Top Live Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-indigo-500/30 text-indigo-300 text-xs font-semibold backdrop-blur-md shadow-lg shadow-indigo-500/10">
             <Sparkles className="w-4 h-4 text-indigo-400 animate-spin" style={{ animationDuration: '6s' }} />
-            <span>Next-Gen 4K AI Generated Wallpapers</span>
+            <span>Next-Gen 4K Ultra HD Wallpapers</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
             Elevate Your Screen with <br className="hidden sm:inline" />
             <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Ultra HD AI Wallpapers
+              Ultra HD 4K Wallpapers
             </span>
           </h1>
 
           <p className="text-sm sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Free high-resolution 4K wallpapers for Desktop, Mobile, AMOLED & OLED screens. Updated daily with original AI artwork.
+            Free high-resolution 4K wallpapers for Desktop, Mobile, AMOLED & OLED screens. Updated daily with original photography & artwork.
           </p>
 
           {/* Mobile Search Input in Hero */}
@@ -144,8 +139,6 @@ export default function Home() {
         <CategoryBar
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
-          showAiOnly={showAiOnly}
-          onToggleAiOnly={() => setShowAiOnly(!showAiOnly)}
         />
 
         {/* Section Title & Results Info */}
@@ -208,7 +201,6 @@ export default function Home() {
               onClick={() => {
                 setSearchQuery('');
                 setSelectedCategory('All');
-                setShowAiOnly(false);
               }}
               className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-colors"
             >
@@ -238,10 +230,10 @@ export default function Home() {
             <div className="space-y-2 text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-2 text-white font-bold text-lg">
                 <Sparkles className="w-5 h-5 text-indigo-400" />
-                AI Wallpapers Hub
+                Wallpapers Hub
               </div>
               <p className="text-slate-500 max-w-md">
-                Your primary source for high quality 4K and Ultra HD AI generated wallpapers for Desktop, Laptop, and Smartphones.
+                Your primary source for high quality 4K and Ultra HD wallpapers for Desktop, Laptop, and Smartphones.
               </p>
             </div>
 
@@ -266,7 +258,7 @@ export default function Home() {
           </div>
 
           <div className="pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-slate-600 gap-4 text-[11px]">
-            <div>© {new Date().getFullYear()} AI Wallpapers Hub. All rights reserved.</div>
+            <div>© {new Date().getFullYear()} Wallpapers Hub. All rights reserved.</div>
             <div>Built for High Speed, SEO & Google AdSense Approval.</div>
           </div>
         </div>
