@@ -48,10 +48,10 @@ export default function WallpaperCard({
       onClick={() => onSelect(wallpaper)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative rounded-2xl overflow-hidden glass-card cursor-pointer border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/10 flex flex-col"
+      className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-red-500/10 break-inside-avoid mb-4 flex flex-col"
     >
-      {/* Image Container */}
-      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-slate-900">
+      {/* Pinterest Pin Image Container */}
+      <div className="relative aspect-[3/4] sm:aspect-[9/14] w-full overflow-hidden bg-slate-900 rounded-3xl">
         <img
           src={imgSrc}
           alt={wallpaper.title}
@@ -62,77 +62,70 @@ export default function WallpaperCard({
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
         />
 
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-
-        {/* Top Badges */}
-        <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-          <span className="px-2.5 py-1 rounded-full bg-slate-950/70 backdrop-blur-md border border-slate-700/50 text-slate-300 text-[11px] font-medium">
-            {wallpaper.category}
-          </span>
-
-          <button
-            onClick={handleLike}
-            className={`pointer-events-auto p-2 rounded-full backdrop-blur-md transition-all ${
-              isFavorite
-                ? 'bg-pink-500/90 text-white shadow-lg shadow-pink-500/30'
-                : 'bg-slate-950/60 text-slate-300 hover:text-pink-400 border border-slate-700/50'
-            }`}
-            aria-label="Like wallpaper"
-          >
-            <Heart className={`w-4 h-4 ${isFavorite ? 'fill-white' : ''}`} />
-          </button>
-        </div>
-
-        {/* Center Hover View Button */}
+        {/* Pinterest Dark Overlay on Hover */}
         <div
-          className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 pointer-events-none ${
+          className={`absolute inset-0 bg-slate-950/40 backdrop-blur-[2px] transition-opacity duration-300 flex flex-col justify-between p-3.5 ${
             isHovered ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <span className="px-4 py-2 rounded-xl bg-indigo-600/90 text-white text-xs font-semibold backdrop-blur-md shadow-lg flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-            <Maximize2 className="w-4 h-4" /> Preview Wallpaper
-          </span>
+          {/* Top Pinterest Overlay Controls */}
+          <div className="flex items-center justify-between gap-2">
+            <span className="px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-slate-200 text-[11px] font-semibold tracking-wide border border-slate-700/50 shadow-md">
+              {wallpaper.category}
+            </span>
+
+            {/* Red Pinterest Style Download / Save Button */}
+            <button
+              onClick={handleDownload}
+              className="px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow-lg shadow-red-600/30 flex items-center gap-1.5 transition-transform active:scale-95"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Save 4K
+            </button>
+          </div>
+
+          {/* Center Hover Preview Button */}
+          <div className="flex justify-center">
+            <span className="px-4 py-2 rounded-full bg-slate-900/90 text-white text-xs font-semibold backdrop-blur-md border border-slate-700/60 shadow-xl flex items-center gap-2">
+              <Maximize2 className="w-3.5 h-3.5 text-red-400" /> View Pin
+            </span>
+          </div>
+
+          {/* Bottom Action Footer */}
+          <div className="flex items-center justify-between text-xs text-white">
+            <div className="flex items-center gap-2 bg-slate-950/70 px-2.5 py-1 rounded-full backdrop-blur-md text-[11px]">
+              <Eye className="w-3.5 h-3.5 text-slate-400" />
+              <span>{(wallpaper.views || 100).toLocaleString()}</span>
+            </div>
+
+            <button
+              onClick={handleLike}
+              className={`p-2.5 rounded-full backdrop-blur-md transition-all ${
+                isFavorite
+                  ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/40'
+                  : 'bg-slate-950/70 text-slate-200 hover:text-pink-400'
+              }`}
+              aria-label="Favorite Pin"
+            >
+              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-white' : ''}`} />
+            </button>
+          </div>
         </div>
 
-        {/* Resolution Tag */}
-        <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded bg-slate-950/80 backdrop-blur-md border border-slate-800 text-[10px] font-mono text-slate-400">
+        {/* Resolution Tag (Default Visible) */}
+        <div className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-slate-950/80 text-[10px] font-mono text-slate-400 border border-slate-800 group-hover:opacity-0 transition-opacity">
           {wallpaper.resolution || '3840 x 2160'}
         </div>
       </div>
 
-      {/* Card Details & Action Footer */}
-      <div className="p-4 flex flex-col justify-between flex-1 bg-slate-900/40">
-        <div>
-          <h3 className="text-base font-semibold text-slate-100 group-hover:text-indigo-400 transition-colors line-clamp-1">
-            {wallpaper.title}
-          </h3>
-          <p className="text-xs text-slate-400 mt-1 line-clamp-2">
-            {wallpaper.description}
-          </p>
-        </div>
-
-        {/* Card Footer */}
-        <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1 hover:text-slate-200">
-              <Eye className="w-3.5 h-3.5 text-slate-500" />
-              {(wallpaper.views || 100).toLocaleString()}
-            </span>
-            <span className="flex items-center gap-1 hover:text-slate-200">
-              <Download className="w-3.5 h-3.5 text-slate-500" />
-              {downloadCount.toLocaleString()}
-            </span>
-          </div>
-
-          <button
-            onClick={handleDownload}
-            className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium flex items-center gap-1.5 transition-colors shadow-md shadow-indigo-600/20"
-          >
-            <Download className="w-3.5 h-3.5" />
-            Download
-          </button>
-        </div>
+      {/* Pinterest Pin Title & Info Below Image */}
+      <div className="p-3 bg-transparent">
+        <h3 className="text-xs sm:text-sm font-semibold text-slate-200 group-hover:text-red-400 transition-colors line-clamp-1">
+          {wallpaper.title}
+        </h3>
+        <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">
+          {wallpaper.description}
+        </p>
       </div>
     </div>
   );

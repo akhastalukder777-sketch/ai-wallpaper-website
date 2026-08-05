@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #090d16;
+  --background: #0d1117;
   --foreground: #f8fafc;
 }
 
@@ -13,40 +13,45 @@ body {
   min-height: 100vh;
 }
 
-/* Custom Scrollbar for ultra sleek UI */
+/* Custom Pinterest Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: #0d1117;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #21262d;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #30363d;
 }
 
-/* Glassmorphism Effect for Navbar and Cards */
+/* Glassmorphism Effect for Pinterest UI */
 .glass-effect {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-card {
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba(22, 27, 34, 0.7);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .glass-card:hover {
-  border-color: rgba(99, 102, 241, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Pinterest Masonry Grid break-inside fix */
+.break-inside-avoid-column {
+  break-inside: avoid;
 }

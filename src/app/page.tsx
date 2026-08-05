@@ -78,7 +78,7 @@ export default function Home() {
   }, [filteredWallpapers, visibleCount]);
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-[#0d1117] text-slate-100 flex flex-col selection:bg-red-500 selection:text-white">
       {/* Header Navigation */}
       <Navbar
         searchQuery={searchQuery}
@@ -94,27 +94,26 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative py-10 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center overflow-hidden">
+      <section className="relative py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center overflow-hidden">
         {/* Glow Effects Background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-indigo-600/15 blur-[120px] rounded-full pointer-events-none" />
-        <div className="absolute top-1/3 left-1/4 w-[300px] h-[200px] bg-purple-600/10 blur-[100px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-red-600/10 blur-[120px] rounded-full pointer-events-none" />
 
-        <div className="relative z-10 max-w-3xl mx-auto space-y-6">
+        <div className="relative z-10 max-w-3xl mx-auto space-y-4">
           {/* Top Live Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-indigo-500/30 text-indigo-300 text-xs font-semibold backdrop-blur-md shadow-lg shadow-indigo-500/10">
-            <Sparkles className="w-4 h-4 text-indigo-400 animate-spin" style={{ animationDuration: '6s' }} />
-            <span>Next-Gen 4K Ultra HD Wallpapers</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-red-500/30 text-red-400 text-xs font-semibold backdrop-blur-md shadow-lg shadow-red-500/10">
+            <Sparkles className="w-4 h-4 text-red-400 animate-spin" style={{ animationDuration: '6s' }} />
+            <span>Discover & Save Ultra HD 4K Pins</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-            Elevate Your Screen with <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Ultra HD 4K Wallpapers
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+            Explore Millions of <br className="hidden sm:inline" />
+            <span className="bg-gradient-to-r from-red-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">
+              4K Ultra HD Wallpapers
             </span>
           </h1>
 
-          <p className="text-sm sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Free high-resolution 4K wallpapers for Desktop, Mobile, AMOLED & OLED screens. Updated daily with original photography & artwork.
+          <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto leading-relaxed">
+            Free high-resolution vertical pins & 4K wallpapers for Mobile, AMOLED, Desktop & Laptop. Updated daily.
           </p>
 
           {/* Mobile Search Input in Hero */}
@@ -123,10 +122,10 @@ export default function Home() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search 4K wallpapers..."
+                placeholder="Search pins, cars, anime, nature..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-slate-900/90 border border-slate-800 rounded-2xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                className="w-full pl-11 pr-4 py-3 bg-slate-900/90 border border-slate-800 rounded-2xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-red-500"
               />
             </div>
           </div>
@@ -134,7 +133,7 @@ export default function Home() {
       </section>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-16">
+      <main className="flex-1 max-w-[1600px] mx-auto w-full px-3 sm:px-6 lg:px-8 pb-16">
         {/* Categories Bar */}
         <CategoryBar
           selectedCategory={selectedCategory}
@@ -142,11 +141,11 @@ export default function Home() {
         />
 
         {/* Section Title & Results Info */}
-        <div className="flex items-center justify-between my-6 border-b border-slate-800/60 pb-4">
+        <div className="flex items-center justify-between my-4 border-b border-slate-800/60 pb-3">
           <div className="flex items-center gap-2">
-            <Flame className="w-5 h-5 text-amber-500" />
-            <h2 className="text-xl font-bold text-white tracking-tight">
-              {selectedCategory === 'All' ? 'Featured Wallpapers' : `${selectedCategory} Wallpapers`}
+            <Flame className="w-5 h-5 text-red-500" />
+            <h2 className="text-lg font-bold text-white tracking-tight">
+              {selectedCategory === 'All' ? 'Discover Pins' : `${selectedCategory} Pins`}
             </h2>
             <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800/80 text-slate-400 border border-slate-700/50 ml-1">
               Showing {displayedWallpapers.length} of {filteredWallpapers.length}
@@ -154,10 +153,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Wallpapers Grid with Integrated Native Ads */}
+        {/* Pinterest Masonry Columns Layout */}
         {displayedWallpapers.length > 0 ? (
           <div className="space-y-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 sm:gap-4 space-y-4">
               {displayedWallpapers.map((wallpaper, index) => (
                 <React.Fragment key={wallpaper.id}>
                   <WallpaperCard
@@ -166,9 +165,11 @@ export default function Home() {
                     onFavoriteToggle={handleFavoriteToggle}
                     isFavorite={favoriteIds.includes(wallpaper.id)}
                   />
-                  {/* Insert In-Feed Ad Unit After Every 3rd Card */}
-                  {(index + 1) % 3 === 0 && (
-                    <InFeedAd className="col-span-1" />
+                  {/* Insert In-Feed Ad Unit After Every 6th Card */}
+                  {(index + 1) % 6 === 0 && (
+                    <div className="break-inside-avoid mb-4">
+                      <InFeedAd />
+                    </div>
                   )}
                 </React.Fragment>
               ))}
@@ -179,11 +180,11 @@ export default function Home() {
               <div className="text-center pt-8">
                 <button
                   onClick={() => setVisibleCount((prev) => prev + 30)}
-                  className="px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all shadow-lg shadow-indigo-600/30 hover:scale-105 active:scale-95 inline-flex items-center gap-2"
+                  className="px-8 py-3.5 rounded-full bg-red-600 hover:bg-red-500 text-white font-semibold text-sm transition-all shadow-lg shadow-red-600/30 hover:scale-105 active:scale-95 inline-flex items-center gap-2"
                 >
-                  <span>Load More Wallpapers</span>
+                  <span>Load More Pins</span>
                   <ChevronDown className="w-4 h-4" />
-                  <span className="text-xs bg-indigo-800/80 px-2 py-0.5 rounded-full border border-indigo-400/30 ml-1">
+                  <span className="text-xs bg-red-800/80 px-2 py-0.5 rounded-full border border-red-400/30 ml-1">
                     +{filteredWallpapers.length - visibleCount} remaining
                   </span>
                 </button>
@@ -193,16 +194,16 @@ export default function Home() {
         ) : (
           <div className="py-20 text-center space-y-4 rounded-3xl bg-slate-900/30 border border-slate-800">
             <Compass className="w-12 h-12 text-slate-600 mx-auto" />
-            <h3 className="text-lg font-semibold text-slate-300">No wallpapers found</h3>
+            <h3 className="text-lg font-semibold text-slate-300">No pins found</h3>
             <p className="text-xs text-slate-500 max-w-md mx-auto">
-              We couldn't find any wallpapers matching your search "{searchQuery}". Try searching for something else or browse categories.
+              We couldn't find any pins matching your search "{searchQuery}". Try searching for something else or browse categories.
             </p>
             <button
               onClick={() => {
                 setSearchQuery('');
                 setSelectedCategory('All');
               }}
-              className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-colors"
+              className="px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition-colors"
             >
               Reset Filters
             </button>
@@ -229,7 +230,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-2 text-white font-bold text-lg">
-                <Sparkles className="w-5 h-5 text-indigo-400" />
+                <Sparkles className="w-5 h-5 text-red-500" />
                 Wallpapers Hub
               </div>
               <p className="text-slate-500 max-w-md">
@@ -239,19 +240,19 @@ export default function Home() {
 
             {/* Google AdSense Compliant Footer Real Links */}
             <div className="flex flex-wrap items-center justify-center gap-6 text-slate-400 font-medium">
-              <Link href="/privacy-policy" className="hover:text-indigo-400 transition-colors flex items-center gap-1">
+              <Link href="/privacy-policy" className="hover:text-red-400 transition-colors flex items-center gap-1">
                 <ShieldCheck className="w-3.5 h-3.5" /> Privacy Policy
               </Link>
-              <Link href="/terms-of-service" className="hover:text-indigo-400 transition-colors flex items-center gap-1">
+              <Link href="/terms-of-service" className="hover:text-red-400 transition-colors flex items-center gap-1">
                 <FileText className="w-3.5 h-3.5" /> Terms of Service
               </Link>
-              <Link href="/about" className="hover:text-indigo-400 transition-colors flex items-center gap-1">
+              <Link href="/about" className="hover:text-red-400 transition-colors flex items-center gap-1">
                 <Info className="w-3.5 h-3.5" /> About Us
               </Link>
-              <Link href="/contact" className="hover:text-indigo-400 transition-colors flex items-center gap-1">
+              <Link href="/contact" className="hover:text-red-400 transition-colors flex items-center gap-1">
                 <Info className="w-3.5 h-3.5" /> Contact Us
               </Link>
-              <Link href="/disclaimer" className="hover:text-indigo-400 transition-colors flex items-center gap-1">
+              <Link href="/disclaimer" className="hover:text-red-400 transition-colors flex items-center gap-1">
                 <AlertCircle className="w-3.5 h-3.5" /> Disclaimer
               </Link>
             </div>
