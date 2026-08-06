@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const secret = searchParams.get('secret');
-    const reqCount = Number(searchParams.get('count')) || 30; // Default 30 per run
+    const reqCount = Number(searchParams.get('count')) || 30;
     const isVercelCron = request.headers.get('x-vercel-cron') === '1';
     const CRON_SECRET = process.env.CRON_SECRET || 'ai-wallpaper-secret-key';
 
@@ -17,8 +17,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ status: 'unauthorized', message: 'Invalid Cron Secret Key' }, { status: 401 });
     }
 
-    // Run multi-source auto-importer with 30-50 count per run
-    const importedWallpapers = await importWallpapersFromSources(Math.min(reqCount, 50));
+    // Run multi-source auto-importer with 30 count per 30-min run
+    const importedWallpapers = await importWallpapersFromSources(Math.min(reqCount, 40));
 
     // Save permanently to Supabase DB Persistence Engine
     await saveWallpapersToDb(importedWallpapers);
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     return NextResponse.json({
       status: 'success',
       timestamp: new Date().toISOString(),
-      message: `Daily Cron Automation executed: ${importedWallpapers.length} wallpapers imported, duplicate checked, and published.`,
+      message: `30-Min Cron Automation executed: ${importedWallpapers.length} wallpapers imported, duplicate checked, and published.`,
       importedCount: importedWallpapers.length,
       wallpapers: importedWallpapers,
     });

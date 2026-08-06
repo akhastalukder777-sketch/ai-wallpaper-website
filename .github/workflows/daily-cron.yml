@@ -2,7 +2,7 @@ name: Daily Wallpaper Auto Import
 
 on:
   schedule:
-    - cron: '0 * * * *' # Runs 24 times a day (every 1 hour)
+    - cron: '*/30 * * * *' # Runs every 30 minutes (48 times a day)
   workflow_dispatch:
 
 jobs:
@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Trigger Auto Import Cron API
         run: |
-          curl -X GET "https://ai-wallpaper-website.vercel.app/api/cron/auto-import?secret=ai-wallpaper-secret-key&count=40"
+          curl -X GET "https://ai-wallpaper-website.vercel.app/api/cron/auto-import?secret=ai-wallpaper-secret-key&count=30"
