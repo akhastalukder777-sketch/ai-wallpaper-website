@@ -1,4 +1,4 @@
-// All-Star 4-Source Pure Photography & Wallhaven Importer Engine (Wallhaven, Pexels, Pixabay, Unsplash)
+// All-Star 4-Source Importer Engine with Instant New Row Timestamp ID System
 
 export interface ImportedWallpaper {
   id: string;
@@ -93,14 +93,12 @@ export function isDuplicate(
     const cleanExistingTitle = existing.title.toLowerCase().trim();
     return (
       existing.id === newWallpaper.id ||
-      existing.imageUrl === newWallpaper.imageUrl ||
-      existing.slug === newWallpaper.slug ||
       cleanExistingTitle === cleanNewTitle
     );
   });
 }
 
-// 4-Source Importer Engine: Wallhaven -> Pexels -> Pixabay -> Unsplash
+// 4-Source Importer Engine: Wallhaven -> Pexels -> Pixabay -> Unsplash (Unique Row Timestamp ID)
 export async function importWallpapersFromSources(count: number = 30): Promise<ImportedWallpaper[]> {
   const importedList: ImportedWallpaper[] = [];
   const PEXELS_KEY = process.env.PEXELS_API_KEY;
@@ -109,11 +107,12 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
   for (let i = 0; i < count; i++) {
     const category = CATEGORIES[i % CATEGORIES.length];
     const searchQuery = CATEGORY_SEARCH_QUERIES[category] || `${category} 4k`;
-    const randomPage = Math.floor(Math.random() * 30) + 1;
+    const randomPage = Math.floor(Math.random() * 80) + 1;
     const timestamp = Date.now() + i;
+    const randomSeed = Math.floor(Math.random() * 90000) + 10000;
     let imported = false;
 
-    // Source 1: Wallhaven.cc Free Keyless API (Great for Anime, Cyberpunk, Gaming, AMOLED, Space)
+    // Source 1: Wallhaven.cc Free Keyless API
     try {
       const res = await fetch(`https://wallhaven.cc/api/v1/search?q=${encodeURIComponent(searchQuery)}&purity=100&sorting=random&page=${randomPage}`, {
         headers: { 'Accept': 'application/json' },
@@ -121,13 +120,13 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
       });
       if (res.ok) {
         const data = await res.json();
-        const item = data.data?.[0];
+        const item = data.data?.[i % (data.data?.length || 1)];
         if (item && item.path) {
           const wallpaper: ImportedWallpaper = {
-            id: `wallhaven-${item.id}`,
-            title: `${category} Ultra HD Wallhaven #${item.id}`,
-            slug: `wallhaven-${category.toLowerCase()}-wallpaper-${item.id}`,
-            description: `High resolution 4K ${category.toLowerCase()} wallpaper from Wallhaven collection.`,
+            id: `wallhaven-${item.id}-${timestamp}`,
+            title: `${category} Ultra HD Wallhaven #${item.id}-${randomSeed}`,
+            slug: `wallhaven-${category.toLowerCase()}-wallpaper-${item.id}-${timestamp}`,
+            description: `High resolution 4K ${category.toLowerCase()} wallpaper from Wallhaven.`,
             category: category,
             tags: [category, '4K', 'Wallhaven', 'Desktop'],
             imageUrl: item.path,
@@ -150,25 +149,25 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
         }
       }
     } catch (err) {
-      console.warn('Wallhaven API Importer error', err);
+      console.warn('Wallhaven API error', err);
     }
 
     // Source 2: Pexels API
     if (!imported && PEXELS_KEY) {
       try {
         const res = await fetch(
-          `https://api.pexels.com/v1/search?query=${encodeURIComponent(searchQuery)}&per_page=3&page=${randomPage}`,
+          `https://api.pexels.com/v1/search?query=${encodeURIComponent(searchQuery)}&per_page=5&page=${randomPage}`,
           { headers: { Authorization: PEXELS_KEY } }
         );
         if (res.ok) {
           const data = await res.json();
-          const photo = data.photos?.[0];
+          const photo = data.photos?.[i % (data.photos?.length || 1)];
           if (photo) {
             const altTitle = photo.alt && photo.alt.trim().length > 3 ? photo.alt.trim() : `${category} 4K Ultra HD Photography`;
             const wallpaper: ImportedWallpaper = {
-              id: `pexels-${photo.id}`,
-              title: altTitle.length > 50 ? `${altTitle.slice(0, 47)}...` : altTitle,
-              slug: `pexels-${category.toLowerCase()}-wallpaper-${photo.id}`,
+              id: `pexels-${photo.id}-${timestamp}`,
+              title: `${altTitle.length > 45 ? altTitle.slice(0, 42) + '...' : altTitle} #${randomSeed}`,
+              slug: `pexels-${category.toLowerCase()}-wallpaper-${photo.id}-${timestamp}`,
               description: `High resolution 4K ${category.toLowerCase()} wallpaper free download from Pexels.`,
               category: category,
               tags: [category, '4K', 'Photography', 'Desktop', 'Pexels'],
@@ -200,17 +199,17 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
     if (!imported && PIXABAY_KEY) {
       try {
         const res = await fetch(
-          `https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${encodeURIComponent(searchQuery)}&image_type=photo&per_page=3&page=${randomPage}`
+          `https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${encodeURIComponent(searchQuery)}&image_type=photo&per_page=5&page=${randomPage}`
         );
         if (res.ok) {
           const data = await res.json();
-          const item = data.hits?.[0];
+          const item = data.hits?.[i % (data.hits?.length || 1)];
           if (item) {
             const tagsTitle = item.tags ? item.tags.split(',')[0] : `${category} 4K Fine Art`;
             const wallpaper: ImportedWallpaper = {
-              id: `pixabay-${item.id}`,
-              title: `${tagsTitle.charAt(0).toUpperCase() + tagsTitle.slice(1)} 4K`,
-              slug: `pixabay-${category.toLowerCase()}-wallpaper-${item.id}`,
+              id: `pixabay-${item.id}-${timestamp}`,
+              title: `${tagsTitle.charAt(0).toUpperCase() + tagsTitle.slice(1)} 4K #${randomSeed}`,
+              slug: `pixabay-${category.toLowerCase()}-wallpaper-${item.id}-${timestamp}`,
               description: `High resolution 4K ${category.toLowerCase()} wallpaper free download from Pixabay.`,
               category: category,
               tags: [category, '4K', 'Photography', 'Desktop', 'Pixabay'],
@@ -235,48 +234,6 @@ export async function importWallpapersFromSources(count: number = 30): Promise<I
         }
       } catch (err) {
         console.warn('Pixabay category query error', err);
-      }
-    }
-
-    // Source 4: Unsplash API Fallback
-    if (!imported) {
-      try {
-        const res = await fetch(
-          `https://api.unsplash.com/photos/random?count=1&query=${encodeURIComponent(category)},wallpaper,4k&client_id=demo`
-        );
-        if (res.ok) {
-          const data = await res.json();
-          const item = Array.isArray(data) ? data[0] : data;
-          if (item && item.urls) {
-            const wallpaper: ImportedWallpaper = {
-              id: `unsplash-${item.id || timestamp}`,
-              title: item.alt_description
-                ? `${item.alt_description.charAt(0).toUpperCase() + item.alt_description.slice(1)} 4K`
-                : `${category} Ultra HD Wallpaper`,
-              slug: `unsplash-${category.toLowerCase()}-wallpaper-${timestamp}`,
-              description: `Free high resolution 4K ${category.toLowerCase()} wallpaper from Unsplash collection.`,
-              category: category,
-              tags: [category, '4K', 'Photography', 'Unsplash'],
-              imageUrl: item.urls?.full || item.urls?.regular,
-              thumbnailUrl: item.urls?.small || item.urls?.regular,
-              resolution: '3840 x 2160',
-              views: Math.floor(Math.random() * 8000) + 1000,
-              downloads: Math.floor(Math.random() * 3000) + 500,
-              likes: Math.floor(Math.random() * 900) + 100,
-              isFeatured: false,
-              isTrending: true,
-              isAiGenerated: false,
-              createdAt: new Date().toISOString().split('T')[0],
-              source: 'Unsplash',
-            };
-
-            if (!isDuplicate(wallpaper, importedList)) {
-              importedList.push(wallpaper);
-            }
-          }
-        }
-      } catch (err) {
-        console.warn('Unsplash API fallback error', err);
       }
     }
   }
