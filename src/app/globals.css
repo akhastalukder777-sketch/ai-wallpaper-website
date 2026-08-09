@@ -50,6 +50,13 @@ h1, h2, h3, h4, h5, h6, button, a {
   box-shadow: 0 10px 30px -10px rgba(9, 13, 18, 0.10);
 }
 
+/* Category Liquid Glass Active Bubble Style */
+.glass-category-bubble {
+  background: #090d12;
+  border: 1px solid rgba(241, 254, 200, 0.25);
+  box-shadow: 0 8px 24px -4px rgba(9, 13, 18, 0.35);
+}
+
 .glass-effect {
   background: rgba(241, 254, 200, 0.85);
   backdrop-filter: blur(16px);
@@ -64,8 +71,16 @@ h1, h2, h3, h4, h5, h6, button, a {
 }
 
 .glass-card:hover {
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.2);
+  border-color: rgba(241, 254, 200, 0.5);
+  box-shadow: 0 16px 36px 0 rgba(9, 13, 18, 0.35);
+}
+
+/* Pixabay-Style Glass Hover Overlay Panel */
+.glass-hover-panel {
+  background: rgba(9, 13, 18, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(241, 254, 200, 0.15);
 }
 
 .break-inside-avoid-column {
