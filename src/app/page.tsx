@@ -18,6 +18,7 @@ export default function Home() {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [wallpapers, setWallpapers] = useState<Wallpaper[]>(INITIAL_WALLPAPERS);
   const [visibleCount, setVisibleCount] = useState(30);
+  const [activeNav, setActiveNav] = useState('Home');
 
   // Load Wallpapers from Supabase DB & persistent favorites on mount
   useEffect(() => {
@@ -52,9 +53,25 @@ export default function Home() {
     });
   };
 
-  // Filter wallpapers based on search & category
+  // Trigger Random Wallpaper Modal Preview
+  const handleRandomWallpaper = () => {
+    if (wallpapers.length > 0) {
+      const randomIndex = Math.floor(Math.random() * wallpapers.length);
+      setSelectedWallpaper(wallpapers[randomIndex]);
+    }
+  };
+
+  // Filter wallpapers based on search, category & nav filters
   const filteredWallpapers = useMemo(() => {
     return wallpapers.filter((wallpaper) => {
+      // Saved / Favorites filter
+      if (activeNav === 'Saved') {
+        if (!favoriteIds.includes(wallpaper.id)) return false;
+      }
+      // Trending filter
+      if (activeNav === 'Trending' && !wallpaper.isTrending) {
+        return false;
+      }
       // Category filter
       if (selectedCategory !== 'All' && wallpaper.category !== selectedCategory) {
         return false;
@@ -70,7 +87,7 @@ export default function Home() {
       }
       return true;
     });
-  }, [wallpapers, searchQuery, selectedCategory]);
+  }, [wallpapers, searchQuery, selectedCategory, activeNav, favoriteIds]);
 
   // Slice displayed wallpapers based on Load More visible count
   const displayedWallpapers = useMemo(() => {
@@ -79,13 +96,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F1FEC8] text-[#090d12] flex flex-col selection:bg-[#090d12] selection:text-[#F1FEC8]">
-      {/* Header Navigation */}
+      {/* Header Navigation with Translucent Vanilla Glass & Liquid Indicator */}
       <Navbar
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         favoriteCount={favoriteIds.length}
         activeCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
+        activeNav={activeNav}
+        onNavChange={setActiveNav}
+        onRandomClick={handleRandomWallpaper}
       />
 
       {/* Universal Header Ad Placement */}
@@ -145,7 +165,13 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <Flame className="w-5 h-5 text-[#090d12]" />
             <h2 className="text-lg font-bold text-[#090d12] tracking-tight">
-              {selectedCategory === 'All' ? 'Discover Pins' : `${selectedCategory} Pins`}
+              {activeNav === 'Saved'
+                ? 'Saved Favorite Pins'
+                : activeNav === 'Trending'
+                ? 'Trending Pins'
+                : selectedCategory === 'All'
+                ? 'Discover Pins'
+                : `${selectedCategory} Pins`}
             </h2>
             <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-900/10 text-[#090d12] font-semibold border border-slate-900/20 ml-1">
               Showing {displayedWallpapers.length} of {filteredWallpapers.length}
@@ -196,12 +222,13 @@ export default function Home() {
             <Compass className="w-12 h-12 text-slate-500 mx-auto" />
             <h3 className="text-lg font-semibold text-[#090d12]">No pins found</h3>
             <p className="text-xs text-slate-600 max-w-md mx-auto">
-              We couldn't find any pins matching your search "{searchQuery}". Try searching for something else or browse categories.
+              We couldn't find any pins matching your query. Try searching for something else or reset filters.
             </p>
             <button
               onClick={() => {
                 setSearchQuery('');
                 setSelectedCategory('All');
+                setActiveNav('Home');
               }}
               className="px-5 py-2.5 rounded-full bg-[#090d12] hover:bg-slate-800 text-[#F1FEC8] text-xs font-bold transition-colors"
             >
@@ -241,19 +268,19 @@ export default function Home() {
             {/* Google AdSense Compliant Footer Real Links */}
             <div className="flex flex-wrap items-center justify-center gap-6 text-slate-400 font-medium">
               <Link href="/privacy-policy" className="hover:text-[#F1FEC8] transition-colors flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" /> Privacy Policy
+                <ShieldCheck className="w-3 h-3" /> Privacy Policy
               </Link>
               <Link href="/terms-of-service" className="hover:text-[#F1FEC8] transition-colors flex items-center gap-1">
-                <FileText className="w-3.5 h-3.5" /> Terms of Service
+                <FileText className="w-3 h-3" /> Terms of Service
               </Link>
               <Link href="/about" className="hover:text-[#F1FEC8] transition-colors flex items-center gap-1">
-                <Info className="w-3.5 h-3.5" /> About Us
+                <Info className="w-3 h-3" /> About Us
               </Link>
               <Link href="/contact" className="hover:text-[#F1FEC8] transition-colors flex items-center gap-1">
-                <Info className="w-3.5 h-3.5" /> Contact Us
+                <Info className="w-3 h-3" /> Contact Us
               </Link>
               <Link href="/disclaimer" className="hover:text-[#F1FEC8] transition-colors flex items-center gap-1">
-                <AlertCircle className="w-3.5 h-3.5" /> Disclaimer
+                <AlertCircle className="w-3 h-3" /> Disclaimer
               </Link>
             </div>
           </div>
