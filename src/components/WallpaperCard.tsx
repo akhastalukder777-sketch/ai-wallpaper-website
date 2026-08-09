@@ -48,7 +48,7 @@ export default function WallpaperCard({
       onClick={() => onSelect(wallpaper)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-red-500/10 break-inside-avoid mb-4 flex flex-col"
+      className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-300 hover:border-[#F1FEC8]/50 hover:shadow-2xl hover:shadow-[#F1FEC8]/10 break-inside-avoid mb-4 flex flex-col"
     >
       {/* Pinterest Pin Image Container */}
       <div className="relative aspect-[3/4] sm:aspect-[9/14] w-full overflow-hidden bg-slate-900 rounded-3xl">
@@ -74,12 +74,12 @@ export default function WallpaperCard({
               {wallpaper.category}
             </span>
 
-            {/* Red Pinterest Style Download / Save Button */}
+            {/* Vanilla Color Save 4K Button */}
             <button
               onClick={handleDownload}
-              className="px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow-lg shadow-red-600/30 flex items-center gap-1.5 transition-transform active:scale-95"
+              className="px-4 py-2 rounded-full bg-[#F1FEC8] hover:bg-[#e2faae] text-[#090d12] text-xs font-bold shadow-lg shadow-[#F1FEC8]/30 flex items-center gap-1.5 transition-transform active:scale-95"
             >
-              <Download className="w-3.5 h-3.5" />
+              <Download className="w-3.5 h-3.5 text-[#090d12]" />
               Save 4K
             </button>
           </div>
@@ -87,7 +87,7 @@ export default function WallpaperCard({
           {/* Center Hover Preview Button */}
           <div className="flex justify-center">
             <span className="px-4 py-2 rounded-full bg-slate-900/90 text-white text-xs font-semibold backdrop-blur-md border border-slate-700/60 shadow-xl flex items-center gap-2">
-              <Maximize2 className="w-3.5 h-3.5 text-red-400" /> View Pin
+              <Maximize2 className="w-3.5 h-3.5 text-[#F1FEC8]" /> View Pin
             </span>
           </div>
 
@@ -102,12 +102,12 @@ export default function WallpaperCard({
               onClick={handleLike}
               className={`p-2.5 rounded-full backdrop-blur-md transition-all ${
                 isFavorite
-                  ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/40'
-                  : 'bg-slate-950/70 text-slate-200 hover:text-pink-400'
+                  ? 'bg-[#F1FEC8] text-[#090d12] shadow-lg shadow-[#F1FEC8]/40'
+                  : 'bg-slate-950/70 text-slate-200 hover:text-[#F1FEC8]'
               }`}
               aria-label="Favorite Pin"
             >
-              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-white' : ''}`} />
+              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#090d12]' : ''}`} />
             </button>
           </div>
         </div>
@@ -120,7 +120,7 @@ export default function WallpaperCard({
 
       {/* Pinterest Pin Title & Info Below Image */}
       <div className="p-3 bg-transparent">
-        <h3 className="text-xs sm:text-sm font-semibold text-slate-200 group-hover:text-red-400 transition-colors line-clamp-1">
+        <h3 className="text-xs sm:text-sm font-semibold text-slate-200 group-hover:text-[#F1FEC8] transition-colors line-clamp-1">
           {wallpaper.title}
         </h3>
         <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">

@@ -78,7 +78,7 @@ export default function Home() {
   }, [filteredWallpapers, visibleCount]);
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-slate-100 flex flex-col selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen bg-[#090d12] text-slate-100 flex flex-col selection:bg-[#F1FEC8] selection:text-[#090d12]">
       {/* Header Navigation */}
       <Navbar
         searchQuery={searchQuery}
@@ -96,18 +96,18 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center overflow-hidden">
         {/* Glow Effects Background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-red-600/10 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-[#F1FEC8]/10 blur-[130px] rounded-full pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl mx-auto space-y-4">
           {/* Top Live Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-red-500/30 text-red-400 text-xs font-semibold backdrop-blur-md shadow-lg shadow-red-500/10">
-            <Sparkles className="w-4 h-4 text-red-400 animate-spin" style={{ animationDuration: '6s' }} />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-[#F1FEC8]/30 text-[#F1FEC8] text-xs font-semibold backdrop-blur-md shadow-lg shadow-[#F1FEC8]/10">
+            <Sparkles className="w-4 h-4 text-[#F1FEC8] animate-spin" style={{ animationDuration: '6s' }} />
             <span>Discover & Save Ultra HD 4K Pins</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
             Explore Millions of <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-red-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#F1FEC8] via-emerald-200 to-indigo-300 bg-clip-text text-transparent">
               4K Ultra HD Wallpapers
             </span>
           </h1>
@@ -125,7 +125,7 @@ export default function Home() {
                 placeholder="Search pins, cars, anime, nature..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-slate-900/90 border border-slate-800 rounded-2xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-red-500"
+                className="w-full pl-11 pr-4 py-3 bg-slate-900/90 border border-slate-800 rounded-2xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#F1FEC8]"
               />
             </div>
           </div>
@@ -143,11 +143,11 @@ export default function Home() {
         {/* Section Title & Results Info */}
         <div className="flex items-center justify-between my-4 border-b border-slate-800/60 pb-3">
           <div className="flex items-center gap-2">
-            <Flame className="w-5 h-5 text-red-500" />
+            <Flame className="w-5 h-5 text-[#F1FEC8]" />
             <h2 className="text-lg font-bold text-white tracking-tight">
               {selectedCategory === 'All' ? 'Discover Pins' : `${selectedCategory} Pins`}
             </h2>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800/80 text-slate-400 border border-slate-700/50 ml-1">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800/80 text-[#F1FEC8] border border-[#F1FEC8]/20 ml-1">
               Showing {displayedWallpapers.length} of {filteredWallpapers.length}
             </span>
           </div>
@@ -180,11 +180,11 @@ export default function Home() {
               <div className="text-center pt-8">
                 <button
                   onClick={() => setVisibleCount((prev) => prev + 30)}
-                  className="px-8 py-3.5 rounded-full bg-red-600 hover:bg-red-500 text-white font-semibold text-sm transition-all shadow-lg shadow-red-600/30 hover:scale-105 active:scale-95 inline-flex items-center gap-2"
+                  className="px-8 py-3.5 rounded-full bg-[#F1FEC8] hover:bg-[#e2faae] text-[#090d12] font-bold text-sm transition-all shadow-lg shadow-[#F1FEC8]/20 hover:scale-105 active:scale-95 inline-flex items-center gap-2"
                 >
                   <span>Load More Pins</span>
-                  <ChevronDown className="w-4 h-4" />
-                  <span className="text-xs bg-red-800/80 px-2 py-0.5 rounded-full border border-red-400/30 ml-1">
+                  <ChevronDown className="w-4 h-4 text-[#090d12]" />
+                  <span className="text-xs bg-[#090d12] text-[#F1FEC8] px-2 py-0.5 rounded-full border border-[#F1FEC8]/30 ml-1">
                     +{filteredWallpapers.length - visibleCount} remaining
                   </span>
                 </button>
@@ -203,7 +203,7 @@ export default function Home() {
                 setSearchQuery('');
                 setSelectedCategory('All');
               }}
-              className="px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition-colors"
+              className="px-5 py-2.5 rounded-full bg-[#F1FEC8] hover:bg-[#e2faae] text-[#090d12] text-xs font-bold transition-colors"
             >
               Reset Filters
             </button>
@@ -230,7 +230,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-2 text-white font-bold text-lg">
-                <Sparkles className="w-5 h-5 text-red-500" />
+                <Sparkles className="w-5 h-5 text-[#F1FEC8]" />
                 Wallpapers Hub
               </div>
               <p className="text-slate-500 max-w-md">
@@ -240,19 +240,19 @@ export default function Home() {
 
             {/* Google AdSense Compliant Footer Real Links */}
             <div className="flex flex-wrap items-center justify-center gap-6 text-slate-400 font-medium">
-              <Link href="/privacy-policy" className="hover:text-red-400 transition-colors flex items-center gap-1">
+              <Link href="/privacy-policy" className="hover:text-[#F1FEC8] transition-colors flex items-center gap-1">
                 <ShieldCheck className="w-3.5 h-3.5" /> Privacy Policy
               </Link>
-              <Link href="/terms-of-service" className="hover:text-red-400 transition-colors flex items-center gap-1">
+              <Link href="/terms-of-service" className="hover:text-[#F1FEC8] transition-colors flex items-center gap-1">
                 <FileText className="w-3.5 h-3.5" /> Terms of Service
               </Link>
-              <Link href="/about" className="hover:text-red-400 transition-colors flex items-center gap-1">
+              <Link href="/about" className="hover:text-[#F1FEC8] transition-colors flex items-center gap-1">
                 <Info className="w-3.5 h-3.5" /> About Us
               </Link>
-              <Link href="/contact" className="hover:text-red-400 transition-colors flex items-center gap-1">
+              <Link href="/contact" className="hover:text-[#F1FEC8] transition-colors flex items-center gap-1">
                 <Info className="w-3.5 h-3.5" /> Contact Us
               </Link>
-              <Link href="/disclaimer" className="hover:text-red-400 transition-colors flex items-center gap-1">
+              <Link href="/disclaimer" className="hover:text-[#F1FEC8] transition-colors flex items-center gap-1">
                 <AlertCircle className="w-3.5 h-3.5" /> Disclaimer
               </Link>
             </div>
