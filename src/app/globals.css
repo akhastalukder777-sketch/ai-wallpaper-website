@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #090d12;
-  --foreground: #f8fafc;
+  --background: #F1FEC8;
+  --foreground: #090d12;
   --vanilla: #F1FEC8;
 }
 
@@ -21,35 +21,35 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d12;
+  background: #F1FEC8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #090d12;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #F1FEC8;
+  background: #334155;
 }
 
-/* Glassmorphic Effects with Vanilla #F1FEC8 Theme Glow */
+/* Glassmorphic Effects with Full Vanilla #F1FEC8 Theme */
 .glass-effect {
-  background: rgba(9, 13, 18, 0.85);
+  background: rgba(241, 254, 200, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(241, 254, 200, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .glass-card {
-  background: rgba(18, 24, 33, 0.75);
+  background: #0f172a;
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(241, 254, 200, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .glass-card:hover {
-  border-color: rgba(241, 254, 200, 0.5);
-  box-shadow: 0 12px 32px 0 rgba(241, 254, 200, 0.12);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.2);
 }
 
 .break-inside-avoid-column {
