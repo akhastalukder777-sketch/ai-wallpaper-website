@@ -41,9 +41,17 @@ h1, h2, h3, h4, h5, h6, button, a {
   background: #334155;
 }
 
-/* Glassmorphic Effects with Full Vanilla #F1FEC8 Theme */
+/* ~50% Translucent Vanilla Glass Floating Navbar Style */
+.glass-navbar {
+  background: rgba(241, 254, 200, 0.50);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(9, 13, 18, 0.12);
+  box-shadow: 0 10px 30px -10px rgba(9, 13, 18, 0.10);
+}
+
 .glass-effect {
-  background: rgba(241, 254, 200, 0.92);
+  background: rgba(241, 254, 200, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
