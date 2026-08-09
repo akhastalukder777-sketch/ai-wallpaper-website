@@ -78,7 +78,7 @@ export default function Home() {
   }, [filteredWallpapers, visibleCount]);
 
   return (
-    <div className="min-h-screen bg-[#090d12] text-slate-100 flex flex-col selection:bg-[#F1FEC8] selection:text-[#090d12]">
+    <div className="min-h-screen bg-[#F1FEC8] text-[#090d12] flex flex-col selection:bg-[#090d12] selection:text-[#F1FEC8]">
       {/* Header Navigation */}
       <Navbar
         searchQuery={searchQuery}
@@ -96,36 +96,36 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center overflow-hidden">
         {/* Glow Effects Background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-[#F1FEC8]/10 blur-[130px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-white/40 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl mx-auto space-y-4">
           {/* Top Live Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-[#F1FEC8]/30 text-[#F1FEC8] text-xs font-semibold backdrop-blur-md shadow-lg shadow-[#F1FEC8]/10">
-            <Sparkles className="w-4 h-4 text-[#F1FEC8] animate-spin" style={{ animationDuration: '6s' }} />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/10 border border-slate-900/20 text-[#090d12] text-xs font-bold backdrop-blur-md shadow-sm">
+            <Sparkles className="w-4 h-4 text-[#090d12] animate-spin" style={{ animationDuration: '6s' }} />
             <span>Discover & Save Ultra HD 4K Pins</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-[#090d12] leading-tight">
             Explore Millions of <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-[#F1FEC8] via-emerald-200 to-indigo-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#090d12] via-slate-800 to-indigo-950 bg-clip-text text-transparent">
               4K Ultra HD Wallpapers
             </span>
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-700 font-medium max-w-xl mx-auto leading-relaxed">
             Free high-resolution vertical pins & 4K wallpapers for Mobile, AMOLED, Desktop & Laptop. Updated daily.
           </p>
 
           {/* Mobile Search Input in Hero */}
           <div className="md:hidden pt-2 max-w-md mx-auto">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
               <input
                 type="text"
                 placeholder="Search pins, cars, anime, nature..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-slate-900/90 border border-slate-800 rounded-2xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#F1FEC8]"
+                className="w-full pl-11 pr-4 py-3 bg-white/90 border border-slate-900/20 rounded-2xl text-sm text-[#090d12] placeholder-slate-500 focus:outline-none focus:border-[#090d12]"
               />
             </div>
           </div>
@@ -141,13 +141,13 @@ export default function Home() {
         />
 
         {/* Section Title & Results Info */}
-        <div className="flex items-center justify-between my-4 border-b border-slate-800/60 pb-3">
+        <div className="flex items-center justify-between my-4 border-b border-slate-900/15 pb-3">
           <div className="flex items-center gap-2">
-            <Flame className="w-5 h-5 text-[#F1FEC8]" />
-            <h2 className="text-lg font-bold text-white tracking-tight">
+            <Flame className="w-5 h-5 text-[#090d12]" />
+            <h2 className="text-lg font-bold text-[#090d12] tracking-tight">
               {selectedCategory === 'All' ? 'Discover Pins' : `${selectedCategory} Pins`}
             </h2>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800/80 text-[#F1FEC8] border border-[#F1FEC8]/20 ml-1">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-900/10 text-[#090d12] font-semibold border border-slate-900/20 ml-1">
               Showing {displayedWallpapers.length} of {filteredWallpapers.length}
             </span>
           </div>
@@ -180,11 +180,11 @@ export default function Home() {
               <div className="text-center pt-8">
                 <button
                   onClick={() => setVisibleCount((prev) => prev + 30)}
-                  className="px-8 py-3.5 rounded-full bg-[#F1FEC8] hover:bg-[#e2faae] text-[#090d12] font-bold text-sm transition-all shadow-lg shadow-[#F1FEC8]/20 hover:scale-105 active:scale-95 inline-flex items-center gap-2"
+                  className="px-8 py-3.5 rounded-full bg-[#090d12] hover:bg-slate-800 text-[#F1FEC8] font-bold text-sm transition-all shadow-xl shadow-black/20 hover:scale-105 active:scale-95 inline-flex items-center gap-2"
                 >
                   <span>Load More Pins</span>
-                  <ChevronDown className="w-4 h-4 text-[#090d12]" />
-                  <span className="text-xs bg-[#090d12] text-[#F1FEC8] px-2 py-0.5 rounded-full border border-[#F1FEC8]/30 ml-1">
+                  <ChevronDown className="w-4 h-4 text-[#F1FEC8]" />
+                  <span className="text-xs bg-slate-800 text-[#F1FEC8] px-2 py-0.5 rounded-full border border-slate-700 ml-1">
                     +{filteredWallpapers.length - visibleCount} remaining
                   </span>
                 </button>
@@ -192,10 +192,10 @@ export default function Home() {
             )}
           </div>
         ) : (
-          <div className="py-20 text-center space-y-4 rounded-3xl bg-slate-900/30 border border-slate-800">
-            <Compass className="w-12 h-12 text-slate-600 mx-auto" />
-            <h3 className="text-lg font-semibold text-slate-300">No pins found</h3>
-            <p className="text-xs text-slate-500 max-w-md mx-auto">
+          <div className="py-20 text-center space-y-4 rounded-3xl bg-white/50 border border-slate-900/10">
+            <Compass className="w-12 h-12 text-slate-500 mx-auto" />
+            <h3 className="text-lg font-semibold text-[#090d12]">No pins found</h3>
+            <p className="text-xs text-slate-600 max-w-md mx-auto">
               We couldn't find any pins matching your search "{searchQuery}". Try searching for something else or browse categories.
             </p>
             <button
@@ -203,7 +203,7 @@ export default function Home() {
                 setSearchQuery('');
                 setSelectedCategory('All');
               }}
-              className="px-5 py-2.5 rounded-full bg-[#F1FEC8] hover:bg-[#e2faae] text-[#090d12] text-xs font-bold transition-colors"
+              className="px-5 py-2.5 rounded-full bg-[#090d12] hover:bg-slate-800 text-[#F1FEC8] text-xs font-bold transition-colors"
             >
               Reset Filters
             </button>
@@ -225,7 +225,7 @@ export default function Home() {
       />
 
       {/* Production Footer (Google AdSense & SEO Essential Links) */}
-      <footer className="mt-auto bg-slate-950 border-t border-slate-800/80 py-12 text-slate-400 text-xs">
+      <footer className="mt-auto bg-[#090d12] border-t border-slate-800/80 py-12 text-slate-400 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 text-center md:text-left">
