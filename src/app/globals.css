@@ -59,8 +59,8 @@ h1, h2, h3, h4, h5, h6, button, a {
   box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.35);
 }
 
-/* Integrated Translucent Liquid Glass Active Indicator (NO DETACHED BALL / NO BLACK) */
-.liquid-blob-indicator {
+/* Integrated Translucent Milky-White Glass Active Indicator (NO DETACHED BALL / NO BLACK) */
+.liquid-pill-active {
   background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);

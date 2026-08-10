@@ -45,7 +45,7 @@ export default function Navbar({
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
-  // Scroll Direction Auto-Hiding States
+  // Scroll Direction Auto-Hiding States (Opposite behavior)
   const [showTopNav, setShowTopNav] = useState(true);
   const [showBottomNav, setShowBottomNav] = useState(true);
   const lastScrollY = useRef(0);
@@ -69,6 +69,8 @@ export default function Navbar({
     height: 0,
     top: 0,
     opacity: 0,
+    scaleX: 1,
+    scaleY: 1,
     isMoving: false,
   });
 
@@ -88,7 +90,7 @@ export default function Navbar({
     { id: 'More', label: 'More', icon: MoreHorizontal },
   ];
 
-  // Detect Scroll Direction for Opposite Navbar Hiding/Showing
+  // Detect Scroll Direction: Scroll DOWN -> Hide Top Nav / Show Bottom Nav; Scroll UP -> Show Top Nav / Hide Bottom Nav
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -147,14 +149,12 @@ export default function Navbar({
     const activeBtn = mobileNavRefs.current.get(targetId);
     if (activeBtn) {
       setMobileIndicator((prev) => ({
+        ...prev,
         left: activeBtn.offsetLeft,
         width: activeBtn.offsetWidth,
         height: activeBtn.offsetHeight,
         top: activeBtn.offsetTop,
         opacity: 1,
-        isMoving:
-          prev.opacity > 0 &&
-          (prev.left !== activeBtn.offsetLeft || prev.width !== activeBtn.offsetWidth),
       }));
     }
   };
@@ -165,7 +165,6 @@ export default function Navbar({
 
     const timer = setTimeout(() => {
       setDesktopIndicator((prev) => ({ ...prev, isMoving: false }));
-      setMobileIndicator((prev) => ({ ...prev, isMoving: false }));
     }, 550);
 
     const handleResize = () => {
@@ -192,20 +191,33 @@ export default function Navbar({
       setIsMobileMenuOpen(false);
     }
 
-    // Direct DOM measurement update for 100% instant precision
+    // Direct DOM measurement update with liquid stretch distance calculation
     if (e?.currentTarget) {
       const btn = e.currentTarget;
+      const prevLeft = mobileIndicator.left;
+      const newLeft = btn.offsetLeft;
+      const distance = Math.abs(newLeft - prevLeft);
+      const stretch = distance > 10 ? Math.min(1.28, 1 + distance / 220) : 1;
+
       setMobileIndicator({
-        left: btn.offsetLeft,
+        left: newLeft,
         width: btn.offsetWidth,
         height: btn.offsetHeight,
         top: btn.offsetTop,
         opacity: 1,
-        isMoving: true,
+        scaleX: stretch,
+        scaleY: 2 - stretch,
+        isMoving: distance > 10,
       });
+
       setTimeout(() => {
-        setMobileIndicator((prev) => ({ ...prev, isMoving: false }));
-      }, 500);
+        setMobileIndicator((prev) => ({
+          ...prev,
+          scaleX: 1,
+          scaleY: 1,
+          isMoving: false,
+        }));
+      }, 480);
     }
   };
 
@@ -395,29 +407,27 @@ export default function Navbar({
         </div>
       </header>
 
-      {/* ========================================================================= */}
+      {/* ======================================================================= */}
       {/* MOBILE FLOATING BOTTOM NAVBAR (INTEGRATED MILKY-WHITE LIQUID GLASS PILL) */}
-      {/* ========================================================================= */}
+      {/* ======================================================================= */}
       <div
         className={`lg:hidden fixed bottom-3 left-3 right-3 z-50 max-w-md mx-auto transition-all duration-300 transform ${
           showBottomNav ? 'translate-y-0 opacity-100' : 'translate-y-28 opacity-0 pointer-events-none'
         }`}
       >
-        <div className="glass-navbar rounded-full px-2 py-1.5 flex items-center justify-around relative shadow-2xl overflow-hidden">
+        <div className="glass-navbar-dark rounded-full px-2 py-1.5 flex items-center justify-around relative shadow-2xl overflow-hidden">
           
           {/* Integrated Milky-White Translucent Glass Active Liquid Pill (NO DETACHED BALL / NO BLACK) */}
           <div
-            className="absolute liquid-blob-indicator pointer-events-none will-change-transform z-0"
+            className="absolute liquid-pill-active pointer-events-none will-change-transform z-0 shadow-lg"
             style={{
-              transform: `translate3d(${mobileIndicator.left}px, ${mobileIndicator.top}px, 0) ${
-                mobileIndicator.isMoving ? 'scaleX(1.28) scaleY(0.82)' : 'scale(1)'
-              }`,
+              transform: `translate3d(${mobileIndicator.left}px, ${mobileIndicator.top}px, 0) scaleX(${mobileIndicator.scaleX}) scaleY(${mobileIndicator.scaleY})`,
               width: `${mobileIndicator.width}px`,
               height: `${mobileIndicator.height}px`,
               opacity: mobileIndicator.opacity,
               borderRadius: mobileIndicator.isMoving ? '26px 10px 28px 8px' : '9999px',
               transition:
-                'transform 550ms cubic-bezier(0.34, 1.56, 0.64, 1), width 550ms cubic-bezier(0.34, 1.56, 0.64, 1), height 550ms cubic-bezier(0.34, 1.56, 0.64, 1), border-radius 550ms ease-out, opacity 300ms ease',
+                'transform 480ms cubic-bezier(0.34, 1.45, 0.64, 1), width 480ms cubic-bezier(0.34, 1.45, 0.64, 1), height 480ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 480ms ease-out, opacity 300ms ease',
             }}
           />
 
@@ -444,7 +454,7 @@ export default function Navbar({
                 className={`relative z-10 flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-full transition-all duration-300 ${
                   isActive
                     ? 'text-[#23212C] font-black scale-105'
-                    : 'text-[#23212C]/75 hover:text-[#23212C]'
+                    : 'text-slate-300 hover:text-white'
                 }`}
               >
                 <Icon className="w-4 h-4" />
