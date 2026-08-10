@@ -45,6 +45,11 @@ export default function Navbar({
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
+  // Scroll Direction Auto-Hiding States
+  const [showTopNav, setShowTopNav] = useState(true);
+  const [showBottomNav, setShowBottomNav] = useState(true);
+  const lastScrollY = useRef(0);
+
   // Desktop Liquid Indicator Refs & State
   const desktopNavRefs = useRef<Map<string, HTMLButtonElement | HTMLAnchorElement>>(new Map());
   const [desktopIndicator, setDesktopIndicator] = useState({
@@ -56,7 +61,7 @@ export default function Navbar({
     isMoving: false,
   });
 
-  // Mobile Bottom Liquid Indicator Refs & State
+  // Mobile Bottom Protruding Liquid Indicator Refs & State
   const mobileNavRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const [mobileIndicator, setMobileIndicator] = useState({
     left: 0,
@@ -83,6 +88,41 @@ export default function Navbar({
     { id: 'More', label: 'More', icon: MoreHorizontal },
   ];
 
+  // Detect Scroll Direction for Opposite Navbar Hiding/Showing
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // At top of page (< 50px), both navbars remain visible
+      if (currentScrollY < 50) {
+        setShowTopNav(true);
+        setShowBottomNav(true);
+        lastScrollY.current = currentScrollY;
+        return;
+      }
+
+      // Small 8px delta threshold to prevent jitter
+      if (Math.abs(currentScrollY - lastScrollY.current) < 8) {
+        return;
+      }
+
+      if (currentScrollY > lastScrollY.current) {
+        // Scrolling DOWN: Hide Top Nav, Show Bottom Nav
+        setShowTopNav(false);
+        setShowBottomNav(true);
+      } else {
+        // Scrolling UP: Show Top Nav, Hide Bottom Nav
+        setShowTopNav(true);
+        setShowBottomNav(false);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Recalculate Desktop Indicator
   const updateDesktopIndicator = () => {
     const activeEl = desktopNavRefs.current.get(activeNav);
@@ -100,7 +140,7 @@ export default function Navbar({
     }
   };
 
-  // Recalculate Mobile Bottom Indicator
+  // Recalculate Mobile Bottom Protruding Indicator
   const updateMobileIndicator = () => {
     const targetId =
       activeNav === 'Saved'
@@ -160,9 +200,13 @@ export default function Navbar({
   return (
     <>
       {/* ================================================== */}
-      {/* FLOATING TOP NAVBAR (DESKTOP & MOBILE INTEGRATED) */}
+      {/* FLOATING TOP NAVBAR (SLIDES UP ON SCROLL DOWN) */}
       {/* ================================================== */}
-      <header className="sticky top-3 z-50 px-2 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full transition-all duration-300">
+      <header
+        className={`sticky top-3 z-50 px-2 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full transition-all duration-300 transform ${
+          showTopNav ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0 pointer-events-none'
+        }`}
+      >
         <div className="glass-navbar rounded-full px-3.5 sm:px-6 py-2 flex items-center justify-between gap-2 overflow-hidden shadow-xl">
           
           {/* SEARCH ACTIVE STATE ON MOBILE (EXPANDS INSIDE NAVBAR SAFELY) */}
@@ -342,23 +386,28 @@ export default function Navbar({
       </header>
 
       {/* ================================================== */}
-      {/* MOBILE FLOATING BOTTOM NAVIGATION BAR (~50% GLASS) */}
+      {/* MOBILE FLOATING BOTTOM NAVBAR (EXACT VIDEO MATCH) */}
       {/* ================================================== */}
-      <div className="lg:hidden fixed bottom-3 left-3 right-3 z-50 max-w-md mx-auto">
-        <div className="glass-navbar rounded-full px-2.5 py-1.5 flex items-center justify-around relative shadow-2xl">
-          {/* Mobile Shared Liquid Active Indicator */}
+      <div
+        className={`lg:hidden fixed bottom-3 left-3 right-3 z-50 max-w-md mx-auto transition-all duration-300 transform ${
+          showBottomNav ? 'translate-y-0 opacity-100' : 'translate-y-28 opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="glass-navbar rounded-full px-2.5 py-2 flex items-center justify-around relative shadow-2xl">
+          
+          {/* Protruding Floating Liquid Active Bubble (Exact Video Animation) */}
           <div
-            className="absolute bg-[#23212C] shadow-md shadow-black/30 pointer-events-none will-change-transform"
+            className="absolute liquid-bubble-raised pointer-events-none will-change-transform z-0"
             style={{
-              transform: `translate3d(${mobileIndicator.left}px, ${mobileIndicator.top}px, 0) ${
-                mobileIndicator.isMoving ? 'scaleX(1.15) scaleY(0.85)' : 'scale(1)'
+              transform: `translate3d(${mobileIndicator.left}px, -14px, 0) ${
+                mobileIndicator.isMoving ? 'scaleX(1.22) scaleY(0.82)' : 'scale(1)'
               }`,
               width: `${mobileIndicator.width}px`,
-              height: `${mobileIndicator.height}px`,
+              height: `${mobileIndicator.height + 12}px`,
               opacity: mobileIndicator.opacity,
-              borderRadius: mobileIndicator.isMoving ? '22px 12px 24px 10px' : '9999px',
+              borderRadius: mobileIndicator.isMoving ? '28px 12px 30px 10px' : '9999px',
               transition:
-                'transform 550ms cubic-bezier(0.34, 1.45, 0.64, 1), width 550ms cubic-bezier(0.34, 1.45, 0.64, 1), height 550ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 550ms ease-out, opacity 300ms ease',
+                'transform 500ms cubic-bezier(0.34, 1.45, 0.64, 1), width 500ms cubic-bezier(0.34, 1.45, 0.64, 1), height 500ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 500ms ease-out, opacity 300ms ease',
             }}
           />
 
@@ -382,14 +431,14 @@ export default function Navbar({
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => handleNavClick(item.id)}
-                className={`relative z-10 flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-full transition-colors duration-200 ${
+                className={`relative z-10 flex flex-col items-center gap-0.5 px-3 py-1 rounded-full transition-all duration-300 ${
                   isActive
-                    ? 'text-[#F1FEC8] font-bold'
+                    ? 'text-[#F1FEC8] font-bold -translate-y-2 scale-110'
                     : 'text-[#23212C]/80 hover:text-[#23212C]'
                 }`}
               >
                 <Icon className="w-4 h-4" />
-                <span className="text-[10px] font-bold tracking-tight">{item.label}</span>
+                <span className="text-[10px] font-extrabold tracking-tight">{item.label}</span>
               </button>
             );
           })}

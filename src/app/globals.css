@@ -17,7 +17,7 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* Bold Block Display Typography for Headings, Titles and Buttons */
+/* Bold Block Display Typography */
 h1, h2, h3, h4, h5, h6, button, a {
   font-family: 'Chakra Petch', 'Syne', sans-serif;
   font-weight: 800;
@@ -42,28 +42,28 @@ h1, h2, h3, h4, h5, h6, button, a {
   background: #3b3745;
 }
 
-/* ~50-65% Translucent Vanilla & Cosmic Glass Navbar Style */
+/* ~50% Translucent Frosted Glass Navbar Style */
 .glass-navbar {
-  background: rgba(241, 254, 200, 0.55);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(35, 33, 44, 0.12);
-  box-shadow: 0 10px 30px -10px rgba(35, 33, 44, 0.12);
+  background: rgba(241, 254, 200, 0.48);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(35, 33, 44, 0.14);
+  box-shadow: 0 12px 32px -8px rgba(35, 33, 44, 0.12);
 }
 
 .glass-navbar-dark {
   background: rgba(35, 33, 44, 0.65);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(241, 254, 200, 0.15);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(241, 254, 200, 0.18);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.35);
 }
 
-/* Category Liquid Cosmic Glass Active Bubble Style */
-.glass-category-bubble {
+/* Protruding Liquid Active Bubble Glow (Exact Match to Video) */
+.liquid-bubble-raised {
   background: #23212C;
-  border: 1px solid rgba(241, 254, 200, 0.30);
-  box-shadow: 0 8px 24px -4px rgba(35, 33, 44, 0.35);
+  border: 2px solid rgba(241, 254, 200, 0.35);
+  box-shadow: 0 -6px 20px rgba(35, 33, 44, 0.35), 0 8px 16px rgba(0, 0, 0, 0.25);
 }
 
 .glass-effect {
@@ -84,7 +84,6 @@ h1, h2, h3, h4, h5, h6, button, a {
   box-shadow: 0 16px 36px 0 rgba(35, 33, 44, 0.25);
 }
 
-/* Pixabay-Style Glass Hover Overlay Panel */
 .glass-hover-panel {
   background: rgba(35, 33, 44, 0.70);
   backdrop-filter: blur(14px);
