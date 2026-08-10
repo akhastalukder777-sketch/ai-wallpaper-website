@@ -1,40 +1,68 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;0,800;1,700&family=Syne:wght@700;800&display=swap');
+
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;0,800;1,700&family=Syne:wght@700;800&display=swap");
 
 :root {
-  --background: #F1FEC8;
-  --foreground: #23212C;
-  --vanilla: #F1FEC8;
-  --cosmic: #23212C;
+  --background: #f1fec8;
+  --foreground: #23212c;
+  --vanilla: #f1fec8;
+  --cosmic: #23212c;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Chakra Petch', 'Syne', system-ui, -apple-system, sans-serif;
+  font-family:
+    "Chakra Petch",
+    "Syne",
+    system-ui,
+    -apple-system,
+    sans-serif;
+
   overflow-x: hidden;
   min-height: 100vh;
   letter-spacing: -0.01em;
 }
 
-/* Bold Block Display Typography */
-h1, h2, h3, h4, h5, h6, button, a {
-  font-family: 'Chakra Petch', 'Syne', sans-serif;
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+a {
+  font-family:
+    "Chakra Petch",
+    "Syne",
+    sans-serif;
+
   font-weight: 800;
 }
 
-/* Custom Vanilla & Cosmic Scrollbar */
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F1FEC8;
+  background: #f1fec8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #23212C;
+  background: #23212c;
   border-radius: 9999px;
 }
 
@@ -42,57 +70,262 @@ h1, h2, h3, h4, h5, h6, button, a {
   background: #3b3745;
 }
 
-/* ~50% Translucent Frosted Glass Navbar Style */
+/* =========================================================
+   GLASS NAVBAR
+========================================================= */
+
 .glass-navbar {
   background: rgba(241, 254, 200, 0.52);
+
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+
   border: 1px solid rgba(35, 33, 44, 0.14);
-  box-shadow: 0 12px 32px -8px rgba(35, 33, 44, 0.12);
+
+  box-shadow:
+    0 12px 32px -8px rgba(35, 33, 44, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
 }
 
 .glass-navbar-dark {
-  background: rgba(35, 33, 44, 0.65);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(241, 254, 200, 0.18);
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.35);
+  background: rgba(35, 33, 44, 0.82);
+
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  box-shadow:
+    0 16px 40px -12px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.08);
 }
 
-/* Integrated Translucent Milky-White Glass Active Indicator (NO DETACHED BALL / NO BLACK) */
+/* =========================================================
+   LIQUID GLASS ACTIVE BUBBLE
+   =========================================================
+   
+   This is the important part.
+   The bubble is intentionally a separate floating element
+   that moves between navigation buttons.
+========================================================= */
+
 .liquid-pill-active {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1.5px solid rgba(255, 255, 255, 0.90);
-  box-shadow: 0 6px 20px -2px rgba(35, 33, 44, 0.16), inset 0 1px 2px rgba(255, 255, 255, 0.95);
+  position: absolute;
+
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 32% 25%,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(255, 255, 255, 0.88) 38%,
+      rgba(255, 255, 255, 0.68) 72%,
+      rgba(255, 255, 255, 0.54) 100%
+    );
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255, 255, 255, 0.95);
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.25),
+    0 2px 8px rgba(255, 255, 255, 0.45),
+    inset 0 1px 3px rgba(255, 255, 255, 1);
+
+  pointer-events: none;
+
+  z-index: 1;
+
+  transform-origin: center center;
+
+  will-change: transform, left, top;
 }
+
+/* Bubble moving state */
+
+.liquid-pill-active.is-moving {
+  border-radius: 48% 52% 58% 42% / 55% 44% 56% 45%;
+}
+
+/* =========================================================
+   LIQUID NAV BUTTON
+========================================================= */
+
+.liquid-nav-button {
+  position: relative;
+
+  z-index: 5;
+
+  min-width: 58px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 3px;
+
+  padding: 7px 8px;
+
+  border-radius: 9999px;
+
+  transition:
+    color 250ms ease,
+    transform 250ms ease;
+}
+
+.liquid-nav-button.active {
+  color: #23212c;
+}
+
+.liquid-nav-button:not(.active) {
+  color: rgba(241, 254, 200, 0.7);
+}
+
+.liquid-nav-button:not(.active):hover {
+  color: #ffffff;
+}
+
+/* Active icon */
+
+.liquid-nav-button.active svg {
+  transform: translateY(-1px) scale(1.03);
+}
+
+/* =========================================================
+   MORE DRAWER
+========================================================= */
+
+.glass-hover-panel {
+  background: rgba(35, 33, 44, 0.94);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(241, 254, 200, 0.18);
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+/* =========================================================
+   GLASS EFFECT
+========================================================= */
 
 .glass-effect {
   background: rgba(241, 254, 200, 0.85);
+
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+
   border-bottom: 1px solid rgba(35, 33, 44, 0.08);
 }
 
+/* =========================================================
+   CARDS
+========================================================= */
+
 .glass-card {
-  background: #23212C;
+  background: #23212c;
+
   backdrop-filter: blur(8px);
+
   border: 1px solid rgba(35, 33, 44, 0.15);
+
+  transition:
+    transform 300ms ease,
+    box-shadow 300ms ease,
+    border-color 300ms ease;
 }
 
 .glass-card:hover {
   border-color: rgba(241, 254, 200, 0.6);
-  box-shadow: 0 16px 36px 0 rgba(35, 33, 44, 0.25);
+
+  box-shadow:
+    0 16px 36px rgba(35, 33, 44, 0.25);
 }
 
-.glass-hover-panel {
-  background: rgba(35, 33, 44, 0.70);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(241, 254, 200, 0.20);
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes liquidEnter {
+  0% {
+    transform: scale(0.65);
+    opacity: 0;
+  }
+
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
+
+@keyframes liquidBounce {
+  0% {
+    transform: scaleX(1) scaleY(1);
+  }
+
+  35% {
+    transform: scaleX(1.22) scaleY(0.82);
+  }
+
+  65% {
+    transform: scaleX(0.9) scaleY(1.08);
+  }
+
+  100% {
+    transform: scaleX(1) scaleY(1);
+  }
+}
+
+.animate-liquid-enter {
+  animation: liquidEnter 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animate-liquid-bounce {
+  animation: liquidBounce 520ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 250ms ease-out;
+}
+
+/* =========================================================
+   COLUMN LAYOUT
+========================================================= */
 
 .break-inside-avoid-column {
   break-inside: avoid;
+}
+
+/* =========================================================
+   MOBILE SAFE AREA
+========================================================= */
+
+.mobile-bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom);
 }

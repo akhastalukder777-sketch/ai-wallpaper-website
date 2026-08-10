@@ -1,7 +1,14 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+} from "react";
+
+import Link from "next/link";
+
 import {
   Search,
   Sparkles,
@@ -17,387 +24,1021 @@ import {
   ShieldCheck,
   FileText,
   Info,
-} from 'lucide-react';
-import { CATEGORIES } from '../data/wallpapers';
+} from "lucide-react";
+
+import { CATEGORIES } from "../data/wallpapers";
 
 interface NavbarProps {
   searchQuery?: string;
+
   onSearchChange?: (query: string) => void;
+
   favoriteCount?: number;
+
   activeCategory?: string;
+
   onSelectCategory?: (category: string) => void;
+
   activeNav?: string;
+
   onNavChange?: (nav: string) => void;
+
   onRandomClick?: () => void;
 }
 
+interface IndicatorState {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  opacity: number;
+  moving: boolean;
+}
+
 export default function Navbar({
-  searchQuery = '',
+  searchQuery = "",
   onSearchChange,
   favoriteCount = 0,
-  activeCategory = 'All',
+  activeCategory = "All",
   onSelectCategory,
-  activeNav = 'Home',
+  activeNav = "Home",
   onNavChange,
   onRandomClick,
 }: NavbarProps) {
-  const [isMobileMoreOpen, setIsMobileMenuOpen] = useState(false);
-  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  /* ======================================================
+     STATES
+  ====================================================== */
 
-  // Scroll Direction Auto-Hiding States (Opposite behavior)
+  const [isMobileMoreOpen, setIsMobileMoreOpen] =
+    useState(false);
+
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] =
+    useState(false);
+
+  const [isSearchExpanded, setIsSearchExpanded] =
+    useState(false);
+
+  /* ======================================================
+     SCROLL STATES
+  ====================================================== */
+
   const [showTopNav, setShowTopNav] = useState(true);
+
   const [showBottomNav, setShowBottomNav] = useState(true);
+
   const lastScrollY = useRef(0);
 
-  // Desktop Liquid Indicator Refs & State
-  const desktopNavRefs = useRef<Map<string, HTMLButtonElement | HTMLAnchorElement>>(new Map());
-  const [desktopIndicator, setDesktopIndicator] = useState({
-    left: 0,
-    width: 0,
-    height: 0,
-    top: 0,
-    opacity: 0,
-    isMoving: false,
-  });
+  /* ======================================================
+     MOBILE NAV REFS
+  ====================================================== */
 
-  // Mobile Bottom Milky Glass Indicator Refs & State
-  const mobileNavRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
-  const [mobileIndicator, setMobileIndicator] = useState({
-    left: 0,
-    width: 0,
-    height: 0,
-    top: 0,
-    opacity: 0,
-    scaleX: 1,
-    scaleY: 1,
-    isMoving: false,
-  });
+  const mobileNavContainerRef =
+    useRef<HTMLDivElement | null>(null);
+
+  const mobileNavRefs =
+    useRef<Map<string, HTMLButtonElement>>(
+      new Map()
+    );
+
+  /* ======================================================
+     MOBILE LIQUID INDICATOR
+  ====================================================== */
+
+  const [mobileIndicator, setMobileIndicator] =
+    useState<IndicatorState>({
+      left: 0,
+      top: 0,
+      width: 58,
+      height: 58,
+      opacity: 0,
+      moving: false,
+    });
+
+  /* ======================================================
+     DESKTOP REFS
+  ====================================================== */
+
+  const desktopNavRefs =
+    useRef<Map<string, HTMLButtonElement>>(
+      new Map()
+    );
+
+  const [desktopIndicator, setDesktopIndicator] =
+    useState({
+      left: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      opacity: 0,
+      moving: false,
+    });
+
+  /* ======================================================
+     NAV ITEMS
+  ====================================================== */
 
   const desktopNavItems = [
-    { id: 'Home', label: 'Home', icon: HomeIcon },
-    { id: 'Latest', label: 'Latest', icon: Clock },
-    { id: 'Trending', label: 'Trending', icon: Flame, iconColor: 'text-[#23212C]' },
-    { id: 'Categories', label: 'Categories', icon: Grid, hasDropdown: true },
-    { id: 'Random', label: 'Random', icon: Dices },
+    {
+      id: "Home",
+      label: "Home",
+      icon: HomeIcon,
+    },
+
+    {
+      id: "Latest",
+      label: "Latest",
+      icon: Clock,
+    },
+
+    {
+      id: "Trending",
+      label: "Trending",
+      icon: Flame,
+    },
+
+    {
+      id: "Categories",
+      label: "Categories",
+      icon: Grid,
+      hasDropdown: true,
+    },
+
+    {
+      id: "Random",
+      label: "Random",
+      icon: Dices,
+    },
   ];
 
   const mobileNavItems = [
-    { id: 'Home', label: 'Home', icon: HomeIcon },
-    { id: 'Trending', label: 'Trending', icon: Flame },
-    { id: 'Random', label: 'Random', icon: Dices },
-    { id: 'Saved', label: 'Saved', icon: Heart },
-    { id: 'More', label: 'More', icon: MoreHorizontal },
+    {
+      id: "Home",
+      label: "Home",
+      icon: HomeIcon,
+    },
+
+    {
+      id: "Trending",
+      label: "Trending",
+      icon: Flame,
+    },
+
+    {
+      id: "Random",
+      label: "Random",
+      icon: Dices,
+    },
+
+    {
+      id: "Saved",
+      label: "Saved",
+      icon: Heart,
+    },
+
+    {
+      id: "More",
+      label: "More",
+      icon: MoreHorizontal,
+    },
   ];
 
-  // Detect Scroll Direction: Scroll DOWN -> Hide Top Nav / Show Bottom Nav; Scroll UP -> Show Top Nav / Hide Bottom Nav
+  /* ======================================================
+     MOBILE ACTIVE ITEM
+  ====================================================== */
+
+  const getMobileActiveId = () => {
+    if (isMobileMoreOpen) {
+      return "More";
+    }
+
+    if (
+      activeNav === "Home" ||
+      activeNav === "Trending" ||
+      activeNav === "Random" ||
+      activeNav === "Saved"
+    ) {
+      return activeNav;
+    }
+
+    return "Home";
+  };
+
+  /* ======================================================
+     UPDATE MOBILE LIQUID BUBBLE
+     
+     IMPORTANT:
+     We calculate the position using getBoundingClientRect()
+     instead of offsetLeft.
+
+     This fixes the misplaced bubble problem.
+  ====================================================== */
+
+  const updateMobileIndicator = (
+    animate = false
+  ) => {
+    const container =
+      mobileNavContainerRef.current;
+
+    const activeId = getMobileActiveId();
+
+    const button =
+      mobileNavRefs.current.get(activeId);
+
+    if (!container || !button) {
+      return;
+    }
+
+    const containerRect =
+      container.getBoundingClientRect();
+
+    const buttonRect =
+      button.getBoundingClientRect();
+
+    const bubbleSize = 58;
+
+    const buttonCenter =
+      buttonRect.left +
+      buttonRect.width / 2;
+
+    const left =
+      buttonCenter -
+      containerRect.left -
+      bubbleSize / 2;
+
+    /*
+      Bubble sits slightly above the navigation button.
+    */
+
+    const top =
+      buttonRect.top -
+      containerRect.top +
+      buttonRect.height / 2 -
+      bubbleSize / 2 -
+      3;
+
+    setMobileIndicator((previous) => ({
+      left,
+      top,
+      width: bubbleSize,
+      height: bubbleSize,
+      opacity: 1,
+      moving: animate,
+    }));
+  };
+
+  /* ======================================================
+     INITIAL / ACTIVE NAV UPDATE
+  ====================================================== */
+
+  useLayoutEffect(() => {
+    const timer = requestAnimationFrame(() => {
+      updateMobileIndicator(false);
+    });
+
+    return () => {
+      cancelAnimationFrame(timer);
+    };
+  }, [
+    activeNav,
+    isMobileMoreOpen,
+  ]);
+
+  /* ======================================================
+     WINDOW RESIZE
+  ====================================================== */
+
+  useEffect(() => {
+    const handleResize = () => {
+      updateMobileIndicator(false);
+      updateDesktopIndicator();
+    };
+
+    window.addEventListener(
+      "resize",
+      handleResize
+    );
+
+    return () => {
+      window.removeEventListener(
+        "resize",
+        handleResize
+      );
+    };
+  });
+
+  /* ======================================================
+     DESKTOP INDICATOR
+  ====================================================== */
+
+  const updateDesktopIndicator = () => {
+    const activeElement =
+      desktopNavRefs.current.get(activeNav);
+
+    if (!activeElement) {
+      return;
+    }
+
+    setDesktopIndicator((previous) => ({
+      left: activeElement.offsetLeft,
+      width: activeElement.offsetWidth,
+      height: activeElement.offsetHeight,
+      top: activeElement.offsetTop,
+      opacity: 1,
+      moving:
+        previous.opacity > 0 &&
+        previous.left !==
+          activeElement.offsetLeft,
+    }));
+  };
+
+  useLayoutEffect(() => {
+    const timer = requestAnimationFrame(() => {
+      updateDesktopIndicator();
+    });
+
+    return () => {
+      cancelAnimationFrame(timer);
+    };
+  }, [activeNav]);
+
+  /* ======================================================
+     SCROLL DIRECTION
+  ====================================================== */
+
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+      const currentScrollY =
+        window.scrollY;
 
       if (currentScrollY < 50) {
         setShowTopNav(true);
         setShowBottomNav(true);
-        lastScrollY.current = currentScrollY;
+
+        lastScrollY.current =
+          currentScrollY;
+
         return;
       }
 
-      if (Math.abs(currentScrollY - lastScrollY.current) < 8) {
+      if (
+        Math.abs(
+          currentScrollY -
+            lastScrollY.current
+        ) < 8
+      ) {
         return;
       }
 
-      if (currentScrollY > lastScrollY.current) {
+      if (
+        currentScrollY >
+        lastScrollY.current
+      ) {
+        /*
+          Scroll DOWN
+          Top disappears
+          Bottom stays
+        */
+
         setShowTopNav(false);
         setShowBottomNav(true);
       } else {
+        /*
+          Scroll UP
+          Top appears
+          Bottom disappears
+        */
+
         setShowTopNav(true);
         setShowBottomNav(false);
       }
 
-      lastScrollY.current = currentScrollY;
+      lastScrollY.current =
+        currentScrollY;
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener(
+      "scroll",
+      handleScroll,
+      {
+        passive: true,
+      }
+    );
+
+    return () => {
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      );
+    };
   }, []);
 
-  // Recalculate Desktop Indicator
-  const updateDesktopIndicator = () => {
-    const activeEl = desktopNavRefs.current.get(activeNav);
-    if (activeEl) {
-      setDesktopIndicator((prev) => ({
-        left: activeEl.offsetLeft,
-        width: activeEl.offsetWidth,
-        height: activeEl.offsetHeight,
-        top: activeEl.offsetTop,
-        opacity: 1,
-        isMoving:
-          prev.opacity > 0 &&
-          (prev.left !== activeEl.offsetLeft || prev.width !== activeEl.offsetWidth),
-      }));
+  /* ======================================================
+     NAV CLICK
+  ====================================================== */
+
+  const handleNavClick = (
+    id: string,
+    event?: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    if (onNavChange) {
+      onNavChange(id);
     }
-  };
 
-  // Recalculate Mobile Bottom Indicator based on exact DOM Button Offset
-  const updateMobileIndicator = () => {
-    const targetId =
-      activeNav === 'Saved'
-        ? 'Saved'
-        : activeNav === 'Home' || activeNav === 'Trending' || activeNav === 'Random'
-        ? activeNav
-        : 'More';
-    const activeBtn = mobileNavRefs.current.get(targetId);
-    if (activeBtn) {
-      setMobileIndicator((prev) => ({
-        ...prev,
-        left: activeBtn.offsetLeft,
-        width: activeBtn.offsetWidth,
-        height: activeBtn.offsetHeight,
-        top: activeBtn.offsetTop,
-        opacity: 1,
-      }));
+    /* RANDOM */
+
+    if (id === "Random") {
+      if (onRandomClick) {
+        onRandomClick();
+      }
     }
-  };
 
-  useEffect(() => {
-    updateDesktopIndicator();
-    updateMobileIndicator();
+    /* MORE */
 
-    const timer = setTimeout(() => {
-      setDesktopIndicator((prev) => ({ ...prev, isMoving: false }));
-    }, 550);
-
-    const handleResize = () => {
-      updateDesktopIndicator();
-      updateMobileIndicator();
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(timer);
-    };
-  }, [activeNav]);
-
-  const handleNavClick = (id: string, e?: React.MouseEvent<HTMLButtonElement>) => {
-    if (onNavChange) onNavChange(id);
-
-    if (id === 'Random') {
-      if (onRandomClick) onRandomClick();
-    }
-    if (id === 'More') {
-      setIsMobileMenuOpen(!isMobileMoreOpen);
+    if (id === "More") {
+      setIsMobileMoreOpen(
+        (previous) => !previous
+      );
     } else {
-      setIsMobileMenuOpen(false);
+      setIsMobileMoreOpen(false);
     }
 
-    // Direct DOM measurement update with liquid stretch distance calculation
-    if (e?.currentTarget) {
-      const btn = e.currentTarget;
-      const prevLeft = mobileIndicator.left;
-      const newLeft = btn.offsetLeft;
-      const distance = Math.abs(newLeft - prevLeft);
-      const stretch = distance > 10 ? Math.min(1.28, 1 + distance / 220) : 1;
+    /*
+      Immediately move bubble to clicked button.
+      This makes animation feel instant.
+    */
+
+    if (
+      event?.currentTarget &&
+      mobileNavContainerRef.current
+    ) {
+      const button =
+        event.currentTarget;
+
+      const container =
+        mobileNavContainerRef.current;
+
+      const containerRect =
+        container.getBoundingClientRect();
+
+      const buttonRect =
+        button.getBoundingClientRect();
+
+      const bubbleSize = 58;
+
+      const buttonCenter =
+        buttonRect.left +
+        buttonRect.width / 2;
+
+      const left =
+        buttonCenter -
+        containerRect.left -
+        bubbleSize / 2;
+
+      const top =
+        buttonRect.top -
+        containerRect.top +
+        buttonRect.height / 2 -
+        bubbleSize / 2 -
+        3;
+
+      /*
+        Calculate travel distance.
+      */
+
+      const distance = Math.abs(
+        left - mobileIndicator.left
+      );
+
+      /*
+        More distance = more stretch.
+      */
+
+      const stretch =
+        Math.min(
+          1.32,
+          1 +
+            distance / 240
+        );
 
       setMobileIndicator({
-        left: newLeft,
-        width: btn.offsetWidth,
-        height: btn.offsetHeight,
-        top: btn.offsetTop,
+        left,
+        top,
+        width: bubbleSize,
+        height: bubbleSize,
         opacity: 1,
-        scaleX: stretch,
-        scaleY: 2 - stretch,
-        isMoving: distance > 10,
+        moving: distance > 8,
       });
 
-      setTimeout(() => {
-        setMobileIndicator((prev) => ({
-          ...prev,
-          scaleX: 1,
-          scaleY: 1,
-          isMoving: false,
-        }));
-      }, 480);
+      /*
+        End liquid stretch.
+      */
+
+      window.setTimeout(() => {
+        setMobileIndicator(
+          (previous) => ({
+            ...previous,
+            moving: false,
+          })
+        );
+      }, 500);
     }
   };
+
+  /* ======================================================
+     MOBILE ACTIVE CHECK
+  ====================================================== */
+
+  const isMobileActive = (
+    id: string
+  ) => {
+    const current =
+      getMobileActiveId();
+
+    return current === id;
+  };
+
+  /* ======================================================
+     RENDER
+  ====================================================== */
 
   return (
     <>
-      {/* ================================================== */}
-      {/* FLOATING TOP NAVBAR (SLIDES UP ON SCROLL DOWN) */}
-      {/* ================================================== */}
+      {/* =====================================================
+          DESKTOP / TOP NAVBAR
+      ===================================================== */}
+
       <header
-        className={`sticky top-3 z-50 px-2 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full transition-all duration-300 transform ${
-          showTopNav ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0 pointer-events-none'
-        }`}
+        className={`
+          sticky
+          top-3
+          z-50
+          px-2
+          sm:px-6
+          lg:px-8
+          max-w-7xl
+          mx-auto
+          w-full
+          transition-all
+          duration-300
+          transform
+          ${
+            showTopNav
+              ? "translate-y-0 opacity-100"
+              : "-translate-y-24 opacity-0 pointer-events-none"
+          }
+        `}
       >
-        <div className="glass-navbar rounded-full px-3.5 sm:px-6 py-2 flex items-center justify-between gap-2 overflow-hidden shadow-xl">
-          
-          {/* SEARCH ACTIVE STATE ON MOBILE (EXPANDS INSIDE NAVBAR SAFELY) */}
+        <div
+          className="
+            glass-navbar
+            rounded-full
+            px-3.5
+            sm:px-6
+            py-2
+            flex
+            items-center
+            justify-between
+            gap-2
+            shadow-xl
+          "
+        >
+          {/* SEARCH */}
+
           {isSearchExpanded ? (
-            <div className="flex-1 flex items-center gap-2 bg-white/95 rounded-full border border-[#23212C]/20 px-3 py-1.5 shadow-inner transition-all duration-300 w-full overflow-hidden animate-fade-in">
-              <Search className="w-4 h-4 text-[#23212C]/70 shrink-0" />
+            <div
+              className="
+                flex-1
+                flex
+                items-center
+                gap-2
+                bg-white/95
+                rounded-full
+                border
+                border-[#23212C]/20
+                px-3
+                py-1.5
+                shadow-inner
+                w-full
+                overflow-hidden
+                animate-fade-in
+              "
+            >
+              <Search
+                className="
+                  w-4
+                  h-4
+                  text-[#23212C]/70
+                  shrink-0
+                "
+              />
+
               <input
                 type="text"
                 autoFocus
                 placeholder="Search 4K pins, cars, anime..."
                 value={searchQuery}
-                onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
-                className="w-full bg-transparent text-xs font-bold text-[#23212C] focus:outline-none placeholder-slate-500"
+                onChange={(event) =>
+                  onSearchChange?.(
+                    event.target.value
+                  )
+                }
+                className="
+                  w-full
+                  bg-transparent
+                  text-xs
+                  font-bold
+                  text-[#23212C]
+                  focus:outline-none
+                  placeholder-slate-500
+                "
               />
+
               <button
                 type="button"
-                onClick={() => setIsSearchExpanded(false)}
-                className="p-1 rounded-full text-[#23212C]/70 hover:text-[#23212C] hover:bg-slate-200 shrink-0"
-                aria-label="Close Search"
+                onClick={() =>
+                  setIsSearchExpanded(false)
+                }
+                className="
+                  p-1
+                  rounded-full
+                  text-[#23212C]/70
+                  hover:bg-slate-200
+                "
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
           ) : (
             <>
-              {/* LEFT: Logo & Brand */}
+              {/* LOGO */}
+
               <Link
                 href="/"
-                onClick={() => handleNavClick('Home')}
-                className="flex items-center gap-2 group shrink-0 pr-2.5 sm:pr-4 border-r border-[#23212C]/15"
+                onClick={() =>
+                  onNavChange?.("Home")
+                }
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  shrink-0
+                  pr-2.5
+                  sm:pr-4
+                  border-r
+                  border-[#23212C]/15
+                "
               >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#23212C] p-0.5 shadow-md group-hover:scale-105 transition-transform duration-300">
-                  <div className="w-full h-full bg-[#23212C] rounded-full flex items-center justify-center">
-                    <Sparkles className="w-4 h-4 text-[#F1FEC8] group-hover:rotate-12 transition-transform duration-300" />
-                  </div>
+                <div
+                  className="
+                    w-8
+                    h-8
+                    sm:w-9
+                    sm:h-9
+                    rounded-full
+                    bg-[#23212C]
+                    flex
+                    items-center
+                    justify-center
+                    shadow-md
+                  "
+                >
+                  <Sparkles
+                    className="
+                      w-4
+                      h-4
+                      text-[#F1FEC8]
+                    "
+                  />
                 </div>
+
                 <div>
-                  <span className="text-sm sm:text-lg font-extrabold text-[#23212C] tracking-tight">
-                    Wallpapers<span className="text-slate-800">.</span>
+                  <span
+                    className="
+                      text-sm
+                      sm:text-lg
+                      font-extrabold
+                      text-[#23212C]
+                    "
+                  >
+                    Wallpapers.
                   </span>
-                  <span className="hidden xl:block text-[9px] font-bold text-slate-800 uppercase tracking-widest -mt-1">
+
+                  <span
+                    className="
+                      hidden
+                      xl:block
+                      text-[9px]
+                      font-bold
+                      text-slate-800
+                      uppercase
+                      tracking-widest
+                    "
+                  >
                     4K & Ultra HD
                   </span>
                 </div>
               </Link>
 
-              {/* CENTER: Floating Desktop Navigation */}
-              <nav className="hidden lg:flex items-center gap-1 relative py-1 px-1">
-                {/* Desktop Liquid Active Indicator */}
+              {/* DESKTOP NAV */}
+
+              <nav
+                className="
+                  hidden
+                  lg:flex
+                  items-center
+                  gap-1
+                  relative
+                  py-1
+                  px-1
+                "
+              >
+                {/* DESKTOP ACTIVE INDICATOR */}
+
                 <div
-                  className="absolute bg-[#23212C] shadow-md shadow-black/20 pointer-events-none will-change-transform"
+                  className="
+                    absolute
+                    bg-[#23212C]
+                    pointer-events-none
+                    z-0
+                  "
                   style={{
-                    transform: `translate3d(${desktopIndicator.left}px, ${desktopIndicator.top}px, 0) ${
-                      desktopIndicator.isMoving ? 'scaleX(1.12) scaleY(0.88)' : 'scale(1)'
-                    }`,
-                    width: `${desktopIndicator.width}px`,
-                    height: `${desktopIndicator.height}px`,
-                    opacity: desktopIndicator.opacity,
-                    borderRadius: desktopIndicator.isMoving ? '22px 12px 24px 10px' : '9999px',
+                    left:
+                      desktopIndicator.left,
+                    top:
+                      desktopIndicator.top,
+                    width:
+                      desktopIndicator.width,
+                    height:
+                      desktopIndicator.height,
+                    opacity:
+                      desktopIndicator.opacity,
+
+                    borderRadius: 9999,
+
                     transition:
-                      'transform 550ms cubic-bezier(0.34, 1.45, 0.64, 1), width 550ms cubic-bezier(0.34, 1.45, 0.64, 1), height 550ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 550ms ease-out, opacity 300ms ease',
+                      "all 450ms cubic-bezier(0.34,1.56,0.64,1)",
                   }}
                 />
 
-                {desktopNavItems.map((item) => {
-                  const isActive = activeNav === item.id;
-                  const Icon = item.icon;
+                {desktopNavItems.map(
+                  (item) => {
+                    const Icon =
+                      item.icon;
 
-                  if (item.hasDropdown) {
-                    return (
-                      <div key={item.id} className="relative">
-                        <button
-                          ref={(el) => {
-                            if (el) desktopNavRefs.current.set(item.id, el);
-                            else desktopNavRefs.current.delete(item.id);
-                          }}
-                          type="button"
-                          aria-pressed={isActive}
-                          onClick={() => {
-                            setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
-                            handleNavClick(item.id);
-                          }}
-                          className={`relative z-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-colors duration-200 ${
-                            isActive
-                              ? 'text-[#F1FEC8]'
-                              : 'text-[#23212C]/80 hover:text-[#23212C] hover:bg-slate-900/10'
-                          }`}
+                    const active =
+                      activeNav ===
+                      item.id;
+
+                    if (
+                      item.hasDropdown
+                    ) {
+                      return (
+                        <div
+                          key={item.id}
+                          className="relative"
                         >
-                          <Icon className="w-3.5 h-3.5" />
-                          <span>{item.label}</span>
-                          <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isCategoryDropdownOpen ? 'rotate-180' : ''}`} />
-                        </button>
+                          <button
+                            ref={(element) => {
+                              if (
+                                element
+                              ) {
+                                desktopNavRefs.current.set(
+                                  item.id,
+                                  element
+                                );
+                              }
+                            }}
+                            type="button"
+                            onClick={() => {
+                              setIsCategoryDropdownOpen(
+                                (
+                                  previous
+                                ) =>
+                                  !previous
+                              );
 
-                        {/* Categories Dropdown Menu */}
-                        {isCategoryDropdownOpen && (
-                          <div className="absolute left-0 mt-3 w-64 bg-[#23212C]/95 border border-slate-700/60 rounded-3xl shadow-2xl backdrop-blur-2xl p-3 z-50 grid grid-cols-2 gap-1 animate-fade-in">
-                            {CATEGORIES.map((cat) => (
-                              <button
-                                key={cat}
-                                type="button"
-                                onClick={() => {
-                                  if (onSelectCategory) onSelectCategory(cat);
-                                  setIsCategoryDropdownOpen(false);
-                                  const categoriesElement = document.getElementById('categories');
-                                  if (categoriesElement) {
-                                    categoriesElement.scrollIntoView({ behavior: 'smooth' });
-                                  }
-                                }}
-                                className={`text-left px-3 py-2 rounded-xl text-xs font-medium transition-all ${
-                                  activeCategory === cat
-                                    ? 'bg-[#F1FEC8] text-[#23212C] font-bold shadow-md'
-                                    : 'text-slate-300 hover:bg-slate-800 hover:text-[#F1FEC8]'
-                                }`}
-                              >
-                                {cat}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                              onNavChange?.(
+                                item.id
+                              );
+                            }}
+                            className={`
+                              relative
+                              z-10
+                              flex
+                              items-center
+                              gap-1.5
+                              px-3.5
+                              py-1.5
+                              rounded-full
+                              text-xs
+                              font-bold
+                              ${
+                                active
+                                  ? "text-[#F1FEC8]"
+                                  : "text-[#23212C]/80"
+                              }
+                            `}
+                          >
+                            <Icon className="w-3.5 h-3.5" />
+
+                            <span>
+                              {
+                                item.label
+                              }
+                            </span>
+
+                            <ChevronDown
+                              className={`
+                                w-3
+                                h-3
+                                transition-transform
+                                ${
+                                  isCategoryDropdownOpen
+                                    ? "rotate-180"
+                                    : ""
+                                }
+                              `}
+                            />
+                          </button>
+
+                          {isCategoryDropdownOpen && (
+                            <div
+                              className="
+                                absolute
+                                left-0
+                                mt-3
+                                w-64
+                                bg-[#23212C]/95
+                                border
+                                border-slate-700/60
+                                rounded-3xl
+                                shadow-2xl
+                                backdrop-blur-2xl
+                                p-3
+                                z-50
+                                grid
+                                grid-cols-2
+                                gap-1
+                              "
+                            >
+                              {CATEGORIES.map(
+                                (category) => (
+                                  <button
+                                    key={
+                                      category
+                                    }
+                                    type="button"
+                                    onClick={() => {
+                                      onSelectCategory?.(
+                                        category
+                                      );
+
+                                      setIsCategoryDropdownOpen(
+                                        false
+                                      );
+                                    }}
+                                    className={`
+                                      text-left
+                                      px-3
+                                      py-2
+                                      rounded-xl
+                                      text-xs
+                                      ${
+                                        activeCategory ===
+                                        category
+                                          ? "bg-[#F1FEC8] text-[#23212C]"
+                                          : "text-slate-300 hover:bg-slate-800"
+                                      }
+                                    `}
+                                  >
+                                    {
+                                      category
+                                    }
+                                  </button>
+                                )
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <button
+                        key={item.id}
+                        ref={(element) => {
+                          if (
+                            element
+                          ) {
+                            desktopNavRefs.current.set(
+                              item.id,
+                              element
+                            );
+                          }
+                        }}
+                        type="button"
+                        onClick={() =>
+                          handleNavClick(
+                            item.id
+                          )
+                        }
+                        className={`
+                          relative
+                          z-10
+                          flex
+                          items-center
+                          gap-1.5
+                          px-3.5
+                          py-1.5
+                          rounded-full
+                          text-xs
+                          font-bold
+                          ${
+                            active
+                              ? "text-[#F1FEC8]"
+                              : "text-[#23212C]/80 hover:text-[#23212C]"
+                          }
+                        `}
+                      >
+                        <Icon className="w-3.5 h-3.5" />
+
+                        <span>
+                          {item.label}
+                        </span>
+                      </button>
                     );
                   }
-
-                  return (
-                    <button
-                      key={item.id}
-                      ref={(el) => {
-                        if (el) desktopNavRefs.current.set(item.id, el);
-                        else desktopNavRefs.current.delete(item.id);
-                      }}
-                      type="button"
-                      aria-current={isActive ? 'page' : undefined}
-                      onClick={() => handleNavClick(item.id)}
-                      className={`relative z-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-colors duration-200 ${
-                        isActive
-                          ? 'text-[#F1FEC8]'
-                          : 'text-[#23212C]/80 hover:text-[#23212C] hover:bg-slate-900/10'
-                      }`}
-                    >
-                      <Icon className={`w-3.5 h-3.5 ${item.iconColor || ''}`} />
-                      <span>{item.label}</span>
-                    </button>
-                  );
-                })}
+                )}
               </nav>
 
-              {/* RIGHT: Search Toggle & Favorites Counter */}
-              <div className="flex items-center gap-1.5 sm:gap-2 pl-2 sm:pl-4 border-l border-[#23212C]/15 shrink-0">
+              {/* RIGHT SIDE */}
+
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-1.5
+                  sm:gap-2
+                  pl-2
+                  sm:pl-4
+                  border-l
+                  border-[#23212C]/15
+                "
+              >
                 <button
                   type="button"
-                  onClick={() => setIsSearchExpanded(true)}
-                  className="p-2 rounded-full text-[#23212C] hover:bg-slate-900/10 transition-all flex items-center gap-1 text-xs font-bold"
-                  aria-label="Search Pins"
+                  onClick={() =>
+                    setIsSearchExpanded(
+                      true
+                    )
+                  }
+                  className="
+                    p-2
+                    rounded-full
+                    text-[#23212C]
+                    hover:bg-slate-900/10
+                  "
                 >
-                  <Search className="w-4 h-4 text-[#23212C]" />
+                  <Search className="w-4 h-4" />
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => handleNavClick('Saved')}
-                  className="relative p-2 rounded-full text-[#23212C] hover:bg-slate-900/10 transition-all flex items-center justify-center"
-                  aria-label="Favorites"
+                  onClick={() =>
+                    onNavChange?.(
+                      "Saved"
+                    )
+                  }
+                  className="
+                    relative
+                    p-2
+                    rounded-full
+                    text-[#23212C]
+                  "
                 >
-                  <Heart className="w-4 h-4 text-[#23212C]" />
-                  {favoriteCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#23212C] text-[#F1FEC8] text-[9px] font-bold rounded-full flex items-center justify-center">
-                      {favoriteCount}
+                  <Heart className="w-4 h-4" />
+
+                  {favoriteCount >
+                    0 && (
+                    <span
+                      className="
+                        absolute
+                        -top-0.5
+                        -right-0.5
+                        w-4
+                        h-4
+                        bg-[#23212C]
+                        text-[#F1FEC8]
+                        text-[9px]
+                        rounded-full
+                        flex
+                        items-center
+                        justify-center
+                      "
+                    >
+                      {
+                        favoriteCount
+                      }
                     </span>
                   )}
                 </button>
@@ -407,102 +1048,347 @@ export default function Navbar({
         </div>
       </header>
 
-      {/* ======================================================================= */}
-      {/* MOBILE FLOATING BOTTOM NAVBAR (INTEGRATED MILKY-WHITE LIQUID GLASS PILL) */}
-      {/* ======================================================================= */}
+      {/* =====================================================
+          MOBILE BOTTOM LIQUID NAV
+      ===================================================== */}
+
       <div
-        className={`lg:hidden fixed bottom-3 left-3 right-3 z-50 max-w-md mx-auto transition-all duration-300 transform ${
-          showBottomNav ? 'translate-y-0 opacity-100' : 'translate-y-28 opacity-0 pointer-events-none'
-        }`}
+        className={`
+          lg:hidden
+          fixed
+          bottom-3
+          left-3
+          right-3
+          z-50
+          max-w-md
+          mx-auto
+          transition-all
+          duration-300
+          ${
+            showBottomNav
+              ? "translate-y-0 opacity-100"
+              : "translate-y-28 opacity-0 pointer-events-none"
+          }
+        `}
       >
-        <div className="glass-navbar-dark rounded-full px-2 py-1.5 flex items-center justify-around relative shadow-2xl overflow-hidden">
-          
-          {/* Integrated Milky-White Translucent Glass Active Liquid Pill (NO DETACHED BALL / NO BLACK) */}
+        <div
+          ref={mobileNavContainerRef}
+          className="
+            glass-navbar-dark
+            relative
+            rounded-full
+            px-2
+            py-2
+            flex
+            items-center
+            justify-around
+            overflow-visible
+            min-h-[64px]
+          "
+        >
+          {/* =================================================
+              LIQUID GLASS BUBBLE
+          ================================================= */}
+
           <div
-            className="absolute liquid-pill-active pointer-events-none will-change-transform z-0 shadow-lg"
+            className={`
+              liquid-pill-active
+              ${
+                mobileIndicator.moving
+                  ? "is-moving"
+                  : ""
+              }
+            `}
             style={{
-              transform: `translate3d(${mobileIndicator.left}px, ${mobileIndicator.top}px, 0) scaleX(${mobileIndicator.scaleX}) scaleY(${mobileIndicator.scaleY})`,
-              width: `${mobileIndicator.width}px`,
-              height: `${mobileIndicator.height}px`,
-              opacity: mobileIndicator.opacity,
-              borderRadius: mobileIndicator.isMoving ? '26px 10px 28px 8px' : '9999px',
+              left:
+                mobileIndicator.left,
+
+              top:
+                mobileIndicator.top,
+
+              width:
+                mobileIndicator.width,
+
+              height:
+                mobileIndicator.height,
+
+              opacity:
+                mobileIndicator.opacity,
+
+              transform:
+                mobileIndicator.moving
+                  ? "scaleX(1.22) scaleY(0.84)"
+                  : "scaleX(1) scaleY(1)",
+
               transition:
-                'transform 480ms cubic-bezier(0.34, 1.45, 0.64, 1), width 480ms cubic-bezier(0.34, 1.45, 0.64, 1), height 480ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 480ms ease-out, opacity 300ms ease',
+                "left 500ms cubic-bezier(0.34,1.56,0.64,1), top 500ms cubic-bezier(0.34,1.56,0.64,1), transform 500ms cubic-bezier(0.34,1.56,0.64,1), opacity 250ms ease",
             }}
           />
 
-          {mobileNavItems.map((item) => {
-            const isActive =
-              (activeNav === 'Home' && item.id === 'Home') ||
-              (activeNav === 'Trending' && item.id === 'Trending') ||
-              (activeNav === 'Random' && item.id === 'Random') ||
-              (activeNav === 'Saved' && item.id === 'Saved') ||
-              (isMobileMoreOpen && item.id === 'More');
+          {/* =================================================
+              MOBILE BUTTONS
+          ================================================= */}
 
-            const Icon = item.icon;
+          {mobileNavItems.map(
+            (item) => {
+              const Icon =
+                item.icon;
 
-            return (
-              <button
-                key={item.id}
-                ref={(el) => {
-                  if (el) mobileNavRefs.current.set(item.id, el);
-                  else mobileNavRefs.current.delete(item.id);
-                }}
-                type="button"
-                aria-pressed={isActive}
-                onClick={(e) => handleNavClick(item.id, e)}
-                className={`relative z-10 flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-full transition-all duration-300 ${
-                  isActive
-                    ? 'text-[#23212C] font-black scale-105'
-                    : 'text-slate-300 hover:text-white'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span className="text-[10px] font-extrabold tracking-tight">{item.label}</span>
-              </button>
-            );
-          })}
+              const active =
+                isMobileActive(
+                  item.id
+                );
+
+              return (
+                <button
+                  key={item.id}
+                  ref={(element) => {
+                    if (element) {
+                      mobileNavRefs.current.set(
+                        item.id,
+                        element
+                      );
+                    } else {
+                      mobileNavRefs.current.delete(
+                        item.id
+                      );
+                    }
+                  }}
+                  type="button"
+                  onClick={(event) =>
+                    handleNavClick(
+                      item.id,
+                      event
+                    )
+                  }
+                  className={`
+                    liquid-nav-button
+                    ${
+                      active
+                        ? "active"
+                        : ""
+                    }
+                  `}
+                >
+                  <Icon
+                    className={`
+                      w-5
+                      h-5
+                      transition-all
+                      duration-300
+                      ${
+                        active
+                          ? "text-[#23212C]"
+                          : "text-[#F1FEC8]/75"
+                      }
+                    `}
+                  />
+
+                  <span
+                    className={`
+                      text-[10px]
+                      leading-none
+                      font-extrabold
+                      ${
+                        active
+                          ? "text-[#23212C]"
+                          : "text-[#F1FEC8]/75"
+                      }
+                    `}
+                  >
+                    {
+                      item.label
+                    }
+                  </span>
+                </button>
+              );
+            }
+          )}
         </div>
 
-        {/* Mobile "More" Drawer Menu */}
+        {/* ===================================================
+            MORE DRAWER
+        =================================================== */}
+
         {isMobileMoreOpen && (
-          <div className="absolute bottom-16 left-0 right-0 bg-[#23212C]/95 border border-slate-700/60 rounded-3xl p-4 shadow-2xl backdrop-blur-2xl text-xs space-y-4 animate-fade-in z-50">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-              <span className="font-bold text-white uppercase tracking-wider text-[11px]">More Navigation</span>
-              <button onClick={() => setIsMobileMenuOpen(false)} className="p-1 text-slate-400 hover:text-white">
+          <div
+            className="
+              absolute
+              bottom-20
+              left-0
+              right-0
+              bg-[#23212C]/95
+              border
+              border-slate-700/60
+              rounded-3xl
+              p-4
+              shadow-2xl
+              backdrop-blur-2xl
+              text-xs
+              space-y-4
+              animate-fade-in
+            "
+          >
+            <div
+              className="
+                flex
+                items-center
+                justify-between
+                border-b
+                border-slate-800
+                pb-2
+              "
+            >
+              <span
+                className="
+                  font-bold
+                  text-white
+                  uppercase
+                  tracking-wider
+                  text-[11px]
+                "
+              >
+                More Navigation
+              </span>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setIsMobileMoreOpen(
+                    false
+                  )
+                }
+                className="
+                  p-1
+                  text-slate-400
+                  hover:text-white
+                "
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div
+              className="
+                grid
+                grid-cols-2
+                gap-2
+              "
+            >
               <button
-                onClick={(e) => {
-                  handleNavClick('Latest', e);
-                }}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:bg-slate-800"
+                type="button"
+                onClick={(event) =>
+                  handleNavClick(
+                    "Latest",
+                    event
+                  )
+                }
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  p-2.5
+                  rounded-xl
+                  bg-slate-900
+                  border
+                  border-slate-800
+                  text-slate-200
+                "
               >
-                <Clock className="w-4 h-4 text-indigo-400" /> Latest Pins
+                <Clock className="w-4 h-4" />
+
+                Latest Pins
               </button>
 
               <button
-                onClick={(e) => {
-                  handleNavClick('Categories', e);
-                }}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:bg-slate-800"
+                type="button"
+                onClick={(event) =>
+                  handleNavClick(
+                    "Categories",
+                    event
+                  )
+                }
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  p-2.5
+                  rounded-xl
+                  bg-slate-900
+                  border
+                  border-slate-800
+                  text-slate-200
+                "
               >
-                <Grid className="w-4 h-4 text-[#F1FEC8]" /> Categories
+                <Grid className="w-4 h-4" />
+
+                Categories
               </button>
             </div>
 
-            <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] text-slate-400 gap-2">
-              <Link href="/privacy-policy" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#F1FEC8] flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3" /> Privacy
+            <div
+              className="
+                pt-2
+                border-t
+                border-slate-800/80
+                flex
+                flex-wrap
+                items-center
+                justify-between
+                text-[11px]
+                text-slate-400
+                gap-2
+              "
+            >
+              <Link
+                href="/privacy-policy"
+                onClick={() =>
+                  setIsMobileMoreOpen(
+                    false
+                  )
+                }
+                className="
+                  flex
+                  items-center
+                  gap-1
+                "
+              >
+                <ShieldCheck className="w-3 h-3" />
+                Privacy
               </Link>
-              <Link href="/terms-of-service" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#F1FEC8] flex items-center gap-1">
-                <FileText className="w-3 h-3" /> Terms
+
+              <Link
+                href="/terms-of-service"
+                onClick={() =>
+                  setIsMobileMoreOpen(
+                    false
+                  )
+                }
+                className="
+                  flex
+                  items-center
+                  gap-1
+                "
+              >
+                <FileText className="w-3 h-3" />
+                Terms
               </Link>
-              <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#F1FEC8] flex items-center gap-1">
-                <Info className="w-3.5 h-3.5" /> About
+
+              <Link
+                href="/about"
+                onClick={() =>
+                  setIsMobileMoreOpen(
+                    false
+                  )
+                }
+                className="
+                  flex
+                  items-center
+                  gap-1
+                "
+              >
+                <Info className="w-3.5 h-3.5" />
+                About
               </Link>
             </div>
           </div>
