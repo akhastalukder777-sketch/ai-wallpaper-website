@@ -1,24 +1,31 @@
 @import "tailwindcss";
 
-@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;0,800;1,700&family=Syne:wght@700;800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;0,800;1,700&family=Syne:wght@700;800&display=swap');
+
+
+/* ============================================================
+   ROOT VARIABLES
+   ============================================================ */
 
 :root {
-  --background: #f1fec8;
-  --foreground: #23212c;
-  --vanilla: #f1fec8;
-  --cosmic: #23212c;
+  --background: #F1FEC8;
+  --foreground: #23212C;
+  --vanilla: #F1FEC8;
+  --cosmic: #23212C;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+
+/* ============================================================
+   GLOBAL BODY
+   ============================================================ */
 
 body {
   color: var(--foreground);
   background: var(--background);
+
   font-family:
-    "Chakra Petch",
-    "Syne",
+    'Chakra Petch',
+    'Syne',
     system-ui,
     -apple-system,
     sans-serif;
@@ -28,9 +35,10 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* =========================================================
+
+/* ============================================================
    TYPOGRAPHY
-========================================================= */
+   ============================================================ */
 
 h1,
 h2,
@@ -41,16 +49,17 @@ h6,
 button,
 a {
   font-family:
-    "Chakra Petch",
-    "Syne",
+    'Chakra Petch',
+    'Syne',
     sans-serif;
 
   font-weight: 800;
 }
 
-/* =========================================================
-   SCROLLBAR
-========================================================= */
+
+/* ============================================================
+   CUSTOM VANILLA & COSMIC SCROLLBAR
+   ============================================================ */
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -58,11 +67,11 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1fec8;
+  background: #F1FEC8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #23212c;
+  background: #23212C;
   border-radius: 9999px;
 }
 
@@ -70,9 +79,10 @@ a {
   background: #3b3745;
 }
 
-/* =========================================================
-   GLASS NAVBAR
-========================================================= */
+
+/* ============================================================
+   FROSTED GLASS NAVBAR
+   ============================================================ */
 
 .glass-navbar {
   background: rgba(241, 254, 200, 0.52);
@@ -83,126 +93,16 @@ a {
   border: 1px solid rgba(35, 33, 44, 0.14);
 
   box-shadow:
-    0 12px 32px -8px rgba(35, 33, 44, 0.12),
-    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    0 12px 32px -8px rgba(35, 33, 44, 0.12);
 }
+
+
+/* ============================================================
+   DARK GLASS NAVBAR
+   ============================================================ */
 
 .glass-navbar-dark {
-  background: rgba(35, 33, 44, 0.82);
-
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-
-  border: 1px solid rgba(255, 255, 255, 0.12);
-
-  box-shadow:
-    0 16px 40px -12px rgba(0, 0, 0, 0.45),
-    inset 0 1px 1px rgba(255, 255, 255, 0.08);
-}
-
-/* =========================================================
-   LIQUID GLASS ACTIVE BUBBLE
-   =========================================================
-   
-   This is the important part.
-   The bubble is intentionally a separate floating element
-   that moves between navigation buttons.
-========================================================= */
-
-.liquid-pill-active {
-  position: absolute;
-
-  width: 58px;
-  height: 58px;
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle at 32% 25%,
-      rgba(255, 255, 255, 0.98) 0%,
-      rgba(255, 255, 255, 0.88) 38%,
-      rgba(255, 255, 255, 0.68) 72%,
-      rgba(255, 255, 255, 0.54) 100%
-    );
-
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-
-  border: 1px solid rgba(255, 255, 255, 0.95);
-
-  box-shadow:
-    0 8px 25px rgba(0, 0, 0, 0.25),
-    0 2px 8px rgba(255, 255, 255, 0.45),
-    inset 0 1px 3px rgba(255, 255, 255, 1);
-
-  pointer-events: none;
-
-  z-index: 1;
-
-  transform-origin: center center;
-
-  will-change: transform, left, top;
-}
-
-/* Bubble moving state */
-
-.liquid-pill-active.is-moving {
-  border-radius: 48% 52% 58% 42% / 55% 44% 56% 45%;
-}
-
-/* =========================================================
-   LIQUID NAV BUTTON
-========================================================= */
-
-.liquid-nav-button {
-  position: relative;
-
-  z-index: 5;
-
-  min-width: 58px;
-
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-
-  gap: 3px;
-
-  padding: 7px 8px;
-
-  border-radius: 9999px;
-
-  transition:
-    color 250ms ease,
-    transform 250ms ease;
-}
-
-.liquid-nav-button.active {
-  color: #23212c;
-}
-
-.liquid-nav-button:not(.active) {
-  color: rgba(241, 254, 200, 0.7);
-}
-
-.liquid-nav-button:not(.active):hover {
-  color: #ffffff;
-}
-
-/* Active icon */
-
-.liquid-nav-button.active svg {
-  transform: translateY(-1px) scale(1.03);
-}
-
-/* =========================================================
-   MORE DRAWER
-========================================================= */
-
-.glass-hover-panel {
-  background: rgba(35, 33, 44, 0.94);
+  background: rgba(35, 33, 44, 0.65);
 
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -210,13 +110,32 @@ a {
   border: 1px solid rgba(241, 254, 200, 0.18);
 
   box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.35),
-    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    0 12px 32px -8px rgba(0, 0, 0, 0.35);
 }
 
-/* =========================================================
-   GLASS EFFECT
-========================================================= */
+
+/* ============================================================
+   ELEVATED MILKY-WHITE TRANSLUCENT GLASS ACTIVE BUBBLE
+   ============================================================ */
+
+.liquid-bubble-raised-milky {
+  background: rgba(255, 255, 255, 0.82);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+
+  box-shadow:
+    0 -6px 20px rgba(255, 255, 255, 0.25),
+    0 10px 24px -4px rgba(0, 0, 0, 0.35),
+    inset 0 1px 2px rgba(255, 255, 255, 1);
+}
+
+
+/* ============================================================
+   GENERAL GLASS EFFECT
+   ============================================================ */
 
 .glass-effect {
   background: rgba(241, 254, 200, 0.85);
@@ -224,108 +143,279 @@ a {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 
-  border-bottom: 1px solid rgba(35, 33, 44, 0.08);
+  border-bottom:
+    1px solid rgba(35, 33, 44, 0.08);
 }
 
-/* =========================================================
-   CARDS
-========================================================= */
+
+/* ============================================================
+   GLASS CARD
+   ============================================================ */
 
 .glass-card {
-  background: #23212c;
+  background: #23212C;
 
   backdrop-filter: blur(8px);
 
-  border: 1px solid rgba(35, 33, 44, 0.15);
-
-  transition:
-    transform 300ms ease,
-    box-shadow 300ms ease,
-    border-color 300ms ease;
+  border:
+    1px solid rgba(35, 33, 44, 0.15);
 }
 
 .glass-card:hover {
-  border-color: rgba(241, 254, 200, 0.6);
+  border-color:
+    rgba(241, 254, 200, 0.6);
 
   box-shadow:
-    0 16px 36px rgba(35, 33, 44, 0.25);
+    0 16px 36px 0 rgba(35, 33, 44, 0.25);
 }
 
-/* =========================================================
-   ANIMATIONS
-========================================================= */
 
-@keyframes liquidEnter {
-  0% {
-    transform: scale(0.65);
-    opacity: 0;
-  }
+/* ============================================================
+   GLASS HOVER PANEL
+   ============================================================ */
 
-  60% {
-    transform: scale(1.12);
-    opacity: 1;
-  }
+.glass-hover-panel {
+  background: rgba(35, 33, 44, 0.70);
 
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border:
+    1px solid rgba(241, 254, 200, 0.20);
 }
 
-@keyframes liquidBounce {
-  0% {
-    transform: scaleX(1) scaleY(1);
-  }
 
-  35% {
-    transform: scaleX(1.22) scaleY(0.82);
-  }
-
-  65% {
-    transform: scaleX(0.9) scaleY(1.08);
-  }
-
-  100% {
-    transform: scaleX(1) scaleY(1);
-  }
-}
-
-.animate-liquid-enter {
-  animation: liquidEnter 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.animate-liquid-bounce {
-  animation: liquidBounce 520ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 250ms ease-out;
-}
-
-/* =========================================================
-   COLUMN LAYOUT
-========================================================= */
+/* ============================================================
+   MASONRY / COLUMN HELPERS
+   ============================================================ */
 
 .break-inside-avoid-column {
   break-inside: avoid;
 }
 
-/* =========================================================
-   MOBILE SAFE AREA
-========================================================= */
 
-.mobile-bottom-nav {
-  padding-bottom: env(safe-area-inset-bottom);
+/* ============================================================
+   LIQUID STRETCH LOAD MORE BUTTON
+   ============================================================ */
+
+.load-more-stretch {
+  min-width: 190px;
+  height: 58px;
+
+  padding: 0 28px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  background: #23212C;
+  color: #F1FEC8;
+
+  border:
+    1.5px solid rgba(241, 254, 200, 0.25);
+
+  border-radius: 9999px;
+
+  box-shadow:
+    0 10px 25px -5px rgba(35, 33, 44, 0.35);
+
+  font-family:
+    'Chakra Petch',
+    'Syne',
+    sans-serif;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 450ms ease,
+    background-color 300ms ease,
+    border-color 300ms ease;
+
+  will-change: transform;
+}
+
+
+/* ============================================================
+   LOAD MORE - HOVER LIQUID STRETCH
+   ============================================================ */
+
+.load-more-stretch:hover {
+  transform:
+    scaleX(1.07)
+    scaleY(0.95)
+    translateY(-2px);
+
+  background: #2d2838;
+
+  border-color:
+    rgba(241, 254, 200, 0.50);
+
+  box-shadow:
+    0 16px 35px -4px rgba(35, 33, 44, 0.45);
+}
+
+
+/* ============================================================
+   LOAD MORE - ACTIVE / CLICK
+   ============================================================ */
+
+.load-more-stretch:active {
+  transform:
+    scaleX(0.96)
+    scaleY(0.96)
+    translateY(0);
+
+  transition-duration: 150ms;
+}
+
+
+/* ============================================================
+   LOAD MORE TEXT
+   ============================================================ */
+
+.load-more-text {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   LOAD MORE ARROW
+   ============================================================ */
+
+.load-more-arrow {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+/* ============================================================
+   LOAD MORE - ARROW HOVER ANIMATION
+   ============================================================ */
+
+.load-more-stretch:hover .load-more-arrow {
+  transform: translateY(4px);
+}
+
+
+/* ============================================================
+   LOAD MORE - ARROW CLICK
+   ============================================================ */
+
+.load-more-stretch:active .load-more-arrow {
+  transform: translateY(1px);
+}
+
+
+/* ============================================================
+   LOAD MORE - FOCUS ACCESSIBILITY
+   ============================================================ */
+
+.load-more-stretch:focus-visible {
+  outline: 2px solid #23212C;
+  outline-offset: 4px;
+}
+
+
+/* ============================================================
+   LOAD MORE - DISABLED STATE
+   ============================================================ */
+
+.load-more-stretch:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+
+  transform: none;
+
+  box-shadow:
+    0 6px 16px -5px rgba(35, 33, 44, 0.25);
+}
+
+
+/* ============================================================
+   MOBILE LOAD MORE BUTTON
+   ============================================================ */
+
+@media (max-width: 640px) {
+
+  .load-more-stretch {
+    min-width: 175px;
+    height: 54px;
+
+    padding: 0 24px;
+
+    gap: 10px;
+  }
+
+  /*
+    Mobile devices don't have real hover.
+    So we disable the large stretch effect.
+  */
+
+  .load-more-stretch:hover {
+    transform: none;
+
+    background: #23212C;
+
+    border-color:
+      rgba(241, 254, 200, 0.25);
+
+    box-shadow:
+      0 10px 25px -5px rgba(35, 33, 44, 0.35);
+  }
+
+  .load-more-stretch:active {
+    transform:
+      scaleX(0.94)
+      scaleY(0.96);
+
+    transition-duration: 150ms;
+  }
+
+  .load-more-stretch:hover .load-more-arrow {
+    transform: none;
+  }
+
+  .load-more-stretch:active .load-more-arrow {
+    transform: translateY(2px);
+  }
+}
+
+
+/* ============================================================
+   REDUCED MOTION ACCESSIBILITY
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .load-more-stretch,
+  .load-more-arrow {
+    transition: none;
+  }
+
+  .load-more-stretch:hover,
+  .load-more-stretch:active {
+    transform: none;
+  }
+
+  .load-more-stretch:hover .load-more-arrow,
+  .load-more-stretch:active .load-more-arrow {
+    transform: none;
+  }
 }
