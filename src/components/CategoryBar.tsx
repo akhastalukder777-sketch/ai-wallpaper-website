@@ -40,17 +40,11 @@ export default function CategoryBar({
   selectedCategory,
   onSelectCategory,
 }: CategoryBarProps) {
-  const buttonRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
-  const containerRef = useRef<HTMLDivElement>(null);
+  // Strictly Isolated Local Refs to Prevent Navbar Animation Contamination
+  const categoryBtnRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const trackRef = useRef<HTMLDivElement>(null);
 
-  const [indicatorStyle, setIndicatorStyle] = useState<{
-    left: number;
-    width: number;
-    height: number;
-    top: number;
-    opacity: number;
-    isMoving: boolean;
-  }>({
+  const [categoryIndicator, setCategoryIndicator] = useState({
     left: 0,
     width: 0,
     height: 0,
@@ -59,11 +53,11 @@ export default function CategoryBar({
     isMoving: false,
   });
 
-  // Calculate and update liquid indicator dimensions & offset
-  const updateIndicator = () => {
-    const activeBtn = buttonRefs.current.get(selectedCategory);
-    if (activeBtn) {
-      setIndicatorStyle((prev) => ({
+  // Calculate and update liquid indicator relative ONLY to CategoryBar track
+  const updateCategoryIndicator = () => {
+    const activeBtn = categoryBtnRefs.current.get(selectedCategory);
+    if (activeBtn && trackRef.current) {
+      setCategoryIndicator((prev) => ({
         left: activeBtn.offsetLeft,
         width: activeBtn.offsetWidth,
         height: activeBtn.offsetHeight,
@@ -76,16 +70,16 @@ export default function CategoryBar({
     }
   };
 
-  // Recalculate position on category change, initial mount, and screen resize
+  // Recalculate on category selection, mount, or window resize
   useEffect(() => {
-    updateIndicator();
+    updateCategoryIndicator();
 
     const timer = setTimeout(() => {
-      setIndicatorStyle((prev) => ({ ...prev, isMoving: false }));
+      setCategoryIndicator((prev) => ({ ...prev, isMoving: false }));
     }, 550);
 
     const handleResize = () => {
-      updateIndicator();
+      updateCategoryIndicator();
     };
 
     window.addEventListener('resize', handleResize);
@@ -98,29 +92,27 @@ export default function CategoryBar({
   return (
     <div id="categories" className="w-full py-6">
       <div className="flex items-center gap-2 mb-4">
-        <Layers className="w-5 h-5 text-[#090d12]" />
-        <h2 className="text-lg font-bold text-[#090d12] tracking-tight">
+        <Layers className="w-5 h-5 text-[#23212C]" />
+        <h2 className="text-lg font-bold text-[#23212C] tracking-tight">
           Explore Categories
         </h2>
       </div>
 
-      {/* Scrollable Pexels-Style Category Track */}
-      <div
-        ref={containerRef}
-        className="flex items-center overflow-x-auto pb-3 pt-1 scrollbar-none no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 relative"
-      >
-        <div className="relative flex items-center gap-2 min-w-max py-1">
-          {/* Animated Liquid/Morphing Active Bubble Indicator */}
+      {/* Horizontally Scrollable Categories Track */}
+      <div className="flex items-center overflow-x-auto pb-3 pt-1 scrollbar-none no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 relative">
+        <div ref={trackRef} className="relative flex items-center gap-2 min-w-max py-1">
+          
+          {/* Strictly Isolated Cosmic Glass Active Liquid Bubble */}
           <div
-            className="absolute bg-[#090d12] border border-[#090d12]/20 shadow-xl shadow-black/25 pointer-events-none will-change-transform"
+            className="absolute bg-[#23212C] border border-[#F1FEC8]/30 shadow-xl shadow-[#23212C]/30 pointer-events-none will-change-transform z-0"
             style={{
-              transform: `translate3d(${indicatorStyle.left}px, ${indicatorStyle.top}px, 0) ${
-                indicatorStyle.isMoving ? 'scaleX(1.12) scaleY(0.90)' : 'scale(1)'
+              transform: `translate3d(${categoryIndicator.left}px, ${categoryIndicator.top}px, 0) ${
+                categoryIndicator.isMoving ? 'scaleX(1.12) scaleY(0.88)' : 'scale(1)'
               }`,
-              width: `${indicatorStyle.width}px`,
-              height: `${indicatorStyle.height}px`,
-              opacity: indicatorStyle.opacity,
-              borderRadius: indicatorStyle.isMoving
+              width: `${categoryIndicator.width}px`,
+              height: `${categoryIndicator.height}px`,
+              opacity: categoryIndicator.opacity,
+              borderRadius: categoryIndicator.isMoving
                 ? '22px 12px 24px 10px'
                 : '9999px',
               transition:
@@ -137,8 +129,8 @@ export default function CategoryBar({
               <button
                 key={category}
                 ref={(el) => {
-                  if (el) buttonRefs.current.set(category, el);
-                  else buttonRefs.current.delete(category);
+                  if (el) categoryBtnRefs.current.set(category, el);
+                  else categoryBtnRefs.current.delete(category);
                 }}
                 type="button"
                 aria-pressed={isActive}
@@ -146,7 +138,7 @@ export default function CategoryBar({
                 className={`relative z-10 whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold flex items-center gap-1.5 transition-colors duration-200 ${
                   isActive
                     ? 'text-[#F1FEC8]'
-                    : 'text-[#090d12]/85 hover:text-[#090d12] hover:bg-slate-900/10 border border-slate-900/15 bg-white/40 backdrop-blur-sm'
+                    : 'text-[#23212C]/85 hover:text-[#23212C] hover:bg-[#23212C]/10 border border-[#23212C]/15 bg-white/40 backdrop-blur-sm'
                 }`}
               >
                 <span className="text-sm leading-none">{icon}</span>

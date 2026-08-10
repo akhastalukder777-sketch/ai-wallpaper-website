@@ -63,10 +63,10 @@ export default function WallpaperCard({
         setIsHovered(false);
         setIsMobileTapped(false);
       }}
-      className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] hover:z-30 hover:shadow-2xl break-inside-avoid mb-4 flex flex-col"
+      className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] hover:z-30 hover:shadow-2xl hover:shadow-[#23212C]/30 break-inside-avoid mb-4 flex flex-col"
     >
       {/* Natural Aspect Ratio Image Container */}
-      <div className="relative w-full overflow-hidden bg-slate-900 rounded-3xl">
+      <div className="relative w-full overflow-hidden bg-[#23212C] rounded-3xl">
         <img
           src={imgSrc}
           alt={wallpaper.title}
@@ -85,30 +85,30 @@ export default function WallpaperCard({
         >
           {/* Top Panel Controls */}
           <div className="flex items-center justify-between gap-2">
-            <span className="px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-slate-200 text-[11px] font-semibold tracking-wide border border-slate-700/50 shadow-md">
+            <span className="px-3 py-1 rounded-full bg-[#23212C]/90 backdrop-blur-md text-[#F1FEC8] text-[11px] font-semibold tracking-wide border border-[#F1FEC8]/20 shadow-md">
               {wallpaper.category}
             </span>
 
-            {/* Vanilla Color Save 4K Button */}
+            {/* Save 4K Button */}
             <button
               onClick={handleDownload}
-              className="px-4 py-2 rounded-full bg-[#F1FEC8] hover:bg-[#e2faae] text-[#090d12] text-xs font-bold shadow-lg shadow-[#F1FEC8]/20 flex items-center gap-1.5 transition-transform active:scale-95"
+              className="px-4 py-2 rounded-full bg-[#F1FEC8] hover:bg-[#e2faae] text-[#23212C] text-xs font-bold shadow-lg shadow-[#F1FEC8]/20 flex items-center gap-1.5 transition-transform active:scale-95"
             >
-              <Download className="w-3.5 h-3.5 text-[#090d12]" />
+              <Download className="w-3.5 h-3.5 text-[#23212C]" />
               Save 4K
             </button>
           </div>
 
           {/* Center Hover Preview Button */}
           <div className="flex justify-center">
-            <span className="px-4 py-2 rounded-full bg-[#090d12]/90 text-white text-xs font-semibold backdrop-blur-md border border-slate-700/60 shadow-xl flex items-center gap-2">
+            <span className="px-4 py-2 rounded-full bg-[#23212C]/90 text-white text-xs font-semibold backdrop-blur-md border border-[#F1FEC8]/30 shadow-xl flex items-center gap-2">
               <Maximize2 className="w-3.5 h-3.5 text-[#F1FEC8]" /> View Pin
             </span>
           </div>
 
           {/* Bottom Action Footer */}
           <div className="flex items-center justify-between text-xs text-white">
-            <div className="flex items-center gap-2 bg-slate-950/80 px-2.5 py-1 rounded-full backdrop-blur-md text-[11px] border border-slate-800">
+            <div className="flex items-center gap-2 bg-[#23212C]/90 px-2.5 py-1 rounded-full backdrop-blur-md text-[11px] border border-[#F1FEC8]/20">
               <Eye className="w-3.5 h-3.5 text-slate-400" />
               <span>{(wallpaper.views || 100).toLocaleString()}</span>
             </div>
@@ -117,30 +117,15 @@ export default function WallpaperCard({
               onClick={handleLike}
               className={`p-2.5 rounded-full backdrop-blur-md transition-all ${
                 isFavorite
-                  ? 'bg-[#F1FEC8] text-[#090d12] shadow-lg shadow-[#F1FEC8]/40'
-                  : 'bg-slate-950/80 text-slate-200 hover:text-[#F1FEC8] border border-slate-800'
+                  ? 'bg-[#F1FEC8] text-[#23212C] shadow-lg shadow-[#F1FEC8]/40'
+                  : 'bg-[#23212C]/90 text-slate-200 hover:text-[#F1FEC8] border border-[#F1FEC8]/20'
               }`}
               aria-label="Favorite Pin"
             >
-              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#090d12]' : ''}`} />
+              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#23212C]' : ''}`} />
             </button>
           </div>
         </div>
-
-        {/* Resolution Tag (Visible on Default) */}
-        <div className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-slate-950/80 text-[10px] font-mono text-slate-300 border border-slate-800 group-hover:opacity-0 transition-opacity">
-          {wallpaper.resolution || '3840 x 2160'}
-        </div>
-      </div>
-
-      {/* Pin Title & Details Below Image */}
-      <div className="p-3 bg-transparent">
-        <h3 className="text-xs sm:text-sm font-bold text-[#090d12] group-hover:text-[#090d12]/80 transition-colors line-clamp-1">
-          {wallpaper.title}
-        </h3>
-        <p className="text-[11px] text-slate-700 mt-0.5 line-clamp-1">
-          {wallpaper.description}
-        </p>
       </div>
     </div>
   );

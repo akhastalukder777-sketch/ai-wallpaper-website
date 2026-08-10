@@ -3,8 +3,9 @@
 
 :root {
   --background: #F1FEC8;
-  --foreground: #090d12;
+  --foreground: #23212C;
   --vanilla: #F1FEC8;
+  --cosmic: #23212C;
 }
 
 body {
@@ -22,7 +23,7 @@ h1, h2, h3, h4, h5, h6, button, a {
   font-weight: 800;
 }
 
-/* Custom Vanilla Scrollbar */
+/* Custom Vanilla & Cosmic Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -33,54 +34,62 @@ h1, h2, h3, h4, h5, h6, button, a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #090d12;
+  background: #23212C;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #3b3745;
 }
 
-/* ~50% Translucent Vanilla Glass Floating Navbar Style */
+/* ~50-65% Translucent Vanilla & Cosmic Glass Navbar Style */
 .glass-navbar {
-  background: rgba(241, 254, 200, 0.50);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(9, 13, 18, 0.12);
-  box-shadow: 0 10px 30px -10px rgba(9, 13, 18, 0.10);
+  background: rgba(241, 254, 200, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(35, 33, 44, 0.12);
+  box-shadow: 0 10px 30px -10px rgba(35, 33, 44, 0.12);
 }
 
-/* Category Liquid Glass Active Bubble Style */
+.glass-navbar-dark {
+  background: rgba(35, 33, 44, 0.65);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(241, 254, 200, 0.15);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.35);
+}
+
+/* Category Liquid Cosmic Glass Active Bubble Style */
 .glass-category-bubble {
-  background: #090d12;
-  border: 1px solid rgba(241, 254, 200, 0.25);
-  box-shadow: 0 8px 24px -4px rgba(9, 13, 18, 0.35);
+  background: #23212C;
+  border: 1px solid rgba(241, 254, 200, 0.30);
+  box-shadow: 0 8px 24px -4px rgba(35, 33, 44, 0.35);
 }
 
 .glass-effect {
   background: rgba(241, 254, 200, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(35, 33, 44, 0.08);
 }
 
 .glass-card {
-  background: #0f172a;
+  background: #23212C;
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(35, 33, 44, 0.15);
 }
 
 .glass-card:hover {
-  border-color: rgba(241, 254, 200, 0.5);
-  box-shadow: 0 16px 36px 0 rgba(9, 13, 18, 0.35);
+  border-color: rgba(241, 254, 200, 0.6);
+  box-shadow: 0 16px 36px 0 rgba(35, 33, 44, 0.25);
 }
 
 /* Pixabay-Style Glass Hover Overlay Panel */
 .glass-hover-panel {
-  background: rgba(9, 13, 18, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(241, 254, 200, 0.15);
+  background: rgba(35, 33, 44, 0.70);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(241, 254, 200, 0.20);
 }
 
 .break-inside-avoid-column {
