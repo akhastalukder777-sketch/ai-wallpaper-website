@@ -395,9 +395,9 @@ export default function Navbar({
         </div>
       </header>
 
-      {/* ======================================================================= */}
-      {/* MOBILE FLOATING BOTTOM NAVBAR (MILKY-WHITE GLASS INTEGRATED BUBBLE) */}
-      {/* ======================================================================= */}
+      {/* ========================================================================= */}
+      {/* MOBILE FLOATING BOTTOM NAVBAR (INTEGRATED MILKY-WHITE LIQUID GLASS PILL) */}
+      {/* ========================================================================= */}
       <div
         className={`lg:hidden fixed bottom-3 left-3 right-3 z-50 max-w-md mx-auto transition-all duration-300 transform ${
           showBottomNav ? 'translate-y-0 opacity-100' : 'translate-y-28 opacity-0 pointer-events-none'
@@ -405,19 +405,19 @@ export default function Navbar({
       >
         <div className="glass-navbar rounded-full px-2 py-1.5 flex items-center justify-around relative shadow-2xl overflow-hidden">
           
-          {/* Integrated Milky-White Translucent Glass Active Liquid Pill (NO BLACK / NO DETACHED BALL) */}
+          {/* Integrated Milky-White Translucent Glass Active Liquid Pill (NO DETACHED BALL / NO BLACK) */}
           <div
-            className="absolute liquid-pill-active pointer-events-none will-change-transform z-0"
+            className="absolute liquid-blob-indicator pointer-events-none will-change-transform z-0"
             style={{
               transform: `translate3d(${mobileIndicator.left}px, ${mobileIndicator.top}px, 0) ${
-                mobileIndicator.isMoving ? 'scaleX(1.18) scaleY(0.85)' : 'scale(1)'
+                mobileIndicator.isMoving ? 'scaleX(1.28) scaleY(0.82)' : 'scale(1)'
               }`,
               width: `${mobileIndicator.width}px`,
               height: `${mobileIndicator.height}px`,
               opacity: mobileIndicator.opacity,
-              borderRadius: mobileIndicator.isMoving ? '26px 12px 28px 10px' : '9999px',
+              borderRadius: mobileIndicator.isMoving ? '26px 10px 28px 8px' : '9999px',
               transition:
-                'transform 500ms cubic-bezier(0.34, 1.45, 0.64, 1), width 500ms cubic-bezier(0.34, 1.45, 0.64, 1), height 500ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 500ms ease-out, opacity 300ms ease',
+                'transform 550ms cubic-bezier(0.34, 1.56, 0.64, 1), width 550ms cubic-bezier(0.34, 1.56, 0.64, 1), height 550ms cubic-bezier(0.34, 1.56, 0.64, 1), border-radius 550ms ease-out, opacity 300ms ease',
             }}
           />
 
