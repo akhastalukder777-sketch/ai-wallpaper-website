@@ -1,13 +1,12 @@
-"use client";
+'use client';
 
 import React, {
   useState,
   useEffect,
   useRef,
-  useLayoutEffect,
-} from "react";
+} from 'react';
 
-import Link from "next/link";
+import Link from 'next/link';
 
 import {
   Search,
@@ -24,548 +23,488 @@ import {
   ShieldCheck,
   FileText,
   Info,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { CATEGORIES } from "../data/wallpapers";
+import { CATEGORIES } from '../data/wallpapers';
+
 
 interface NavbarProps {
   searchQuery?: string;
-
   onSearchChange?: (query: string) => void;
 
   favoriteCount?: number;
 
   activeCategory?: string;
-
   onSelectCategory?: (category: string) => void;
 
   activeNav?: string;
-
   onNavChange?: (nav: string) => void;
 
   onRandomClick?: () => void;
 }
 
-interface IndicatorState {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  opacity: number;
-  moving: boolean;
-}
 
 export default function Navbar({
-  searchQuery = "",
+  searchQuery = '',
   onSearchChange,
+
   favoriteCount = 0,
-  activeCategory = "All",
+
+  activeCategory = 'All',
   onSelectCategory,
-  activeNav = "Home",
+
+  activeNav = 'Home',
   onNavChange,
+
   onRandomClick,
 }: NavbarProps) {
-  /* ======================================================
-     STATES
-  ====================================================== */
 
-  const [isMobileMoreOpen, setIsMobileMoreOpen] =
+  /* ============================================================
+     MOBILE MORE MENU
+     ============================================================ */
+
+  const [isMobileMoreOpen, setIsMobileMenuOpen] =
     useState(false);
+
+
+  /* ============================================================
+     CATEGORY DROPDOWN
+     ============================================================ */
 
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] =
     useState(false);
 
+
+  /* ============================================================
+     MOBILE SEARCH
+     ============================================================ */
+
   const [isSearchExpanded, setIsSearchExpanded] =
     useState(false);
 
-  /* ======================================================
-     SCROLL STATES
-  ====================================================== */
+
+  /* ============================================================
+     SCROLL NAVIGATION
+     ============================================================ */
 
   const [showTopNav, setShowTopNav] = useState(true);
-
   const [showBottomNav, setShowBottomNav] = useState(true);
 
   const lastScrollY = useRef(0);
 
-  /* ======================================================
-     MOBILE NAV REFS
-  ====================================================== */
 
-  const mobileNavContainerRef =
-    useRef<HTMLDivElement | null>(null);
+  /* ============================================================
+     DESKTOP INDICATOR
+     ============================================================ */
+
+  const desktopNavRefs =
+    useRef<Map<string, HTMLButtonElement | HTMLAnchorElement>>(
+      new Map()
+    );
+
+  const [desktopIndicator, setDesktopIndicator] = useState({
+    left: 0,
+    width: 0,
+    height: 0,
+    top: 0,
+    opacity: 0,
+    isMoving: false,
+  });
+
+
+  /* ============================================================
+     MOBILE INDICATOR
+     ============================================================ */
 
   const mobileNavRefs =
     useRef<Map<string, HTMLButtonElement>>(
       new Map()
     );
 
-  /* ======================================================
-     MOBILE LIQUID INDICATOR
-  ====================================================== */
+  const [mobileIndicator, setMobileIndicator] = useState({
+    left: 0,
+    width: 0,
+    height: 0,
+    top: 0,
+    opacity: 0,
+    scaleX: 1,
+    scaleY: 1,
+    isMoving: false,
+  });
 
-  const [mobileIndicator, setMobileIndicator] =
-    useState<IndicatorState>({
-      left: 0,
-      top: 0,
-      width: 58,
-      height: 58,
-      opacity: 0,
-      moving: false,
-    });
 
-  /* ======================================================
-     DESKTOP REFS
-  ====================================================== */
-
-  const desktopNavRefs =
-    useRef<Map<string, HTMLButtonElement>>(
-      new Map()
-    );
-
-  const [desktopIndicator, setDesktopIndicator] =
-    useState({
-      left: 0,
-      width: 0,
-      height: 0,
-      top: 0,
-      opacity: 0,
-      moving: false,
-    });
-
-  /* ======================================================
-     NAV ITEMS
-  ====================================================== */
+  /* ============================================================
+     DESKTOP NAV ITEMS
+     ============================================================ */
 
   const desktopNavItems = [
     {
-      id: "Home",
-      label: "Home",
+      id: 'Home',
+      label: 'Home',
       icon: HomeIcon,
     },
-
     {
-      id: "Latest",
-      label: "Latest",
+      id: 'Latest',
+      label: 'Latest',
       icon: Clock,
     },
-
     {
-      id: "Trending",
-      label: "Trending",
+      id: 'Trending',
+      label: 'Trending',
       icon: Flame,
     },
-
     {
-      id: "Categories",
-      label: "Categories",
+      id: 'Categories',
+      label: 'Categories',
       icon: Grid,
       hasDropdown: true,
     },
-
     {
-      id: "Random",
-      label: "Random",
+      id: 'Random',
+      label: 'Random',
       icon: Dices,
     },
   ];
 
+
+  /* ============================================================
+     MOBILE NAV ITEMS
+     ============================================================ */
+
   const mobileNavItems = [
     {
-      id: "Home",
-      label: "Home",
+      id: 'Home',
+      label: 'Home',
       icon: HomeIcon,
     },
-
     {
-      id: "Trending",
-      label: "Trending",
+      id: 'Trending',
+      label: 'Trending',
       icon: Flame,
     },
-
     {
-      id: "Random",
-      label: "Random",
+      id: 'Random',
+      label: 'Random',
       icon: Dices,
     },
-
     {
-      id: "Saved",
-      label: "Saved",
+      id: 'Saved',
+      label: 'Saved',
       icon: Heart,
     },
-
     {
-      id: "More",
-      label: "More",
+      id: 'More',
+      label: 'More',
       icon: MoreHorizontal,
     },
   ];
 
-  /* ======================================================
-     MOBILE ACTIVE ITEM
-  ====================================================== */
 
-  const getMobileActiveId = () => {
-    if (isMobileMoreOpen) {
-      return "More";
-    }
-
-    if (
-      activeNav === "Home" ||
-      activeNav === "Trending" ||
-      activeNav === "Random" ||
-      activeNav === "Saved"
-    ) {
-      return activeNav;
-    }
-
-    return "Home";
-  };
-
-  /* ======================================================
-     UPDATE MOBILE LIQUID BUBBLE
-     
-     IMPORTANT:
-     We calculate the position using getBoundingClientRect()
-     instead of offsetLeft.
-
-     This fixes the misplaced bubble problem.
-  ====================================================== */
-
-  const updateMobileIndicator = (
-    animate = false
-  ) => {
-    const container =
-      mobileNavContainerRef.current;
-
-    const activeId = getMobileActiveId();
-
-    const button =
-      mobileNavRefs.current.get(activeId);
-
-    if (!container || !button) {
-      return;
-    }
-
-    const containerRect =
-      container.getBoundingClientRect();
-
-    const buttonRect =
-      button.getBoundingClientRect();
-
-    const bubbleSize = 58;
-
-    const buttonCenter =
-      buttonRect.left +
-      buttonRect.width / 2;
-
-    const left =
-      buttonCenter -
-      containerRect.left -
-      bubbleSize / 2;
-
-    /*
-      Bubble sits slightly above the navigation button.
-    */
-
-    const top =
-      buttonRect.top -
-      containerRect.top +
-      buttonRect.height / 2 -
-      bubbleSize / 2 -
-      3;
-
-    setMobileIndicator((previous) => ({
-      left,
-      top,
-      width: bubbleSize,
-      height: bubbleSize,
-      opacity: 1,
-      moving: animate,
-    }));
-  };
-
-  /* ======================================================
-     INITIAL / ACTIVE NAV UPDATE
-  ====================================================== */
-
-  useLayoutEffect(() => {
-    const timer = requestAnimationFrame(() => {
-      updateMobileIndicator(false);
-    });
-
-    return () => {
-      cancelAnimationFrame(timer);
-    };
-  }, [
-    activeNav,
-    isMobileMoreOpen,
-  ]);
-
-  /* ======================================================
-     WINDOW RESIZE
-  ====================================================== */
-
-  useEffect(() => {
-    const handleResize = () => {
-      updateMobileIndicator(false);
-      updateDesktopIndicator();
-    };
-
-    window.addEventListener(
-      "resize",
-      handleResize
-    );
-
-    return () => {
-      window.removeEventListener(
-        "resize",
-        handleResize
-      );
-    };
-  });
-
-  /* ======================================================
-     DESKTOP INDICATOR
-  ====================================================== */
-
-  const updateDesktopIndicator = () => {
-    const activeElement =
-      desktopNavRefs.current.get(activeNav);
-
-    if (!activeElement) {
-      return;
-    }
-
-    setDesktopIndicator((previous) => ({
-      left: activeElement.offsetLeft,
-      width: activeElement.offsetWidth,
-      height: activeElement.offsetHeight,
-      top: activeElement.offsetTop,
-      opacity: 1,
-      moving:
-        previous.opacity > 0 &&
-        previous.left !==
-          activeElement.offsetLeft,
-    }));
-  };
-
-  useLayoutEffect(() => {
-    const timer = requestAnimationFrame(() => {
-      updateDesktopIndicator();
-    });
-
-    return () => {
-      cancelAnimationFrame(timer);
-    };
-  }, [activeNav]);
-
-  /* ======================================================
+  /* ============================================================
      SCROLL DIRECTION
-  ====================================================== */
+     ============================================================ */
 
   useEffect(() => {
+
     const handleScroll = () => {
-      const currentScrollY =
-        window.scrollY;
+
+      const currentScrollY = window.scrollY;
 
       if (currentScrollY < 50) {
+
         setShowTopNav(true);
         setShowBottomNav(true);
 
-        lastScrollY.current =
-          currentScrollY;
+        lastScrollY.current = currentScrollY;
 
         return;
       }
 
       if (
         Math.abs(
-          currentScrollY -
-            lastScrollY.current
+          currentScrollY - lastScrollY.current
         ) < 8
       ) {
         return;
       }
 
-      if (
-        currentScrollY >
-        lastScrollY.current
-      ) {
-        /*
-          Scroll DOWN
-          Top disappears
-          Bottom stays
-        */
+      if (currentScrollY > lastScrollY.current) {
 
+        /* Scroll DOWN */
         setShowTopNav(false);
         setShowBottomNav(true);
-      } else {
-        /*
-          Scroll UP
-          Top appears
-          Bottom disappears
-        */
 
+      } else {
+
+        /* Scroll UP */
         setShowTopNav(true);
         setShowBottomNav(false);
       }
 
-      lastScrollY.current =
-        currentScrollY;
+      lastScrollY.current = currentScrollY;
     };
 
+
     window.addEventListener(
-      "scroll",
+      'scroll',
       handleScroll,
-      {
-        passive: true,
-      }
+      { passive: true }
     );
+
 
     return () => {
       window.removeEventListener(
-        "scroll",
+        'scroll',
         handleScroll
       );
     };
+
   }, []);
 
-  /* ======================================================
-     NAV CLICK
-  ====================================================== */
+
+  /* ============================================================
+     DESKTOP INDICATOR UPDATE
+     ============================================================ */
+
+  const updateDesktopIndicator = () => {
+
+    const activeEl =
+      desktopNavRefs.current.get(activeNav);
+
+    if (!activeEl) {
+      return;
+    }
+
+    setDesktopIndicator((prev) => ({
+
+      left: activeEl.offsetLeft,
+
+      width: activeEl.offsetWidth,
+
+      height: activeEl.offsetHeight,
+
+      top: activeEl.offsetTop,
+
+      opacity: 1,
+
+      isMoving:
+        prev.opacity > 0 &&
+        (
+          prev.left !== activeEl.offsetLeft ||
+          prev.width !== activeEl.offsetWidth
+        ),
+    }));
+  };
+
+
+  /* ============================================================
+     MOBILE INDICATOR UPDATE
+     ============================================================ */
+
+  const updateMobileIndicator = () => {
+
+    const targetId =
+      activeNav === 'Saved'
+        ? 'Saved'
+        : activeNav === 'Home' ||
+          activeNav === 'Trending' ||
+          activeNav === 'Random'
+        ? activeNav
+        : 'More';
+
+
+    const activeBtn =
+      mobileNavRefs.current.get(targetId);
+
+
+    if (!activeBtn) {
+      return;
+    }
+
+
+    setMobileIndicator((prev) => ({
+
+      ...prev,
+
+      left: activeBtn.offsetLeft,
+
+      width: activeBtn.offsetWidth,
+
+      height: activeBtn.offsetHeight,
+
+      top: activeBtn.offsetTop,
+
+      opacity: 1,
+    }));
+  };
+
+
+  /* ============================================================
+     UPDATE INDICATORS
+     ============================================================ */
+
+  useEffect(() => {
+
+    const update = () => {
+      updateDesktopIndicator();
+      updateMobileIndicator();
+    };
+
+
+    requestAnimationFrame(update);
+
+
+    const timer = setTimeout(() => {
+
+      setDesktopIndicator((prev) => ({
+        ...prev,
+        isMoving: false,
+      }));
+
+    }, 550);
+
+
+    const handleResize = () => {
+      update();
+    };
+
+
+    window.addEventListener(
+      'resize',
+      handleResize
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        'resize',
+        handleResize
+      );
+
+      clearTimeout(timer);
+    };
+
+  }, [
+    activeNav,
+    isMobileMoreOpen,
+  ]);
+
+
+  /* ============================================================
+     NAVIGATION CLICK
+     ============================================================ */
 
   const handleNavClick = (
     id: string,
-    event?: React.MouseEvent<HTMLButtonElement>
+    e?: React.MouseEvent<HTMLButtonElement>
   ) => {
+
     if (onNavChange) {
       onNavChange(id);
     }
 
+
     /* RANDOM */
 
-    if (id === "Random") {
+    if (id === 'Random') {
+
       if (onRandomClick) {
         onRandomClick();
       }
     }
 
+
     /* MORE */
 
-    if (id === "More") {
-      setIsMobileMoreOpen(
-        (previous) => !previous
+    if (id === 'More') {
+
+      setIsMobileMenuOpen(
+        (prev) => !prev
       );
+
     } else {
-      setIsMobileMoreOpen(false);
+
+      setIsMobileMenuOpen(false);
     }
 
-    /*
-      Immediately move bubble to clicked button.
-      This makes animation feel instant.
-    */
 
-    if (
-      event?.currentTarget &&
-      mobileNavContainerRef.current
-    ) {
-      const button =
-        event.currentTarget;
+    /* ==========================================================
+       MOBILE LIQUID INDICATOR
+       ========================================================== */
 
-      const container =
-        mobileNavContainerRef.current;
+    if (e?.currentTarget) {
 
-      const containerRect =
-        container.getBoundingClientRect();
+      const btn = e.currentTarget;
 
-      const buttonRect =
-        button.getBoundingClientRect();
+      const prevLeft =
+        mobileIndicator.left;
 
-      const bubbleSize = 58;
+      const newLeft =
+        btn.offsetLeft;
 
-      const buttonCenter =
-        buttonRect.left +
-        buttonRect.width / 2;
+      const distance =
+        Math.abs(
+          newLeft - prevLeft
+        );
 
-      const left =
-        buttonCenter -
-        containerRect.left -
-        bubbleSize / 2;
-
-      const top =
-        buttonRect.top -
-        containerRect.top +
-        buttonRect.height / 2 -
-        bubbleSize / 2 -
-        3;
-
-      /*
-        Calculate travel distance.
-      */
-
-      const distance = Math.abs(
-        left - mobileIndicator.left
-      );
-
-      /*
-        More distance = more stretch.
-      */
 
       const stretch =
-        Math.min(
-          1.32,
-          1 +
-            distance / 240
-        );
+        distance > 10
+          ? Math.min(
+              1.28,
+              1 + distance / 220
+            )
+          : 1;
+
 
       setMobileIndicator({
-        left,
-        top,
-        width: bubbleSize,
-        height: bubbleSize,
+
+        left: newLeft,
+
+        width: btn.offsetWidth,
+
+        height: btn.offsetHeight,
+
+        top: btn.offsetTop,
+
         opacity: 1,
-        moving: distance > 8,
+
+        scaleX: stretch,
+
+        scaleY: 2 - stretch,
+
+        isMoving: distance > 10,
       });
 
-      /*
-        End liquid stretch.
-      */
 
-      window.setTimeout(() => {
-        setMobileIndicator(
-          (previous) => ({
-            ...previous,
-            moving: false,
-          })
-        );
-      }, 500);
+      setTimeout(() => {
+
+        setMobileIndicator((prev) => ({
+
+          ...prev,
+
+          scaleX: 1,
+
+          scaleY: 1,
+
+          isMoving: false,
+        }));
+
+      }, 480);
     }
   };
 
-  /* ======================================================
-     MOBILE ACTIVE CHECK
-  ====================================================== */
 
-  const isMobileActive = (
-    id: string
-  ) => {
-    const current =
-      getMobileActiveId();
-
-    return current === id;
-  };
-
-  /* ======================================================
+  /* ============================================================
      RENDER
-  ====================================================== */
+     ============================================================ */
 
   return (
     <>
-      {/* =====================================================
+      {/* ========================================================
           DESKTOP / TOP NAVBAR
-      ===================================================== */}
+          ======================================================== */}
 
       <header
         className={`
@@ -583,11 +522,12 @@ export default function Navbar({
           transform
           ${
             showTopNav
-              ? "translate-y-0 opacity-100"
-              : "-translate-y-24 opacity-0 pointer-events-none"
+              ? 'translate-y-0 opacity-100'
+              : '-translate-y-24 opacity-0 pointer-events-none'
           }
         `}
       >
+
         <div
           className="
             glass-navbar
@@ -599,12 +539,17 @@ export default function Navbar({
             items-center
             justify-between
             gap-2
+            overflow-hidden
             shadow-xl
           "
         >
-          {/* SEARCH */}
+
+          {/* ====================================================
+              MOBILE SEARCH EXPANDED
+              ==================================================== */}
 
           {isSearchExpanded ? (
+
             <div
               className="
                 flex-1
@@ -618,11 +563,13 @@ export default function Navbar({
                 px-3
                 py-1.5
                 shadow-inner
+                transition-all
+                duration-300
                 w-full
                 overflow-hidden
-                animate-fade-in
               "
             >
+
               <Search
                 className="
                   w-4
@@ -637,10 +584,9 @@ export default function Navbar({
                 autoFocus
                 placeholder="Search 4K pins, cars, anime..."
                 value={searchQuery}
-                onChange={(event) =>
-                  onSearchChange?.(
-                    event.target.value
-                  )
+                onChange={(e) =>
+                  onSearchChange &&
+                  onSearchChange(e.target.value)
                 }
                 className="
                   w-full
@@ -662,25 +608,36 @@ export default function Navbar({
                   p-1
                   rounded-full
                   text-[#23212C]/70
+                  hover:text-[#23212C]
                   hover:bg-slate-200
+                  shrink-0
                 "
+                aria-label="Close Search"
               >
+
                 <X className="w-4 h-4" />
+
               </button>
+
             </div>
+
           ) : (
+
             <>
-              {/* LOGO */}
+              {/* ==================================================
+                  LOGO
+                  ================================================== */}
 
               <Link
                 href="/"
                 onClick={() =>
-                  onNavChange?.("Home")
+                  handleNavClick('Home')
                 }
                 className="
                   flex
                   items-center
                   gap-2
+                  group
                   shrink-0
                   pr-2.5
                   sm:pr-4
@@ -688,6 +645,7 @@ export default function Navbar({
                   border-[#23212C]/15
                 "
               >
+
                 <div
                   className="
                     w-8
@@ -696,31 +654,54 @@ export default function Navbar({
                     sm:h-9
                     rounded-full
                     bg-[#23212C]
-                    flex
-                    items-center
-                    justify-center
+                    p-0.5
                     shadow-md
+                    group-hover:scale-105
+                    transition-transform
+                    duration-300
                   "
                 >
-                  <Sparkles
+
+                  <div
                     className="
-                      w-4
-                      h-4
-                      text-[#F1FEC8]
+                      w-full
+                      h-full
+                      bg-[#23212C]
+                      rounded-full
+                      flex
+                      items-center
+                      justify-center
                     "
-                  />
+                  >
+
+                    <Sparkles
+                      className="
+                        w-4
+                        h-4
+                        text-[#F1FEC8]
+                        group-hover:rotate-12
+                        transition-transform
+                        duration-300
+                      "
+                    />
+
+                  </div>
+
                 </div>
 
+
                 <div>
+
                   <span
                     className="
                       text-sm
                       sm:text-lg
                       font-extrabold
                       text-[#23212C]
+                      tracking-tight
                     "
                   >
-                    Wallpapers.
+                    Wallpapers<span className="text-slate-800">.</span>
                   </span>
 
                   <span
@@ -732,14 +713,20 @@ export default function Navbar({
                       text-slate-800
                       uppercase
                       tracking-widest
+                      -mt-1
                     "
                   >
                     4K & Ultra HD
                   </span>
+
                 </div>
+
               </Link>
 
-              {/* DESKTOP NAV */}
+
+              {/* ==================================================
+                  DESKTOP NAVIGATION
+                  ================================================== */}
 
               <nav
                 className="
@@ -752,226 +739,301 @@ export default function Navbar({
                   px-1
                 "
               >
+
                 {/* DESKTOP ACTIVE INDICATOR */}
 
                 <div
                   className="
                     absolute
                     bg-[#23212C]
+                    shadow-md
+                    shadow-black/20
                     pointer-events-none
-                    z-0
+                    will-change-transform
                   "
                   style={{
-                    left:
-                      desktopIndicator.left,
-                    top:
-                      desktopIndicator.top,
+                    transform:
+                      `translate3d(${desktopIndicator.left}px, ${desktopIndicator.top}px, 0) ${
+                        desktopIndicator.isMoving
+                          ? 'scaleX(1.12) scaleY(0.88)'
+                          : 'scale(1)'
+                      }`,
+
                     width:
-                      desktopIndicator.width,
+                      `${desktopIndicator.width}px`,
+
                     height:
-                      desktopIndicator.height,
+                      `${desktopIndicator.height}px`,
+
                     opacity:
                       desktopIndicator.opacity,
 
-                    borderRadius: 9999,
+                    borderRadius:
+                      desktopIndicator.isMoving
+                        ? '22px 12px 24px 10px'
+                        : '9999px',
 
                     transition:
-                      "all 450ms cubic-bezier(0.34,1.56,0.64,1)",
+                      `
+                      transform 550ms cubic-bezier(0.34, 1.45, 0.64, 1),
+                      width 550ms cubic-bezier(0.34, 1.45, 0.64, 1),
+                      height 550ms cubic-bezier(0.34, 1.45, 0.64, 1),
+                      border-radius 550ms ease-out,
+                      opacity 300ms ease
+                      `,
                   }}
                 />
 
-                {desktopNavItems.map(
-                  (item) => {
-                    const Icon =
-                      item.icon;
 
-                    const active =
-                      activeNav ===
-                      item.id;
+                {desktopNavItems.map((item) => {
 
-                    if (
-                      item.hasDropdown
-                    ) {
-                      return (
-                        <div
-                          key={item.id}
-                          className="relative"
-                        >
-                          <button
-                            ref={(element) => {
-                              if (
-                                element
-                              ) {
-                                desktopNavRefs.current.set(
-                                  item.id,
-                                  element
-                                );
-                              }
-                            }}
-                            type="button"
-                            onClick={() => {
-                              setIsCategoryDropdownOpen(
-                                (
-                                  previous
-                                ) =>
-                                  !previous
-                              );
+                  const isActive =
+                    activeNav === item.id;
 
-                              onNavChange?.(
-                                item.id
-                              );
-                            }}
-                            className={`
-                              relative
-                              z-10
-                              flex
-                              items-center
-                              gap-1.5
-                              px-3.5
-                              py-1.5
-                              rounded-full
-                              text-xs
-                              font-bold
-                              ${
-                                active
-                                  ? "text-[#F1FEC8]"
-                                  : "text-[#23212C]/80"
-                              }
-                            `}
-                          >
-                            <Icon className="w-3.5 h-3.5" />
+                  const Icon = item.icon;
 
-                            <span>
-                              {
-                                item.label
-                              }
-                            </span>
 
-                            <ChevronDown
-                              className={`
-                                w-3
-                                h-3
-                                transition-transform
-                                ${
-                                  isCategoryDropdownOpen
-                                    ? "rotate-180"
-                                    : ""
-                                }
-                              `}
-                            />
-                          </button>
+                  /* CATEGORY */
 
-                          {isCategoryDropdownOpen && (
-                            <div
-                              className="
-                                absolute
-                                left-0
-                                mt-3
-                                w-64
-                                bg-[#23212C]/95
-                                border
-                                border-slate-700/60
-                                rounded-3xl
-                                shadow-2xl
-                                backdrop-blur-2xl
-                                p-3
-                                z-50
-                                grid
-                                grid-cols-2
-                                gap-1
-                              "
-                            >
-                              {CATEGORIES.map(
-                                (category) => (
-                                  <button
-                                    key={
-                                      category
-                                    }
-                                    type="button"
-                                    onClick={() => {
-                                      onSelectCategory?.(
-                                        category
-                                      );
-
-                                      setIsCategoryDropdownOpen(
-                                        false
-                                      );
-                                    }}
-                                    className={`
-                                      text-left
-                                      px-3
-                                      py-2
-                                      rounded-xl
-                                      text-xs
-                                      ${
-                                        activeCategory ===
-                                        category
-                                          ? "bg-[#F1FEC8] text-[#23212C]"
-                                          : "text-slate-300 hover:bg-slate-800"
-                                      }
-                                    `}
-                                  >
-                                    {
-                                      category
-                                    }
-                                  </button>
-                                )
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    }
+                  if (item.hasDropdown) {
 
                     return (
-                      <button
+                      <div
                         key={item.id}
-                        ref={(element) => {
-                          if (
-                            element
-                          ) {
-                            desktopNavRefs.current.set(
-                              item.id,
-                              element
-                            );
-                          }
-                        }}
-                        type="button"
-                        onClick={() =>
-                          handleNavClick(
-                            item.id
-                          )
-                        }
-                        className={`
-                          relative
-                          z-10
-                          flex
-                          items-center
-                          gap-1.5
-                          px-3.5
-                          py-1.5
-                          rounded-full
-                          text-xs
-                          font-bold
-                          ${
-                            active
-                              ? "text-[#F1FEC8]"
-                              : "text-[#23212C]/80 hover:text-[#23212C]"
-                          }
-                        `}
+                        className="relative"
                       >
-                        <Icon className="w-3.5 h-3.5" />
 
-                        <span>
-                          {item.label}
-                        </span>
-                      </button>
+                        <button
+                          ref={(el) => {
+
+                            if (el) {
+                              desktopNavRefs.current.set(
+                                item.id,
+                                el
+                              );
+                            } else {
+                              desktopNavRefs.current.delete(
+                                item.id
+                              );
+                            }
+
+                          }}
+                          type="button"
+                          aria-pressed={isActive}
+                          onClick={() => {
+
+                            setIsCategoryDropdownOpen(
+                              (prev) => !prev
+                            );
+
+                            handleNavClick(
+                              item.id
+                            );
+
+                          }}
+                          className={`
+                            relative
+                            z-10
+                            flex
+                            items-center
+                            gap-1.5
+                            px-3.5
+                            py-1.5
+                            rounded-full
+                            text-xs
+                            font-bold
+                            transition-colors
+                            duration-200
+                            ${
+                              isActive
+                                ? 'text-[#F1FEC8]'
+                                : 'text-[#23212C]/80 hover:text-[#23212C] hover:bg-slate-900/10'
+                            }
+                          `}
+                        >
+
+                          <Icon className="w-3.5 h-3.5" />
+
+                          <span>
+                            {item.label}
+                          </span>
+
+                          <ChevronDown
+                            className={`
+                              w-3
+                              h-3
+                              transition-transform
+                              duration-200
+                              ${
+                                isCategoryDropdownOpen
+                                  ? 'rotate-180'
+                                  : ''
+                              }
+                            `}
+                          />
+
+                        </button>
+
+
+                        {/* CATEGORY DROPDOWN */}
+
+                        {isCategoryDropdownOpen && (
+
+                          <div
+                            className="
+                              absolute
+                              left-0
+                              mt-3
+                              w-64
+                              bg-[#23212C]/95
+                              border
+                              border-slate-700/60
+                              rounded-3xl
+                              shadow-2xl
+                              backdrop-blur-2xl
+                              p-3
+                              z-50
+                              grid
+                              grid-cols-2
+                              gap-1
+                            "
+                          >
+
+                            {CATEGORIES.map(
+                              (cat) => (
+
+                                <button
+                                  key={cat}
+                                  type="button"
+                                  onClick={() => {
+
+                                    if (
+                                      onSelectCategory
+                                    ) {
+                                      onSelectCategory(
+                                        cat
+                                      );
+                                    }
+
+                                    setIsCategoryDropdownOpen(
+                                      false
+                                    );
+
+                                    const
+                                      categoriesElement =
+                                        document.getElementById(
+                                          'categories'
+                                        );
+
+                                    if (
+                                      categoriesElement
+                                    ) {
+                                      categoriesElement.scrollIntoView(
+                                        {
+                                          behavior:
+                                            'smooth',
+                                        }
+                                      );
+                                    }
+
+                                  }}
+                                  className={`
+                                    text-left
+                                    px-3
+                                    py-2
+                                    rounded-xl
+                                    text-xs
+                                    font-medium
+                                    transition-all
+                                    ${
+                                      activeCategory === cat
+                                        ? 'bg-[#F1FEC8] text-[#23212C] font-bold shadow-md'
+                                        : 'text-slate-300 hover:bg-slate-800 hover:text-[#F1FEC8]'
+                                    }
+                                  `}
+                                >
+                                  {cat}
+                                </button>
+
+                              )
+                            )}
+
+                          </div>
+                        )}
+
+                      </div>
                     );
                   }
-                )}
+
+
+                  /* NORMAL DESKTOP NAV */
+
+                  return (
+
+                    <button
+                      key={item.id}
+                      ref={(el) => {
+
+                        if (el) {
+                          desktopNavRefs.current.set(
+                            item.id,
+                            el
+                          );
+                        } else {
+                          desktopNavRefs.current.delete(
+                            item.id
+                          );
+                        }
+
+                      }}
+                      type="button"
+                      aria-current={
+                        isActive
+                          ? 'page'
+                          : undefined
+                      }
+                      onClick={() =>
+                        handleNavClick(
+                          item.id
+                        )
+                      }
+                      className={`
+                        relative
+                        z-10
+                        flex
+                        items-center
+                        gap-1.5
+                        px-3.5
+                        py-1.5
+                        rounded-full
+                        text-xs
+                        font-bold
+                        transition-colors
+                        duration-200
+                        ${
+                          isActive
+                            ? 'text-[#F1FEC8]'
+                            : 'text-[#23212C]/80 hover:text-[#23212C] hover:bg-slate-900/10'
+                        }
+                      `}
+                    >
+
+                      <Icon className="w-3.5 h-3.5" />
+
+                      <span>
+                        {item.label}
+                      </span>
+
+                    </button>
+                  );
+                })}
+
               </nav>
 
-              {/* RIGHT SIDE */}
+
+              {/* ==================================================
+                  SEARCH + FAVORITES
+                  ================================================== */}
 
               <div
                 className="
@@ -983,43 +1045,58 @@ export default function Navbar({
                   sm:pl-4
                   border-l
                   border-[#23212C]/15
+                  shrink-0
                 "
               >
+
                 <button
                   type="button"
                   onClick={() =>
-                    setIsSearchExpanded(
-                      true
-                    )
+                    setIsSearchExpanded(true)
                   }
                   className="
                     p-2
                     rounded-full
                     text-[#23212C]
                     hover:bg-slate-900/10
+                    transition-all
+                    flex
+                    items-center
+                    gap-1
+                    text-xs
+                    font-bold
                   "
+                  aria-label="Search Pins"
                 >
+
                   <Search className="w-4 h-4" />
+
                 </button>
+
 
                 <button
                   type="button"
                   onClick={() =>
-                    onNavChange?.(
-                      "Saved"
-                    )
+                    handleNavClick('Saved')
                   }
                   className="
                     relative
                     p-2
                     rounded-full
                     text-[#23212C]
+                    hover:bg-slate-900/10
+                    transition-all
+                    flex
+                    items-center
+                    justify-center
                   "
+                  aria-label="Favorites"
                 >
+
                   <Heart className="w-4 h-4" />
 
-                  {favoriteCount >
-                    0 && (
+                  {favoriteCount > 0 && (
+
                     <span
                       className="
                         absolute
@@ -1030,27 +1107,33 @@ export default function Navbar({
                         bg-[#23212C]
                         text-[#F1FEC8]
                         text-[9px]
+                        font-bold
                         rounded-full
                         flex
                         items-center
                         justify-center
                       "
                     >
-                      {
-                        favoriteCount
-                      }
+                      {favoriteCount}
                     </span>
+
                   )}
+
                 </button>
+
               </div>
+
             </>
           )}
+
         </div>
+
       </header>
 
-      {/* =====================================================
-          MOBILE BOTTOM LIQUID NAV
-      ===================================================== */}
+
+      {/* ========================================================
+          MOBILE BOTTOM NAVBAR
+          ======================================================== */}
 
       <div
         className={`
@@ -1064,157 +1147,182 @@ export default function Navbar({
           mx-auto
           transition-all
           duration-300
+          transform
           ${
             showBottomNav
-              ? "translate-y-0 opacity-100"
-              : "translate-y-28 opacity-0 pointer-events-none"
+              ? 'translate-y-0 opacity-100'
+              : 'translate-y-28 opacity-0 pointer-events-none'
           }
         `}
       >
+
         <div
-          ref={mobileNavContainerRef}
           className="
             glass-navbar-dark
-            relative
             rounded-full
             px-2
-            py-2
+            py-1.5
             flex
             items-center
             justify-around
-            overflow-visible
-            min-h-[64px]
+            relative
+            shadow-2xl
+            overflow-hidden
           "
         >
-          {/* =================================================
-              LIQUID GLASS BUBBLE
-          ================================================= */}
+
+          {/* ==================================================
+              MILKY WHITE ACTIVE INDICATOR
+              ================================================== */}
 
           <div
-            className={`
+            className="
+              absolute
               liquid-pill-active
-              ${
-                mobileIndicator.moving
-                  ? "is-moving"
-                  : ""
-              }
-            `}
+              pointer-events-none
+              will-change-transform
+              z-0
+            "
             style={{
-              left:
-                mobileIndicator.left,
 
-              top:
-                mobileIndicator.top,
+              transform:
+                `
+                translate3d(
+                  ${mobileIndicator.left}px,
+                  ${mobileIndicator.top}px,
+                  0
+                )
+                scaleX(${mobileIndicator.scaleX})
+                scaleY(${mobileIndicator.scaleY})
+                `,
 
               width:
-                mobileIndicator.width,
+                `${mobileIndicator.width}px`,
 
               height:
-                mobileIndicator.height,
+                `${mobileIndicator.height}px`,
 
               opacity:
                 mobileIndicator.opacity,
 
-              transform:
-                mobileIndicator.moving
-                  ? "scaleX(1.22) scaleY(0.84)"
-                  : "scaleX(1) scaleY(1)",
+              borderRadius:
+                mobileIndicator.isMoving
+                  ? '26px 10px 28px 8px'
+                  : '9999px',
 
               transition:
-                "left 500ms cubic-bezier(0.34,1.56,0.64,1), top 500ms cubic-bezier(0.34,1.56,0.64,1), transform 500ms cubic-bezier(0.34,1.56,0.64,1), opacity 250ms ease",
+                `
+                transform 480ms cubic-bezier(0.34, 1.45, 0.64, 1),
+                width 480ms cubic-bezier(0.34, 1.45, 0.64, 1),
+                height 480ms cubic-bezier(0.34, 1.45, 0.64, 1),
+                border-radius 480ms ease-out,
+                opacity 300ms ease
+                `,
             }}
           />
 
-          {/* =================================================
-              MOBILE BUTTONS
-          ================================================= */}
 
-          {mobileNavItems.map(
-            (item) => {
-              const Icon =
-                item.icon;
+          {/* ==================================================
+              MOBILE NAV ITEMS
+              ================================================== */}
 
-              const active =
-                isMobileActive(
-                  item.id
-                );
+          {mobileNavItems.map((item) => {
 
-              return (
-                <button
-                  key={item.id}
-                  ref={(element) => {
-                    if (element) {
-                      mobileNavRefs.current.set(
-                        item.id,
-                        element
-                      );
-                    } else {
-                      mobileNavRefs.current.delete(
-                        item.id
-                      );
-                    }
-                  }}
-                  type="button"
-                  onClick={(event) =>
-                    handleNavClick(
+            const isActive =
+              (activeNav === 'Home' &&
+                item.id === 'Home') ||
+
+              (activeNav === 'Trending' &&
+                item.id === 'Trending') ||
+
+              (activeNav === 'Random' &&
+                item.id === 'Random') ||
+
+              (activeNav === 'Saved' &&
+                item.id === 'Saved') ||
+
+              (isMobileMoreOpen &&
+                item.id === 'More');
+
+
+            const Icon = item.icon;
+
+
+            return (
+
+              <button
+                key={item.id}
+                ref={(el) => {
+
+                  if (el) {
+                    mobileNavRefs.current.set(
                       item.id,
-                      event
-                    )
+                      el
+                    );
+                  } else {
+                    mobileNavRefs.current.delete(
+                      item.id
+                    );
                   }
-                  className={`
-                    liquid-nav-button
-                    ${
-                      active
-                        ? "active"
-                        : ""
-                    }
-                  `}
-                >
-                  <Icon
-                    className={`
-                      w-5
-                      h-5
-                      transition-all
-                      duration-300
-                      ${
-                        active
-                          ? "text-[#23212C]"
-                          : "text-[#F1FEC8]/75"
-                      }
-                    `}
-                  />
 
-                  <span
-                    className={`
-                      text-[10px]
-                      leading-none
-                      font-extrabold
-                      ${
-                        active
-                          ? "text-[#23212C]"
-                          : "text-[#F1FEC8]/75"
-                      }
-                    `}
-                  >
-                    {
-                      item.label
-                    }
-                  </span>
-                </button>
-              );
-            }
-          )}
+                }}
+                type="button"
+                aria-pressed={isActive}
+                onClick={(e) =>
+                  handleNavClick(
+                    item.id,
+                    e
+                  )
+                }
+                className={`
+                  relative
+                  z-10
+                  flex
+                  flex-col
+                  items-center
+                  gap-0.5
+                  px-3
+                  py-1.5
+                  rounded-full
+                  transition-all
+                  duration-300
+                  ${
+                    isActive
+                      ? 'text-[#23212C] font-black scale-105'
+                      : 'text-slate-300 hover:text-white'
+                  }
+                `}
+              >
+
+                <Icon className="w-4 h-4" />
+
+                <span
+                  className="
+                    text-[10px]
+                    font-extrabold
+                    tracking-tight
+                  "
+                >
+                  {item.label}
+                </span>
+
+              </button>
+            );
+          })}
+
         </div>
 
-        {/* ===================================================
+
+        {/* ======================================================
             MORE DRAWER
-        =================================================== */}
+            ====================================================== */}
 
         {isMobileMoreOpen && (
+
           <div
             className="
               absolute
-              bottom-20
+              bottom-16
               left-0
               right-0
               bg-[#23212C]/95
@@ -1226,9 +1334,10 @@ export default function Navbar({
               backdrop-blur-2xl
               text-xs
               space-y-4
-              animate-fade-in
+              z-50
             "
           >
+
             <div
               className="
                 flex
@@ -1239,6 +1348,7 @@ export default function Navbar({
                 pb-2
               "
             >
+
               <span
                 className="
                   font-bold
@@ -1251,12 +1361,11 @@ export default function Navbar({
                 More Navigation
               </span>
 
+
               <button
                 type="button"
                 onClick={() =>
-                  setIsMobileMoreOpen(
-                    false
-                  )
+                  setIsMobileMenuOpen(false)
                 }
                 className="
                   p-1
@@ -1264,9 +1373,13 @@ export default function Navbar({
                   hover:text-white
                 "
               >
+
                 <X className="w-4 h-4" />
+
               </button>
+
             </div>
+
 
             <div
               className="
@@ -1275,12 +1388,13 @@ export default function Navbar({
                 gap-2
               "
             >
+
               <button
                 type="button"
-                onClick={(event) =>
+                onClick={(e) =>
                   handleNavClick(
-                    "Latest",
-                    event
+                    'Latest',
+                    e
                   )
                 }
                 className="
@@ -1293,21 +1407,40 @@ export default function Navbar({
                   border
                   border-slate-800
                   text-slate-200
+                  hover:bg-slate-800
                 "
               >
+
                 <Clock className="w-4 h-4" />
 
                 Latest Pins
+
               </button>
+
 
               <button
                 type="button"
-                onClick={(event) =>
+                onClick={() => {
+
                   handleNavClick(
-                    "Categories",
-                    event
-                  )
-                }
+                    'Categories'
+                  );
+
+                  const
+                    categoriesElement =
+                      document.getElementById(
+                        'categories'
+                      );
+
+                  if (
+                    categoriesElement
+                  ) {
+                    categoriesElement.scrollIntoView({
+                      behavior: 'smooth',
+                    });
+                  }
+
+                }}
                 className="
                   flex
                   items-center
@@ -1318,13 +1451,18 @@ export default function Navbar({
                   border
                   border-slate-800
                   text-slate-200
+                  hover:bg-slate-800
                 "
               >
+
                 <Grid className="w-4 h-4" />
 
                 Categories
+
               </button>
+
             </div>
+
 
             <div
               className="
@@ -1340,59 +1478,71 @@ export default function Navbar({
                 gap-2
               "
             >
+
               <Link
                 href="/privacy-policy"
                 onClick={() =>
-                  setIsMobileMoreOpen(
-                    false
-                  )
+                  setIsMobileMenuOpen(false)
                 }
                 className="
+                  hover:text-[#F1FEC8]
                   flex
                   items-center
                   gap-1
                 "
               >
+
                 <ShieldCheck className="w-3 h-3" />
+
                 Privacy
+
               </Link>
+
 
               <Link
                 href="/terms-of-service"
                 onClick={() =>
-                  setIsMobileMoreOpen(
-                    false
-                  )
+                  setIsMobileMenuOpen(false)
                 }
                 className="
+                  hover:text-[#F1FEC8]
                   flex
                   items-center
                   gap-1
                 "
               >
+
                 <FileText className="w-3 h-3" />
+
                 Terms
+
               </Link>
+
 
               <Link
                 href="/about"
                 onClick={() =>
-                  setIsMobileMoreOpen(
-                    false
-                  )
+                  setIsMobileMenuOpen(false)
                 }
                 className="
+                  hover:text-[#F1FEC8]
                   flex
                   items-center
                   gap-1
                 "
               >
+
                 <Info className="w-3.5 h-3.5" />
+
                 About
+
               </Link>
+
             </div>
+
           </div>
         )}
+
       </div>
     </>
   );

@@ -1,6 +1,11 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+} from 'react';
+
 import Link from 'next/link';
 
 import Navbar from '../components/Navbar';
@@ -37,283 +42,433 @@ import {
   ChevronDown,
 } from 'lucide-react';
 
+
 export default function Home() {
-  // ============================================================
-  // STATE
-  // ============================================================
 
-  const [searchQuery, setSearchQuery] = useState('');
+  /* ============================================================
+     SEARCH
+     ============================================================ */
 
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchQuery, setSearchQuery] =
+    useState('');
+
+
+  /* ============================================================
+     CATEGORY
+     ============================================================ */
+
+  const [selectedCategory, setSelectedCategory] =
+    useState('All');
+
+
+  /* ============================================================
+     SELECTED WALLPAPER
+     ============================================================ */
 
   const [selectedWallpaper, setSelectedWallpaper] =
     useState<Wallpaper | null>(null);
 
-  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+
+  /* ============================================================
+     FAVORITES
+     ============================================================ */
+
+  const [favoriteIds, setFavoriteIds] =
+    useState<string[]>([]);
+
+
+  /* ============================================================
+     WALLPAPERS
+     ============================================================ */
 
   const [wallpapers, setWallpapers] =
-    useState<Wallpaper[]>(INITIAL_WALLPAPERS);
-
-  const [visibleCount, setVisibleCount] = useState(30);
-
-  const [activeNav, setActiveNav] = useState('Home');
+    useState<Wallpaper[]>(
+      INITIAL_WALLPAPERS
+    );
 
 
-  // ============================================================
-  // LOAD DATABASE WALLPAPERS + FAVORITES
-  // ============================================================
+  /* ============================================================
+     LOAD MORE COUNT
+     ============================================================ */
+
+  const [visibleCount, setVisibleCount] =
+    useState(30);
+
+
+  /* ============================================================
+     ACTIVE NAV
+     ============================================================ */
+
+  const [activeNav, setActiveNav] =
+    useState('Home');
+
+
+  /* ============================================================
+     LOAD DATABASE + FAVORITES
+     ============================================================ */
 
   useEffect(() => {
+
     const loadInitialData = async () => {
-      try {
-        const dbWallpapers = await getWallpapersFromDb();
 
-        if (dbWallpapers && dbWallpapers.length > 0) {
-          setWallpapers(dbWallpapers);
+      try {
+
+        const dbWallpapers =
+          await getWallpapersFromDb();
+
+
+        if (
+          dbWallpapers &&
+          dbWallpapers.length > 0
+        ) {
+
+          setWallpapers(
+            dbWallpapers
+          );
+
         } else {
-          setWallpapers(INITIAL_WALLPAPERS);
+
+          setWallpapers(
+            INITIAL_WALLPAPERS
+          );
         }
+
       } catch (error) {
+
         console.error(
-          'Failed to load wallpapers from database:',
+          'Failed to load wallpapers:',
           error
         );
 
-        setWallpapers(INITIAL_WALLPAPERS);
-      }
-
-      try {
-        const savedFavs = getStoredFavorites();
-
-        if (savedFavs && savedFavs.length > 0) {
-          setFavoriteIds(savedFavs);
-        }
-      } catch (error) {
-        console.error(
-          'Failed to load saved favorites:',
-          error
+        setWallpapers(
+          INITIAL_WALLPAPERS
         );
       }
+
+
+      /* LOAD FAVORITES */
+
+      const savedFavs =
+        getStoredFavorites();
+
+      if (
+        savedFavs &&
+        savedFavs.length > 0
+      ) {
+
+        setFavoriteIds(
+          savedFavs
+        );
+      }
+
     };
 
+
     loadInitialData();
+
   }, []);
 
 
-  // ============================================================
-  // RESET PAGINATION WHEN FILTER CHANGES
-  // ============================================================
+  /* ============================================================
+     RESET LOAD MORE WHEN FILTER CHANGES
+     ============================================================ */
 
   useEffect(() => {
+
     setVisibleCount(30);
-  }, [searchQuery, selectedCategory, activeNav]);
+
+  }, [
+    searchQuery,
+    selectedCategory,
+    activeNav,
+  ]);
 
 
-  // ============================================================
-  // FAVORITE TOGGLE
-  // ============================================================
+  /* ============================================================
+     FAVORITE TOGGLE
+     ============================================================ */
 
-  const handleFavoriteToggle = (id: string) => {
+  const handleFavoriteToggle = (
+    id: string
+  ) => {
+
     setFavoriteIds((prev) => {
-      const updated = prev.includes(id)
-        ? prev.filter((item) => item !== id)
-        : [...prev, id];
 
-      saveStoredFavorites(updated);
+      const updated =
+        prev.includes(id)
+
+          ? prev.filter(
+              (item) =>
+                item !== id
+            )
+
+          : [
+              ...prev,
+              id,
+            ];
+
+
+      saveStoredFavorites(
+        updated
+      );
+
 
       return updated;
     });
   };
 
 
-  // ============================================================
-  // RANDOM WALLPAPER
-  // ============================================================
+  /* ============================================================
+     RANDOM WALLPAPER
+     ============================================================ */
 
   const handleRandomWallpaper = () => {
-    if (wallpapers.length === 0) return;
 
-    const randomIndex = Math.floor(
-      Math.random() * wallpapers.length
+    if (
+      wallpapers.length === 0
+    ) {
+      return;
+    }
+
+
+    const randomIndex =
+      Math.floor(
+        Math.random() *
+        wallpapers.length
+      );
+
+
+    setSelectedWallpaper(
+      wallpapers[randomIndex]
     );
-
-    setSelectedWallpaper(wallpapers[randomIndex]);
   };
 
 
-  // ============================================================
-  // FILTER WALLPAPERS
-  // ============================================================
+  /* ============================================================
+     FILTER WALLPAPERS
+     ============================================================ */
 
-  const filteredWallpapers = useMemo(() => {
-    return wallpapers.filter((wallpaper) => {
+  const filteredWallpapers =
+    useMemo(() => {
 
-      // --------------------------------------------------------
-      // SAVED / FAVORITES
-      // --------------------------------------------------------
+      return wallpapers.filter(
+        (wallpaper) => {
 
-      if (activeNav === 'Saved') {
-        if (!favoriteIds.includes(wallpaper.id)) {
-          return false;
-        }
-      }
+          /* SAVED */
 
+          if (
+            activeNav === 'Saved'
+          ) {
 
-      // --------------------------------------------------------
-      // TRENDING
-      // --------------------------------------------------------
-
-      if (
-        activeNav === 'Trending' &&
-        !wallpaper.isTrending
-      ) {
-        return false;
-      }
-
-
-      // --------------------------------------------------------
-      // CATEGORY
-      // --------------------------------------------------------
-
-      if (
-        selectedCategory !== 'All' &&
-        wallpaper.category !== selectedCategory
-      ) {
-        return false;
-      }
-
-
-      // --------------------------------------------------------
-      // SEARCH
-      // --------------------------------------------------------
-
-      if (searchQuery.trim() !== '') {
-        const query = searchQuery
-          .toLowerCase()
-          .trim();
-
-        const matchesTitle =
-          wallpaper.title
-            ? wallpaper.title
-                .toLowerCase()
-                .includes(query)
-            : false;
-
-        const matchesDescription =
-          wallpaper.description
-            ? wallpaper.description
-                .toLowerCase()
-                .includes(query)
-            : false;
-
-        const matchesCategory =
-          wallpaper.category
-            ? wallpaper.category
-                .toLowerCase()
-                .includes(query)
-            : false;
-
-        const matchesTags =
-          wallpaper.tags
-            ? wallpaper.tags.some((tag) =>
-                tag.toLowerCase().includes(query)
+            if (
+              !favoriteIds.includes(
+                wallpaper.id
               )
-            : false;
-
-        return (
-          matchesTitle ||
-          matchesDescription ||
-          matchesCategory ||
-          matchesTags
-        );
-      }
-
-      return true;
-    });
-  }, [
-    wallpapers,
-    searchQuery,
-    selectedCategory,
-    activeNav,
-    favoriteIds,
-  ]);
+            ) {
+              return false;
+            }
+          }
 
 
-  // ============================================================
-  // DISPLAYED WALLPAPERS
-  // ============================================================
+          /* TRENDING */
 
-  const displayedWallpapers = useMemo(() => {
-    return filteredWallpapers.slice(
-      0,
-      visibleCount
-    );
-  }, [
-    filteredWallpapers,
-    visibleCount,
-  ]);
+          if (
+            activeNav === 'Trending' &&
+            !wallpaper.isTrending
+          ) {
+
+            return false;
+          }
 
 
-  // ============================================================
-  // LOAD MORE
-  // ============================================================
+          /* CATEGORY */
 
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 30);
-  };
+          if (
+            selectedCategory !== 'All' &&
+            wallpaper.category !==
+              selectedCategory
+          ) {
 
-
-  // ============================================================
-  // RESET FILTERS
-  // ============================================================
-
-  const handleResetFilters = () => {
-    setSearchQuery('');
-    setSelectedCategory('All');
-    setActiveNav('Home');
-    setVisibleCount(30);
-  };
+            return false;
+          }
 
 
-  // ============================================================
-  // PAGE
-  // ============================================================
+          /* SEARCH */
+
+          if (
+            searchQuery.trim() !== ''
+          ) {
+
+            const query =
+              searchQuery
+                .toLowerCase()
+                .trim();
+
+
+            const matchesTitle =
+              wallpaper.title
+                ? wallpaper.title
+                    .toLowerCase()
+                    .includes(query)
+                : false;
+
+
+            const matchesDescription =
+              wallpaper.description
+                ? wallpaper.description
+                    .toLowerCase()
+                    .includes(query)
+                : false;
+
+
+            const matchesCategory =
+              wallpaper.category
+                ? wallpaper.category
+                    .toLowerCase()
+                    .includes(query)
+                : false;
+
+
+            const matchesTags =
+              wallpaper.tags
+                ? wallpaper.tags.some(
+                    (tag) =>
+                      tag
+                        .toLowerCase()
+                        .includes(query)
+                  )
+                : false;
+
+
+            return (
+              matchesTitle ||
+              matchesDescription ||
+              matchesCategory ||
+              matchesTags
+            );
+          }
+
+
+          return true;
+        }
+      );
+
+    }, [
+      wallpapers,
+      searchQuery,
+      selectedCategory,
+      activeNav,
+      favoriteIds,
+    ]);
+
+
+  /* ============================================================
+     DISPLAYED WALLPAPERS
+     ============================================================ */
+
+  const displayedWallpapers =
+    useMemo(() => {
+
+      return filteredWallpapers.slice(
+        0,
+        visibleCount
+      );
+
+    }, [
+      filteredWallpapers,
+      visibleCount,
+    ]);
+
+
+  /* ============================================================
+     PAGE
+     ============================================================ */
 
   return (
-    <div className="min-h-screen bg-[#F1FEC8] text-[#090d12] flex flex-col selection:bg-[#090d12] selection:text-[#F1FEC8]">
+
+    <div
+      className="
+        min-h-screen
+        bg-[#F1FEC8]
+        text-[#090d12]
+        flex
+        flex-col
+        selection:bg-[#090d12]
+        selection:text-[#F1FEC8]
+      "
+    >
 
       {/* ========================================================
           NAVBAR
-      ======================================================== */}
+          ======================================================== */}
 
       <Navbar
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        favoriteCount={favoriteIds.length}
-        activeCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-        activeNav={activeNav}
-        onNavChange={setActiveNav}
-        onRandomClick={handleRandomWallpaper}
+
+        searchQuery={
+          searchQuery
+        }
+
+        onSearchChange={
+          setSearchQuery
+        }
+
+        favoriteCount={
+          favoriteIds.length
+        }
+
+        activeCategory={
+          selectedCategory
+        }
+
+        onSelectCategory={
+          setSelectedCategory
+        }
+
+        activeNav={
+          activeNav
+        }
+
+        onNavChange={
+          setActiveNav
+        }
+
+        onRandomClick={
+          handleRandomWallpaper
+        }
+
       />
 
 
       {/* ========================================================
           HEADER AD
-      ======================================================== */}
+          ======================================================== */}
 
       <div className="pt-4">
+
         <HeaderAd />
+
       </div>
 
 
       {/* ========================================================
-          HERO SECTION
-      ======================================================== */}
+          HERO
+          ======================================================== */}
 
-      <section className="relative py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center overflow-hidden">
-
-        {/* Background Glow */}
+      <section
+        className="
+          relative
+          py-8
+          sm:py-12
+          px-4
+          sm:px-6
+          lg:px-8
+          max-w-7xl
+          mx-auto
+          w-full
+          text-center
+          overflow-hidden
+        "
+      >
 
         <div
           className="
@@ -331,9 +486,18 @@ export default function Home() {
           "
         />
 
-        <div className="relative z-10 max-w-3xl mx-auto space-y-4">
 
-          {/* Live Badge */}
+        <div
+          className="
+            relative
+            z-10
+            max-w-3xl
+            mx-auto
+            space-y-4
+          "
+        >
+
+          {/* BADGE */}
 
           <div
             className="
@@ -353,20 +517,28 @@ export default function Home() {
               shadow-sm
             "
           >
+
             <Sparkles
-              className="w-4 h-4 text-[#090d12] animate-spin"
+              className="
+                w-4
+                h-4
+                text-[#090d12]
+                animate-spin
+              "
               style={{
-                animationDuration: '6s',
+                animationDuration:
+                  '6s',
               }}
             />
 
             <span>
               Discover & Save Ultra HD 4K Pins
             </span>
+
           </div>
 
 
-          {/* Main Heading */}
+          {/* TITLE */}
 
           <h1
             className="
@@ -378,7 +550,9 @@ export default function Home() {
               leading-tight
             "
           >
+
             Explore Millions of
+
             <br className="hidden sm:inline" />
 
             <span
@@ -393,10 +567,11 @@ export default function Home() {
             >
               4K Ultra HD Wallpapers
             </span>
+
           </h1>
 
 
-          {/* Description */}
+          {/* DESCRIPTION */}
 
           <p
             className="
@@ -409,17 +584,20 @@ export default function Home() {
               leading-relaxed
             "
           >
-            Free high-resolution vertical pins & 4K
-            wallpapers for Mobile, AMOLED, Desktop &
-            Laptop. Updated daily.
+            Free high-resolution vertical pins & 4K wallpapers for Mobile, AMOLED, Desktop & Laptop. Updated daily.
           </p>
 
 
-          {/* ==================================================
-              MOBILE SEARCH
-          ================================================== */}
+          {/* MOBILE SEARCH */}
 
-          <div className="md:hidden pt-2 max-w-md mx-auto">
+          <div
+            className="
+              md:hidden
+              pt-2
+              max-w-md
+              mx-auto
+            "
+          >
 
             <div className="relative">
 
@@ -438,9 +616,13 @@ export default function Home() {
               <input
                 type="text"
                 placeholder="Search pins, cars, anime, nature..."
-                value={searchQuery}
+                value={
+                  searchQuery
+                }
                 onChange={(e) =>
-                  setSearchQuery(e.target.value)
+                  setSearchQuery(
+                    e.target.value
+                  )
                 }
                 className="
                   w-full
@@ -469,8 +651,8 @@ export default function Home() {
 
 
       {/* ========================================================
-          MAIN CONTENT
-      ======================================================== */}
+          MAIN
+          ======================================================== */}
 
       <main
         className="
@@ -485,20 +667,21 @@ export default function Home() {
         "
       >
 
-
-        {/* ======================================================
-            CATEGORY BAR
-        ====================================================== */}
+        {/* CATEGORY BAR */}
 
         <CategoryBar
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
+          selectedCategory={
+            selectedCategory
+          }
+          onSelectCategory={
+            setSelectedCategory
+          }
         />
 
 
         {/* ======================================================
-            SECTION TITLE
-        ====================================================== */}
+            SECTION HEADER
+            ====================================================== */}
 
         <div
           className="
@@ -512,10 +695,20 @@ export default function Home() {
           "
         >
 
-          <div className="flex items-center gap-2">
+          <div
+            className="
+              flex
+              items-center
+              gap-2
+            "
+          >
 
             <Flame
-              className="w-5 h-5 text-[#090d12]"
+              className="
+                w-5
+                h-5
+                text-[#090d12]
+              "
             />
 
             <h2
@@ -526,17 +719,23 @@ export default function Home() {
                 tracking-tight
               "
             >
+
               {activeNav === 'Saved'
+
                 ? 'Saved Favorite Pins'
+
                 : activeNav === 'Trending'
+
                 ? 'Trending Pins'
+
                 : selectedCategory === 'All'
+
                 ? 'Discover Pins'
+
                 : `${selectedCategory} Pins`}
+
             </h2>
 
-
-            {/* Result Counter */}
 
             <span
               className="
@@ -552,8 +751,7 @@ export default function Home() {
                 ml-1
               "
             >
-              Showing {displayedWallpapers.length} of{' '}
-              {filteredWallpapers.length}
+              Showing {displayedWallpapers.length} of {filteredWallpapers.length}
             </span>
 
           </div>
@@ -563,7 +761,7 @@ export default function Home() {
 
         {/* ======================================================
             WALLPAPER GRID
-        ====================================================== */}
+            ====================================================== */}
 
         {displayedWallpapers.length > 0 ? (
 
@@ -582,39 +780,50 @@ export default function Home() {
             >
 
               {displayedWallpapers.map(
-                (wallpaper, index) => (
+                (
+                  wallpaper,
+                  index
+                ) => (
 
                   <React.Fragment
-                    key={wallpaper.id}
+                    key={
+                      wallpaper.id
+                    }
                   >
 
-                    {/* Wallpaper */}
-
                     <WallpaperCard
-                      wallpaper={wallpaper}
-                      onSelect={setSelectedWallpaper}
+                      wallpaper={
+                        wallpaper
+                      }
+                      onSelect={
+                        setSelectedWallpaper
+                      }
                       onFavoriteToggle={
                         handleFavoriteToggle
                       }
-                      isFavorite={favoriteIds.includes(
-                        wallpaper.id
-                      )}
+                      isFavorite={
+                        favoriteIds.includes(
+                          wallpaper.id
+                        )
+                      }
                     />
 
 
-                    {/* ==================================================
-                        IN-FEED AD AFTER EVERY 6 WALLPAPERS
-                    ================================================== */}
+                    {/* IN-FEED AD */}
 
                     {(index + 1) % 6 === 0 && (
+
                       <div
                         className="
                           break-inside-avoid
                           mb-4
                         "
                       >
+
                         <InFeedAd />
+
                       </div>
+
                     )}
 
                   </React.Fragment>
@@ -626,55 +835,73 @@ export default function Home() {
 
 
             {/* ==================================================
-                LIQUID STRETCH LOAD MORE BUTTON
-            ================================================== */}
+                LOAD MORE
+                ONLY:
+                Load More + Arrow
+                NO REMAINING COUNT
+                ================================================== */}
 
             {visibleCount <
               filteredWallpapers.length && (
 
-              <div className="text-center pt-8">
+              <div
+                className="
+                  text-center
+                  pt-8
+                "
+              >
 
                 <button
                   type="button"
-                  onClick={handleLoadMore}
-                  className="group load-more-stretch"
-                  aria-label="Load More Wallpapers"
+                  onClick={() =>
+                    setVisibleCount(
+                      (prev) =>
+                        prev + 30
+                    )
+                  }
+                  className="
+                    group
+                    load-more-stretch
+                  "
                 >
 
-                  {/* Button Text */}
-
-                  <span className="load-more-text">
+                  <span
+                    className="
+                      load-more-text
+                    "
+                  >
                     Load More
                   </span>
 
 
-                  {/* Arrow */}
-
                   <span
-                    className="load-more-arrow"
-                    aria-hidden="true"
+                    className="
+                      load-more-arrow
+                    "
                   >
+
                     <ChevronDown
                       className="
-                        w-[18px]
-                        h-[18px]
+                        w-5
+                        h-5
+                        text-[#F1FEC8]
                       "
                     />
+
                   </span>
 
                 </button>
 
               </div>
-
             )}
 
           </div>
 
         ) : (
 
-          /* ======================================================
+          /* ====================================================
              NO RESULTS
-          ====================================================== */
+             ==================================================== */
 
           <div
             className="
@@ -717,17 +944,25 @@ export default function Home() {
                 mx-auto
               "
             >
-              We couldn't find any pins matching
-              your query. Try searching for something
-              else or reset filters.
+              We couldn't find any pins matching your query. Try searching for something else or reset filters.
             </p>
 
 
-            {/* Reset Filters */}
-
             <button
               type="button"
-              onClick={handleResetFilters}
+              onClick={() => {
+
+                setSearchQuery('');
+
+                setSelectedCategory(
+                  'All'
+                );
+
+                setActiveNav(
+                  'Home'
+                );
+
+              }}
               className="
                 px-5
                 py-2.5
@@ -748,12 +983,14 @@ export default function Home() {
         )}
 
 
-        {/* ========================================================
+        {/* ======================================================
             FOOTER AD
-        ======================================================== */}
+            ====================================================== */}
 
         <div className="pt-8">
+
           <FooterAd />
+
         </div>
 
       </main>
@@ -761,16 +998,22 @@ export default function Home() {
 
       {/* ========================================================
           WALLPAPER MODAL
-      ======================================================== */}
+          ======================================================== */}
 
       <WallpaperModal
-        wallpaper={selectedWallpaper}
+
+        wallpaper={
+          selectedWallpaper
+        }
+
         onClose={() =>
           setSelectedWallpaper(null)
         }
+
         onFavoriteToggle={
           handleFavoriteToggle
         }
+
         isFavorite={
           selectedWallpaper
             ? favoriteIds.includes(
@@ -778,12 +1021,13 @@ export default function Home() {
               )
             : false
         }
+
       />
 
 
       {/* ========================================================
           FOOTER
-      ======================================================== */}
+          ======================================================== */}
 
       <footer
         className="
@@ -808,8 +1052,6 @@ export default function Home() {
           "
         >
 
-          {/* Footer Top */}
-
           <div
             className="
               flex
@@ -820,8 +1062,6 @@ export default function Home() {
               gap-6
             "
           >
-
-            {/* Brand */}
 
             <div
               className="
@@ -863,16 +1103,13 @@ export default function Home() {
                   max-w-md
                 "
               >
-                Your primary source for high
-                quality 4K and Ultra HD wallpapers
-                for Desktop, Laptop, and
-                Smartphones.
+                Your primary source for high quality 4K and Ultra HD wallpapers for Desktop, Laptop, and Smartphones.
               </p>
 
             </div>
 
 
-            {/* Footer Links */}
+            {/* FOOTER LINKS */}
 
             <div
               className="
@@ -896,10 +1133,11 @@ export default function Home() {
                   gap-1
                 "
               >
-                <ShieldCheck
-                  className="w-3 h-3"
-                />
+
+                <ShieldCheck className="w-3 h-3" />
+
                 Privacy Policy
+
               </Link>
 
 
@@ -913,10 +1151,11 @@ export default function Home() {
                   gap-1
                 "
               >
-                <FileText
-                  className="w-3 h-3"
-                />
+
+                <FileText className="w-3 h-3" />
+
                 Terms of Service
+
               </Link>
 
 
@@ -930,10 +1169,11 @@ export default function Home() {
                   gap-1
                 "
               >
-                <Info
-                  className="w-3 h-3"
-                />
+
+                <Info className="w-3 h-3" />
+
                 About Us
+
               </Link>
 
 
@@ -947,10 +1187,11 @@ export default function Home() {
                   gap-1
                 "
               >
-                <Info
-                  className="w-3 h-3"
-                />
+
+                <Info className="w-3 h-3" />
+
                 Contact Us
+
               </Link>
 
 
@@ -964,10 +1205,11 @@ export default function Home() {
                   gap-1
                 "
               >
-                <AlertCircle
-                  className="w-3 h-3"
-                />
+
+                <AlertCircle className="w-3 h-3" />
+
                 Disclaimer
+
               </Link>
 
             </div>
@@ -975,7 +1217,7 @@ export default function Home() {
           </div>
 
 
-          {/* Footer Bottom */}
+          {/* COPYRIGHT */}
 
           <div
             className="
@@ -994,17 +1236,11 @@ export default function Home() {
           >
 
             <div>
-              © {new Date().getFullYear()}
-              {' '}
-              Wallpapers Hub.
-              {' '}
-              All rights reserved.
+              © {new Date().getFullYear()} Wallpapers Hub. All rights reserved.
             </div>
 
-
             <div>
-              Built for High Speed, SEO &
-              Google AdSense Approval.
+              Built for High Speed, SEO & Google AdSense Approval.
             </div>
 
           </div>
