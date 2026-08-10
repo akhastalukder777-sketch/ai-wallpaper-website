@@ -61,12 +61,15 @@ export default function Navbar({
     isMoving: false,
   });
 
-  // Mobile Bottom Magic Circle Indicator Refs & State
+  // Mobile Bottom Milky Glass Indicator Refs & State
   const mobileNavRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const [mobileIndicator, setMobileIndicator] = useState({
     left: 0,
     width: 0,
+    height: 0,
+    top: 0,
     opacity: 0,
+    isMoving: false,
   });
 
   const desktopNavItems = [
@@ -133,7 +136,7 @@ export default function Navbar({
     }
   };
 
-  // Recalculate Mobile Bottom Magic Circle Indicator
+  // Recalculate Mobile Bottom Indicator based on exact DOM Button Offset
   const updateMobileIndicator = () => {
     const targetId =
       activeNav === 'Saved'
@@ -143,13 +146,16 @@ export default function Navbar({
         : 'More';
     const activeBtn = mobileNavRefs.current.get(targetId);
     if (activeBtn) {
-      // Center the 56px circle over the button
-      const btnCenter = activeBtn.offsetLeft + activeBtn.offsetWidth / 2;
-      setMobileIndicator({
-        left: btnCenter - 28, // 28px is half of 56px circle
-        width: 56,
+      setMobileIndicator((prev) => ({
+        left: activeBtn.offsetLeft,
+        width: activeBtn.offsetWidth,
+        height: activeBtn.offsetHeight,
+        top: activeBtn.offsetTop,
         opacity: 1,
-      });
+        isMoving:
+          prev.opacity > 0 &&
+          (prev.left !== activeBtn.offsetLeft || prev.width !== activeBtn.offsetWidth),
+      }));
     }
   };
 
@@ -159,6 +165,7 @@ export default function Navbar({
 
     const timer = setTimeout(() => {
       setDesktopIndicator((prev) => ({ ...prev, isMoving: false }));
+      setMobileIndicator((prev) => ({ ...prev, isMoving: false }));
     }, 550);
 
     const handleResize = () => {
@@ -185,21 +192,27 @@ export default function Navbar({
       setIsMobileMenuOpen(false);
     }
 
+    // Direct DOM measurement update for 100% instant precision
     if (e?.currentTarget) {
       const btn = e.currentTarget;
-      const btnCenter = btn.offsetLeft + btn.offsetWidth / 2;
       setMobileIndicator({
-        left: btnCenter - 28,
-        width: 56,
+        left: btn.offsetLeft,
+        width: btn.offsetWidth,
+        height: btn.offsetHeight,
+        top: btn.offsetTop,
         opacity: 1,
+        isMoving: true,
       });
+      setTimeout(() => {
+        setMobileIndicator((prev) => ({ ...prev, isMoving: false }));
+      }, 500);
     }
   };
 
   return (
     <>
       {/* ================================================== */}
-      {/* FLOATING TOP NAVBAR (DESKTOP & TABLET) */}
+      {/* FLOATING TOP NAVBAR (SLIDES UP ON SCROLL DOWN) */}
       {/* ================================================== */}
       <header
         className={`sticky top-3 z-50 px-2 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full transition-all duration-300 transform ${
@@ -208,7 +221,7 @@ export default function Navbar({
       >
         <div className="glass-navbar rounded-full px-3.5 sm:px-6 py-2 flex items-center justify-between gap-2 overflow-hidden shadow-xl">
           
-          {/* SEARCH ACTIVE STATE ON MOBILE */}
+          {/* SEARCH ACTIVE STATE ON MOBILE (EXPANDS INSIDE NAVBAR SAFELY) */}
           {isSearchExpanded ? (
             <div className="flex-1 flex items-center gap-2 bg-white/95 rounded-full border border-[#23212C]/20 px-3 py-1.5 shadow-inner transition-all duration-300 w-full overflow-hidden animate-fade-in">
               <Search className="w-4 h-4 text-[#23212C]/70 shrink-0" />
@@ -382,28 +395,31 @@ export default function Navbar({
         </div>
       </header>
 
-      {/* ========================================================================= */}
-      {/* MOBILE FLOATING MAGIC LIQUID NAVBAR (EXACT MATCH TO REFERENCE SCREENSHOT 1) */}
-      {/* ========================================================================= */}
+      {/* ======================================================================= */}
+      {/* MOBILE FLOATING BOTTOM NAVBAR (MILKY-WHITE GLASS INTEGRATED BUBBLE) */}
+      {/* ======================================================================= */}
       <div
-        className={`lg:hidden fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto transition-all duration-300 transform ${
+        className={`lg:hidden fixed bottom-3 left-3 right-3 z-50 max-w-md mx-auto transition-all duration-300 transform ${
           showBottomNav ? 'translate-y-0 opacity-100' : 'translate-y-28 opacity-0 pointer-events-none'
         }`}
       >
-        <div className="bg-[#23212C]/90 backdrop-blur-xl border border-slate-700/60 rounded-2xl h-[68px] px-2 flex items-center justify-around relative shadow-2xl">
+        <div className="glass-navbar rounded-full px-2 py-1.5 flex items-center justify-around relative shadow-2xl overflow-hidden">
           
-          {/* Exact Raised Floating White/Vanilla Magic Circle Indicator */}
+          {/* Integrated Milky-White Translucent Glass Active Liquid Pill (NO BLACK / NO DETACHED BALL) */}
           <div
-            className="absolute w-14 h-14 bg-[#F1FEC8] rounded-full border-4 border-[#23212C] shadow-2xl pointer-events-none z-0 flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+            className="absolute liquid-pill-active pointer-events-none will-change-transform z-0"
             style={{
-              transform: `translate3d(${mobileIndicator.left}px, -26px, 0)`,
+              transform: `translate3d(${mobileIndicator.left}px, ${mobileIndicator.top}px, 0) ${
+                mobileIndicator.isMoving ? 'scaleX(1.18) scaleY(0.85)' : 'scale(1)'
+              }`,
+              width: `${mobileIndicator.width}px`,
+              height: `${mobileIndicator.height}px`,
               opacity: mobileIndicator.opacity,
+              borderRadius: mobileIndicator.isMoving ? '26px 12px 28px 10px' : '9999px',
+              transition:
+                'transform 500ms cubic-bezier(0.34, 1.45, 0.64, 1), width 500ms cubic-bezier(0.34, 1.45, 0.64, 1), height 500ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 500ms ease-out, opacity 300ms ease',
             }}
-          >
-            {/* Smooth Concave Liquid Wings Left & Right (Gooey Curve Connection) */}
-            <div className="absolute -left-[16px] bottom-[8px] w-4 h-4 bg-transparent rounded-tr-full shadow-[6px_-6px_0_0_#23212C]" />
-            <div className="absolute -right-[16px] bottom-[8px] w-4 h-4 bg-transparent rounded-tl-full shadow-[-6px_-6px_0_0_#23212C]" />
-          </div>
+          />
 
           {mobileNavItems.map((item) => {
             const isActive =
@@ -425,29 +441,14 @@ export default function Navbar({
                 type="button"
                 aria-pressed={isActive}
                 onClick={(e) => handleNavClick(item.id, e)}
-                className="relative z-10 w-1/5 flex flex-col items-center justify-center h-full transition-all duration-300"
+                className={`relative z-10 flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-full transition-all duration-300 ${
+                  isActive
+                    ? 'text-[#23212C] font-black scale-105'
+                    : 'text-[#23212C]/75 hover:text-[#23212C]'
+                }`}
               >
-                {/* Active Icon moves UP inside the raised circle */}
-                <div
-                  className={`transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                    isActive
-                      ? '-translate-y-6 text-[#23212C] scale-110'
-                      : 'translate-y-0 text-slate-300 hover:text-white'
-                  }`}
-                >
-                  <Icon className="w-5 h-5" />
-                </div>
-
-                {/* Active Label appears under the raised circle inside the bar */}
-                <span
-                  className={`text-[10px] font-extrabold tracking-tight transition-all duration-300 absolute bottom-2 ${
-                    isActive
-                      ? 'opacity-100 translate-y-0 text-[#F1FEC8]'
-                      : 'opacity-0 translate-y-2 text-slate-400 pointer-events-none'
-                  }`}
-                >
-                  {item.label}
-                </span>
+                <Icon className="w-4 h-4" />
+                <span className="text-[10px] font-extrabold tracking-tight">{item.label}</span>
               </button>
             );
           })}
@@ -455,7 +456,7 @@ export default function Navbar({
 
         {/* Mobile "More" Drawer Menu */}
         {isMobileMoreOpen && (
-          <div className="absolute bottom-20 left-0 right-0 bg-[#23212C]/95 border border-slate-700/60 rounded-3xl p-4 shadow-2xl backdrop-blur-2xl text-xs space-y-4 animate-fade-in z-50">
+          <div className="absolute bottom-16 left-0 right-0 bg-[#23212C]/95 border border-slate-700/60 rounded-3xl p-4 shadow-2xl backdrop-blur-2xl text-xs space-y-4 animate-fade-in z-50">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
               <span className="font-bold text-white uppercase tracking-wider text-[11px]">More Navigation</span>
               <button onClick={() => setIsMobileMenuOpen(false)} className="p-1 text-slate-400 hover:text-white">
