@@ -44,7 +44,7 @@ h1, h2, h3, h4, h5, h6, button, a {
 
 /* ~50% Translucent Frosted Glass Navbar Style */
 .glass-navbar {
-  background: rgba(241, 254, 200, 0.48);
+  background: rgba(241, 254, 200, 0.50);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(35, 33, 44, 0.14);
@@ -59,11 +59,13 @@ h1, h2, h3, h4, h5, h6, button, a {
   box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.35);
 }
 
-/* Protruding Liquid Active Bubble Glow (Exact Match to Video) */
-.liquid-bubble-raised {
-  background: #23212C;
-  border: 2px solid rgba(241, 254, 200, 0.35);
-  box-shadow: 0 -6px 20px rgba(35, 33, 44, 0.35), 0 8px 16px rgba(0, 0, 0, 0.25);
+/* Soft Milky-White Translucent Glass Active Bubble for Mobile Navigation (NO BLACK) */
+.liquid-bubble-milky {
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(255, 255, 255, 0.90);
+  box-shadow: 0 8px 24px -4px rgba(35, 33, 44, 0.18), inset 0 1px 2px rgba(255, 255, 255, 0.95);
 }
 
 .glass-effect {

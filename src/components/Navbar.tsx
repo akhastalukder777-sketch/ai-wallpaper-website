@@ -61,7 +61,7 @@ export default function Navbar({
     isMoving: false,
   });
 
-  // Mobile Bottom Protruding Liquid Indicator Refs & State
+  // Mobile Bottom Milky Glass Indicator Refs & State
   const mobileNavRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const [mobileIndicator, setMobileIndicator] = useState({
     left: 0,
@@ -93,7 +93,6 @@ export default function Navbar({
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // At top of page (< 50px), both navbars remain visible
       if (currentScrollY < 50) {
         setShowTopNav(true);
         setShowBottomNav(true);
@@ -101,17 +100,14 @@ export default function Navbar({
         return;
       }
 
-      // Small 8px delta threshold to prevent jitter
       if (Math.abs(currentScrollY - lastScrollY.current) < 8) {
         return;
       }
 
       if (currentScrollY > lastScrollY.current) {
-        // Scrolling DOWN: Hide Top Nav, Show Bottom Nav
         setShowTopNav(false);
         setShowBottomNav(true);
       } else {
-        // Scrolling UP: Show Top Nav, Hide Bottom Nav
         setShowTopNav(true);
         setShowBottomNav(false);
       }
@@ -140,7 +136,7 @@ export default function Navbar({
     }
   };
 
-  // Recalculate Mobile Bottom Protruding Indicator
+  // Recalculate Mobile Bottom Indicator based on exact DOM Button Offset
   const updateMobileIndicator = () => {
     const targetId =
       activeNav === 'Saved'
@@ -184,17 +180,33 @@ export default function Navbar({
     };
   }, [activeNav]);
 
-  const handleNavClick = (id: string) => {
+  const handleNavClick = (id: string, e?: React.MouseEvent<HTMLButtonElement>) => {
+    if (onNavChange) onNavChange(id);
+
     if (id === 'Random') {
       if (onRandomClick) onRandomClick();
-      return;
     }
     if (id === 'More') {
       setIsMobileMenuOpen(!isMobileMoreOpen);
-      return;
+    } else {
+      setIsMobileMenuOpen(false);
     }
-    if (onNavChange) onNavChange(id);
-    setIsMobileMenuOpen(false);
+
+    // Direct DOM measurement update for 100% instant precision
+    if (e?.currentTarget) {
+      const btn = e.currentTarget;
+      setMobileIndicator({
+        left: btn.offsetLeft,
+        width: btn.offsetWidth,
+        height: btn.offsetHeight,
+        top: btn.offsetTop,
+        opacity: 1,
+        isMoving: true,
+      });
+      setTimeout(() => {
+        setMobileIndicator((prev) => ({ ...prev, isMoving: false }));
+      }, 500);
+    }
   };
 
   return (
@@ -386,26 +398,26 @@ export default function Navbar({
       </header>
 
       {/* ================================================== */}
-      {/* MOBILE FLOATING BOTTOM NAVBAR (EXACT VIDEO MATCH) */}
+      {/* MOBILE FLOATING BOTTOM NAVBAR (MILKY-WHITE GLASS BUBBLE) */}
       {/* ================================================== */}
       <div
         className={`lg:hidden fixed bottom-3 left-3 right-3 z-50 max-w-md mx-auto transition-all duration-300 transform ${
           showBottomNav ? 'translate-y-0 opacity-100' : 'translate-y-28 opacity-0 pointer-events-none'
         }`}
       >
-        <div className="glass-navbar rounded-full px-2.5 py-2 flex items-center justify-around relative shadow-2xl">
+        <div className="glass-navbar rounded-full px-2 py-1.5 flex items-center justify-around relative shadow-2xl">
           
-          {/* Protruding Floating Liquid Active Bubble (Exact Video Animation) */}
+          {/* Milky-White Translucent Glass Active Bubble (NO BLACK - EXACT DOM POSITION) */}
           <div
-            className="absolute liquid-bubble-raised pointer-events-none will-change-transform z-0"
+            className="absolute liquid-bubble-milky pointer-events-none will-change-transform z-0 shadow-lg"
             style={{
-              transform: `translate3d(${mobileIndicator.left}px, -14px, 0) ${
-                mobileIndicator.isMoving ? 'scaleX(1.22) scaleY(0.82)' : 'scale(1)'
+              transform: `translate3d(${mobileIndicator.left}px, ${mobileIndicator.top}px, 0) ${
+                mobileIndicator.isMoving ? 'scaleX(1.18) scaleY(0.85)' : 'scale(1)'
               }`,
               width: `${mobileIndicator.width}px`,
-              height: `${mobileIndicator.height + 12}px`,
+              height: `${mobileIndicator.height}px`,
               opacity: mobileIndicator.opacity,
-              borderRadius: mobileIndicator.isMoving ? '28px 12px 30px 10px' : '9999px',
+              borderRadius: mobileIndicator.isMoving ? '26px 12px 28px 10px' : '9999px',
               transition:
                 'transform 500ms cubic-bezier(0.34, 1.45, 0.64, 1), width 500ms cubic-bezier(0.34, 1.45, 0.64, 1), height 500ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 500ms ease-out, opacity 300ms ease',
             }}
@@ -430,11 +442,11 @@ export default function Navbar({
                 }}
                 type="button"
                 aria-pressed={isActive}
-                onClick={() => handleNavClick(item.id)}
-                className={`relative z-10 flex flex-col items-center gap-0.5 px-3 py-1 rounded-full transition-all duration-300 ${
+                onClick={(e) => handleNavClick(item.id, e)}
+                className={`relative z-10 flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-full transition-all duration-300 ${
                   isActive
-                    ? 'text-[#F1FEC8] font-bold -translate-y-2 scale-110'
-                    : 'text-[#23212C]/80 hover:text-[#23212C]'
+                    ? 'text-[#23212C] font-black -translate-y-0.5 scale-105'
+                    : 'text-[#23212C]/75 hover:text-[#23212C]'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -456,8 +468,8 @@ export default function Navbar({
 
             <div className="grid grid-cols-2 gap-2">
               <button
-                onClick={() => {
-                  handleNavClick('Latest');
+                onClick={(e) => {
+                  handleNavClick('Latest', e);
                 }}
                 className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:bg-slate-800"
               >
@@ -465,8 +477,8 @@ export default function Navbar({
               </button>
 
               <button
-                onClick={() => {
-                  handleNavClick('Categories');
+                onClick={(e) => {
+                  handleNavClick('Categories', e);
                 }}
                 className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:bg-slate-800"
               >
