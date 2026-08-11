@@ -1,7 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;0,800;1,700&family=Syne:wght@700;800&display=swap");
+
 @import "tailwindcss";
-
-@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;0,800;1,700&family=Syne:wght@700;800&display=swap');
-
 
 /* ============================================================
    ROOT VARIABLES
@@ -14,35 +13,49 @@
   --cosmic: #23212C;
 }
 
-
 /* ============================================================
-   BODY
+   HTML
    ============================================================ */
 
 html {
   scroll-behavior: smooth;
 }
 
+/* ============================================================
+   BODY
+   ============================================================ */
+
 body {
+  margin: 0;
+  padding: 0;
+
   color: var(--foreground);
   background: var(--background);
 
   font-family:
-    'Chakra Petch',
-    'Syne',
+    "Chakra Petch",
+    "Syne",
     system-ui,
     -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     sans-serif;
 
   overflow-x: hidden;
   min-height: 100vh;
 
   letter-spacing: -0.01em;
-
-  margin: 0;
-  padding: 0;
 }
 
+/* ============================================================
+   BOX SIZING
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 /* ============================================================
    TYPOGRAPHY
@@ -57,16 +70,27 @@ h6,
 button,
 a {
   font-family:
-    'Chakra Petch',
-    'Syne',
+    "Chakra Petch",
+    "Syne",
     sans-serif;
 
   font-weight: 800;
 }
 
+/* ============================================================
+   BUTTON / LINK RESET
+   ============================================================ */
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  -webkit-tap-highlight-color: transparent;
+}
 
 /* ============================================================
-   SCROLLBAR
+   CUSTOM SCROLLBAR
    ============================================================ */
 
 ::-webkit-scrollbar {
@@ -87,6 +111,12 @@ a {
   background: #3b3745;
 }
 
+/* Firefox */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #23212C #F1FEC8;
+}
 
 /* ============================================================
    GLASS NAVBAR
@@ -104,7 +134,6 @@ a {
     0 12px 32px -8px rgba(35, 33, 44, 0.12);
 }
 
-
 /* ============================================================
    DARK MOBILE NAVBAR
    ============================================================ */
@@ -121,9 +150,19 @@ a {
     0 12px 32px -8px rgba(0, 0, 0, 0.35);
 }
 
-/* Mobile Navigation Active Liquid Glass Bubble */
+/* ============================================================
+   MOBILE NAVBAR ACTIVE LIQUID GLASS BUBBLE
+
+   IMPORTANT:
+   Navbar.tsx uses:
+   .liquid-bubble-raised-milky
+
+   DO NOT REMOVE THIS CLASS.
+   ============================================================ */
+
 .liquid-bubble-raised-milky {
   background: rgba(255, 255, 255, 0.82);
+
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 
@@ -133,13 +172,16 @@ a {
     0 -6px 20px rgba(255, 255, 255, 0.25),
     0 10px 24px -4px rgba(0, 0, 0, 0.35),
     inset 0 1px 2px rgba(255, 255, 255, 1);
+
+  pointer-events: none;
+
+  will-change: transform;
 }
 
 /* ============================================================
    MOBILE NAVBAR ACTIVE LIQUID PILL
-   IMPORTANT:
-   DO NOT REMOVE THIS CLASS.
-   Navbar.tsx USES .liquid-pill-active
+
+   Kept for compatibility if another component uses it.
    ============================================================ */
 
 .liquid-pill-active {
@@ -157,7 +199,6 @@ a {
   pointer-events: none;
 }
 
-
 /* ============================================================
    GLASS EFFECT
    ============================================================ */
@@ -172,7 +213,6 @@ a {
     1px solid rgba(35, 33, 44, 0.08);
 }
 
-
 /* ============================================================
    GLASS CARD
    ============================================================ */
@@ -182,8 +222,12 @@ a {
 
   backdrop-filter: blur(8px);
 
-  border:
-    1px solid rgba(35, 33, 44, 0.15);
+  border: 1px solid rgba(35, 33, 44, 0.15);
+
+  transition:
+    border-color 250ms ease,
+    box-shadow 250ms ease,
+    transform 250ms ease;
 }
 
 .glass-card:hover {
@@ -193,7 +237,6 @@ a {
   box-shadow:
     0 16px 36px 0 rgba(35, 33, 44, 0.25);
 }
-
 
 /* ============================================================
    GLASS HOVER PANEL
@@ -209,7 +252,6 @@ a {
     1px solid rgba(241, 254, 200, 0.20);
 }
 
-
 /* ============================================================
    MASONRY
    ============================================================ */
@@ -217,7 +259,6 @@ a {
 .break-inside-avoid-column {
   break-inside: avoid;
 }
-
 
 /* ============================================================
    LOAD MORE BUTTON
@@ -247,8 +288,8 @@ a {
     0 10px 25px -5px rgba(35, 33, 44, 0.35);
 
   font-family:
-    'Chakra Petch',
-    'Syne',
+    "Chakra Petch",
+    "Syne",
     sans-serif;
 
   font-size: 14px;
@@ -268,13 +309,11 @@ a {
   will-change: transform;
 }
 
-
 /* ============================================================
    LOAD MORE - DESKTOP MOUSE HOVER
    ============================================================ */
 
 @media (hover: hover) and (pointer: fine) {
-
   .load-more-stretch:hover {
     transform:
       scaleX(1.07)
@@ -295,7 +334,6 @@ a {
   }
 }
 
-
 /* ============================================================
    LOAD MORE - ACTIVE / PRESS
    ============================================================ */
@@ -314,7 +352,6 @@ a {
   transition-duration: 120ms;
 }
 
-
 /* ============================================================
    LOAD MORE TEXT
    ============================================================ */
@@ -327,7 +364,6 @@ a {
 
   white-space: nowrap;
 }
-
 
 /* ============================================================
    LOAD MORE ARROW
@@ -343,13 +379,11 @@ a {
     transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-
 /* ============================================================
    MOBILE LOAD MORE
    ============================================================ */
 
 @media (max-width: 640px) {
-
   .load-more-stretch {
     min-width: 175px;
     height: 54px;
@@ -371,13 +405,11 @@ a {
   }
 }
 
-
 /* ============================================================
    SMALL MOBILE
    ============================================================ */
 
 @media (max-width: 380px) {
-
   .load-more-stretch {
     min-width: 165px;
     height: 52px;
@@ -385,5 +417,39 @@ a {
     padding: 0 22px;
 
     font-size: 13px;
+  }
+}
+
+/* ============================================================
+   MOBILE NAVBAR SAFETY
+   Prevent browser selection / weird touch behavior
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  .glass-navbar-dark {
+    touch-action: manipulation;
+  }
+
+  .glass-navbar-dark button {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
