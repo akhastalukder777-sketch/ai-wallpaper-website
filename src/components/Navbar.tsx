@@ -842,36 +842,7 @@ export default function Navbar({
                       focus:outline-none
                     "
                   >
-                    {/* RAISED CENTER CIRCLE BUBBLE */}
-                    <div
-                      className={`
-                        center-raised-circle
-                        absolute
-                        -top-7
-                        left-1/2
-                        -translate-x-1/2
-                        w-[70px]
-                        h-[70px]
-                        rounded-full
-                        flex
-                        items-center
-                        justify-center
-                        z-20
-                        transition-transform
-                        duration-200
-                        ${
-                          isActive
-                            ? 'scale-105 ring-2 ring-white/90 shadow-xl'
-                            : 'active:scale-95 hover:scale-105'
-                        }
-                      `}
-                    >
-                      <Icon
-                        className="w-6 h-6 text-[#23212C]"
-                        strokeWidth={2.4}
-                      />
-                    </div>
-
+                    
                     {/* LABEL BELOW CIRCLE */}
                     <span
                       className={`
