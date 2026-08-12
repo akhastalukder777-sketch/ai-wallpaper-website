@@ -83,8 +83,6 @@ BUTTON / LINK RESET
 
 button {
   -webkit-tap-highlight-color: transparent;
-  -webkit-user-select: none;
-  user-select: none;
 }
 
 a {
@@ -151,15 +149,26 @@ DARK MOBILE NAVBAR
   box-shadow:
     0 12px 32px -8px rgba(0, 0, 0, 0.35);
 
+  /*
+    Important for mobile browser touch handling.
+  */
   touch-action: manipulation;
+
+  /*
+    Prevent the browser from treating the navbar
+    as a text-selection / gesture area.
+  */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* ============================================================
 MOBILE NAVBAR ACTIVE LIQUID GLASS BUBBLE
 
-IMPORTANT:
 Navbar.tsx uses:
 .liquid-bubble-raised-milky
+
+DO NOT REMOVE THIS CLASS.
 ============================================================ */
 
 .liquid-bubble-raised-milky {
@@ -177,11 +186,20 @@ Navbar.tsx uses:
 
   pointer-events: none;
 
-  will-change: transform, width, height;
+  will-change: transform;
 
+  /*
+    Keeps the liquid bubble on its own compositing layer
+    on mobile browsers.
+  */
   transform-origin: center center;
 
-  z-index: 0;
+  /*
+    Prevents the browser from selecting / dragging
+    the transparent bubble.
+  */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* ============================================================
@@ -228,7 +246,8 @@ GLASS CARD
 
   backdrop-filter: blur(8px);
 
-  border: 1px solid rgba(35, 33, 44, 0.15);
+  border:
+    1px solid rgba(35, 33, 44, 0.15);
 
   transition:
     border-color 250ms ease,
@@ -433,19 +452,38 @@ MOBILE NAVBAR SAFETY
 @media (max-width: 1023px) {
   .glass-navbar-dark {
     touch-action: manipulation;
-    -webkit-touch-callout: none;
   }
 
   .glass-navbar-dark button {
     -webkit-user-select: none;
     user-select: none;
+
     touch-action: manipulation;
   }
 
-  .liquid-bubble-raised-milky {
-    pointer-events: none;
-    -webkit-user-select: none;
-    user-select: none;
+  .glass-navbar-dark button:focus {
+    outline: none;
+  }
+
+  .glass-navbar-dark button:focus-visible {
+    outline: 2px solid rgba(241, 254, 200, 0.55);
+    outline-offset: 2px;
+  }
+}
+
+/* ============================================================
+MOBILE VIEWPORT / BROWSER SAFETY
+============================================================ */
+
+@media (max-width: 1023px) {
+  /*
+    Prevents mobile browser viewport changes from creating
+    horizontal overflow while the bottom navbar is fixed.
+  */
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
   }
 }
 

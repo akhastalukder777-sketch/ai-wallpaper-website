@@ -1,12 +1,6 @@
 'use client';
 
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
-
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 import {
@@ -64,8 +58,7 @@ export default function Navbar({
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] =
     useState(false);
 
-  const [isSearchExpanded, setIsSearchExpanded] =
-    useState(false);
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   /* Scroll visibility */
   const [showTopNav, setShowTopNav] = useState(true);
@@ -90,15 +83,18 @@ export default function Navbar({
   });
 
   /* =========================================================
-     MOBILE INDICATOR
+     MOBILE NAV CONTAINER
   ========================================================= */
 
-  const mobileNavRefs = useRef<
-    Map<string, HTMLButtonElement>
-  >(new Map());
+  const mobileNavContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const mobileNavContainerRef =
-    useRef<HTMLDivElement | null>(null);
+  /* =========================================================
+     MOBILE NAV ITEMS
+  ========================================================= */
+
+  const mobileNavRefs = useRef<Map<string, HTMLButtonElement>>(
+    new Map()
+  );
 
   const [mobileIndicator, setMobileIndicator] = useState({
     left: 0,
@@ -110,6 +106,14 @@ export default function Navbar({
     scaleY: 1,
     isMoving: false,
   });
+
+  /*
+    IMPORTANT:
+    Browser setTimeout returns number.
+    Using number here prevents the
+    NodeJS.Timeout / number TypeScript error.
+  */
+  const mobileIndicatorTimer = useRef<number | null>(null);
 
   /* =========================================================
      DESKTOP NAV ITEMS
@@ -191,8 +195,7 @@ export default function Navbar({
         return;
       }
 
-      const difference =
-        currentScrollY - lastScrollY.current;
+      const difference = currentScrollY - lastScrollY.current;
 
       if (Math.abs(difference) < 8) {
         return;
@@ -214,20 +217,16 @@ export default function Navbar({
     });
 
     return () => {
-      window.removeEventListener(
-        'scroll',
-        handleScroll
-      );
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   /* =========================================================
-     DESKTOP INDICATOR UPDATE
+     DESKTOP INDICATOR
   ========================================================= */
 
   const updateDesktopIndicator = () => {
-    const element =
-      desktopNavRefs.current.get(activeNav);
+    const element = desktopNavRefs.current.get(activeNav);
 
     if (!element) {
       setDesktopIndicator((prev) => ({
@@ -253,8 +252,10 @@ export default function Navbar({
 
   const getMobileActiveId = () => {
     /*
-      More drawer open থাকলে More button-ই active থাকবে।
+      When More drawer is open,
+      More button stays active.
     */
+
     if (isMobileMoreOpen) {
       return 'More';
     }
@@ -276,8 +277,9 @@ export default function Navbar({
     }
 
     /*
-      Latest / Categories are inside More
+      Latest / Categories are inside More.
     */
+
     if (
       activeNav === 'Latest' ||
       activeNav === 'Categories'
@@ -289,42 +291,32 @@ export default function Navbar({
   };
 
   /* =========================================================
-     MOBILE INDICATOR UPDATE
-     
-     FIX:
-     Container-এর actual position অনুযায়ী bubble position
-     calculate করা হচ্ছে।
+     MOBILE INDICATOR
+     ROBUST MOBILE BROWSER POSITIONING
   ========================================================= */
 
-  const updateMobileIndicator = (
-    targetId = getMobileActiveId()
-  ) => {
-    const button =
-      mobileNavRefs.current.get(targetId);
+  const updateMobileIndicator = () => {
+    const targetId = getMobileActiveId();
 
-    const container =
-      mobileNavContainerRef.current;
+    const button = mobileNavRefs.current.get(targetId);
+    const container = mobileNavContainerRef.current;
 
     if (!button || !container) {
       return;
     }
 
-    const buttonRect =
-      button.getBoundingClientRect();
+    const buttonRect = button.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
 
-    const containerRect =
-      container.getBoundingClientRect();
+    const left = buttonRect.left - containerRect.left;
+    const top = buttonRect.top - containerRect.top;
 
     setMobileIndicator((prev) => ({
       ...prev,
-      left:
-        buttonRect.left -
-        containerRect.left,
+      left,
       width: buttonRect.width,
       height: buttonRect.height,
-      top:
-        buttonRect.top -
-        containerRect.top,
+      top,
       opacity: 1,
     }));
   };
@@ -333,23 +325,22 @@ export default function Navbar({
      UPDATE INDICATORS
   ========================================================= */
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const update = () => {
       updateDesktopIndicator();
-      updateMobileIndicator();
+
+      requestAnimationFrame(() => {
+        updateMobileIndicator();
+      });
     };
 
-    const timer =
-      window.setTimeout(update, 30);
+    const timer = window.setTimeout(update, 80);
 
     const handleResize = () => {
       update();
     };
 
-    window.addEventListener(
-      'resize',
-      handleResize
-    );
+    window.addEventListener('resize', handleResize);
 
     return () => {
       window.clearTimeout(timer);
@@ -359,29 +350,55 @@ export default function Navbar({
         handleResize
       );
     };
-  }, [
-    activeNav,
-    isMobileMoreOpen,
-  ]);
+  }, [activeNav, isMobileMoreOpen]);
 
   /* =========================================================
-     KEEP MOBILE BUBBLE CORRECT AFTER FONT / LAYOUT LOAD
+     MOBILE BROWSER / VISUAL VIEWPORT
   ========================================================= */
 
   useEffect(() => {
-    const update = () => {
-      updateMobileIndicator();
+    const handleViewportResize = () => {
+      requestAnimationFrame(() => {
+        updateMobileIndicator();
+      });
     };
 
-    const timer1 =
-      window.setTimeout(update, 100);
+    window.visualViewport?.addEventListener(
+      'resize',
+      handleViewportResize
+    );
 
-    const timer2 =
-      window.setTimeout(update, 300);
+    window.visualViewport?.addEventListener(
+      'scroll',
+      handleViewportResize
+    );
 
     return () => {
-      window.clearTimeout(timer1);
-      window.clearTimeout(timer2);
+      window.visualViewport?.removeEventListener(
+        'resize',
+        handleViewportResize
+      );
+
+      window.visualViewport?.removeEventListener(
+        'scroll',
+        handleViewportResize
+      );
+    };
+  }, [activeNav, isMobileMoreOpen]);
+
+  /* =========================================================
+     CLEANUP TIMER
+  ========================================================= */
+
+  useEffect(() => {
+    return () => {
+      if (mobileIndicatorTimer.current !== null) {
+        window.clearTimeout(
+          mobileIndicatorTimer.current
+        );
+
+        mobileIndicatorTimer.current = null;
+      }
     };
   }, []);
 
@@ -393,6 +410,7 @@ export default function Navbar({
     /*
       Random
     */
+
     if (id === 'Random') {
       onNavChange?.('Random');
       onRandomClick?.();
@@ -406,14 +424,17 @@ export default function Navbar({
     /*
       More
     */
+
     if (id === 'More') {
       setIsMobileMoreOpen((prev) => !prev);
+
       return;
     }
 
     /*
       Normal navigation
     */
+
     onNavChange?.(id);
 
     setIsMobileMoreOpen(false);
@@ -425,10 +446,6 @@ export default function Navbar({
 
   /* =========================================================
      MOBILE NAV CLICK
-     
-     FIX:
-     Bubble movement এখন container-relative এবং state
-     update-এর সাথে conflict করবে না।
   ========================================================= */
 
   const handleMobileNavClick = (
@@ -444,31 +461,87 @@ export default function Navbar({
     if (id === 'More') {
       const willOpen = !isMobileMoreOpen;
 
-      /*
-        Bubble immediately More button-এ যাবে।
-      */
-      updateMobileIndicator('More');
-
-      setMobileIndicator((prev) => ({
-        ...prev,
-        scaleX: 1,
-        scaleY: 1,
-        isMoving: false,
-      }));
-
       setIsMobileMoreOpen(willOpen);
 
       /*
-        State update হওয়ার পরে আবার exact position update।
+        Immediately position bubble on More.
       */
+
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          updateMobileIndicator('More');
+          const target =
+            mobileNavRefs.current.get('More');
+
+          const container =
+            mobileNavContainerRef.current;
+
+          if (!target || !container) {
+            return;
+          }
+
+          const targetRect =
+            target.getBoundingClientRect();
+
+          const containerRect =
+            container.getBoundingClientRect();
+
+          setMobileIndicator((prev) => ({
+            ...prev,
+            left:
+              targetRect.left -
+              containerRect.left,
+            width: targetRect.width,
+            height: targetRect.height,
+            top:
+              targetRect.top -
+              containerRect.top,
+            opacity: 1,
+            scaleX: 1,
+            scaleY: 1,
+            isMoving: false,
+          }));
         });
       });
 
       return;
     }
+
+    /* =====================================================
+       GET CURRENT BUBBLE POSITION
+    ===================================================== */
+
+    const container =
+      mobileNavContainerRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    const buttonRect =
+      button.getBoundingClientRect();
+
+    const containerRect =
+      container.getBoundingClientRect();
+
+    const newLeft =
+      buttonRect.left - containerRect.left;
+
+    const newTop =
+      buttonRect.top - containerRect.top;
+
+    const previousLeft =
+      mobileIndicator.left;
+
+    const distance =
+      Math.abs(newLeft - previousLeft);
+
+    const stretch =
+      distance > 10
+        ? Math.min(
+            1.20,
+            1 + distance / 300
+          )
+        : 1;
 
     /* =====================================================
        RANDOM
@@ -494,62 +567,38 @@ export default function Navbar({
        LIQUID STRETCH
     ===================================================== */
 
-    const container =
-      mobileNavContainerRef.current;
-
-    if (!container) {
-      return;
-    }
-
-    const buttonRect =
-      button.getBoundingClientRect();
-
-    const containerRect =
-      container.getBoundingClientRect();
-
-    const newLeft =
-      buttonRect.left -
-      containerRect.left;
-
-    const previousLeft =
-      mobileIndicator.left;
-
-    const distance =
-      Math.abs(newLeft - previousLeft);
-
-    const stretch =
-      distance > 10
-        ? Math.min(
-            1.20,
-            1 + distance / 300
-          )
-        : 1;
-
     setMobileIndicator({
       left: newLeft,
       width: buttonRect.width,
       height: buttonRect.height,
-      top:
-        buttonRect.top -
-        containerRect.top,
+      top: newTop,
       opacity: 1,
       scaleX: stretch,
       scaleY: 2 - stretch,
       isMoving: distance > 10,
     });
 
-    window.setTimeout(() => {
-      setMobileIndicator((prev) => ({
-        ...prev,
-        scaleX: 1,
-        scaleY: 1,
-        isMoving: false,
-      }));
+    /*
+      Clear previous timer safely.
+    */
 
-      requestAnimationFrame(() => {
-        updateMobileIndicator();
-      });
-    }, 450);
+    if (mobileIndicatorTimer.current !== null) {
+      window.clearTimeout(
+        mobileIndicatorTimer.current
+      );
+    }
+
+    mobileIndicatorTimer.current =
+      window.setTimeout(() => {
+        setMobileIndicator((prev) => ({
+          ...prev,
+          scaleX: 1,
+          scaleY: 1,
+          isMoving: false,
+        }));
+
+        mobileIndicatorTimer.current = null;
+      }, 450);
   };
 
   /* =========================================================
@@ -568,9 +617,7 @@ export default function Navbar({
 
     requestAnimationFrame(() => {
       const element =
-        document.getElementById(
-          'categories'
-        );
+        document.getElementById('categories');
 
       if (element) {
         element.scrollIntoView({
@@ -792,14 +839,19 @@ export default function Navbar({
                         0
                       )
                     `,
+
                     width:
                       `${desktopIndicator.width}px`,
+
                     height:
                       `${desktopIndicator.height}px`,
+
                     opacity:
                       desktopIndicator.opacity,
+
                     borderRadius:
                       '9999px',
+
                     transition:
                       'all 450ms cubic-bezier(0.34, 1.45, 0.64, 1)',
                   }}
@@ -824,6 +876,10 @@ export default function Navbar({
                               desktopNavRefs.current.set(
                                 item.id,
                                 el
+                              );
+                            } else {
+                              desktopNavRefs.current.delete(
+                                item.id
                               );
                             }
                           }}
@@ -1013,9 +1069,7 @@ export default function Navbar({
                 <button
                   type="button"
                   onClick={() =>
-                    handleNavClick(
-                      'Saved'
-                    )
+                    handleNavClick('Saved')
                   }
                   className="
                     relative
@@ -1121,17 +1175,9 @@ export default function Navbar({
 
               <button
                 type="button"
-                onClick={() => {
-                  setIsMobileMoreOpen(
-                    false
-                  );
-
-                  requestAnimationFrame(
-                    () => {
-                      updateMobileIndicator();
-                    }
-                  );
-                }}
+                onClick={() =>
+                  setIsMobileMoreOpen(false)
+                }
                 className="
                   p-1
                   text-slate-400
@@ -1147,13 +1193,9 @@ export default function Navbar({
               <button
                 type="button"
                 onClick={() => {
-                  onNavChange?.(
-                    'Latest'
-                  );
+                  onNavChange?.('Latest');
 
-                  setIsMobileMoreOpen(
-                    false
-                  );
+                  setIsMobileMoreOpen(false);
 
                   window.scrollTo({
                     top: 0,
@@ -1178,26 +1220,17 @@ export default function Navbar({
               <button
                 type="button"
                 onClick={() => {
-                  onNavChange?.(
-                    'Categories'
-                  );
+                  onNavChange?.('Categories');
 
-                  setIsMobileMoreOpen(
-                    false
-                  );
+                  setIsMobileMoreOpen(false);
 
-                  requestAnimationFrame(
-                    () => {
-                      document
-                        .getElementById(
-                          'categories'
-                        )
-                        ?.scrollIntoView({
-                          behavior:
-                            'smooth',
-                        });
-                    }
-                  );
+                  requestAnimationFrame(() => {
+                    document
+                      .getElementById('categories')
+                      ?.scrollIntoView({
+                        behavior: 'smooth',
+                      });
+                  });
                 }}
                 className="
                   flex items-center gap-2
@@ -1232,9 +1265,7 @@ export default function Navbar({
               <Link
                 href="/privacy-policy"
                 onClick={() =>
-                  setIsMobileMoreOpen(
-                    false
-                  )
+                  setIsMobileMoreOpen(false)
                 }
                 className="
                   hover:text-[#F1FEC8]
@@ -1248,9 +1279,7 @@ export default function Navbar({
               <Link
                 href="/terms-of-service"
                 onClick={() =>
-                  setIsMobileMoreOpen(
-                    false
-                  )
+                  setIsMobileMoreOpen(false)
                 }
                 className="
                   hover:text-[#F1FEC8]
@@ -1264,9 +1293,7 @@ export default function Navbar({
               <Link
                 href="/about"
                 onClick={() =>
-                  setIsMobileMoreOpen(
-                    false
-                  )
+                  setIsMobileMoreOpen(false)
                 }
                 className="
                   hover:text-[#F1FEC8]
@@ -1297,7 +1324,8 @@ export default function Navbar({
             relative
             shadow-2xl
             overflow-hidden
-            isolation-isolate
+            touch-manipulation
+            isolate
           "
         >
           {/* ===================================================
@@ -1312,7 +1340,6 @@ export default function Navbar({
               will-change-transform
               z-0
             "
-            aria-hidden="true"
             style={{
               transform: `
                 translate3d(
@@ -1323,18 +1350,26 @@ export default function Navbar({
                 scaleX(${mobileIndicator.scaleX})
                 scaleY(${mobileIndicator.scaleY})
               `,
+
               width:
                 `${mobileIndicator.width}px`,
+
               height:
                 `${mobileIndicator.height}px`,
+
               opacity:
                 mobileIndicator.opacity,
+
               borderRadius:
                 mobileIndicator.isMoving
                   ? '28px 12px 28px 12px'
                   : '9999px',
+
               transition:
                 'transform 450ms cubic-bezier(0.34, 1.45, 0.64, 1), width 450ms cubic-bezier(0.34, 1.45, 0.64, 1), height 450ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 450ms ease, opacity 250ms ease',
+
+              transformOrigin:
+                'center center',
             }}
           />
 
@@ -1347,8 +1382,7 @@ export default function Navbar({
               const Icon = item.icon;
 
               const isActive =
-                mobileActiveId ===
-                item.id;
+                mobileActiveId === item.id;
 
               return (
                 <button
@@ -1366,9 +1400,7 @@ export default function Navbar({
                     }
                   }}
                   type="button"
-                  aria-pressed={
-                    isActive
-                  }
+                  aria-pressed={isActive}
                   onClick={(event) =>
                     handleMobileNavClick(
                       item.id,
@@ -1387,8 +1419,9 @@ export default function Navbar({
                     py-1.5
                     min-w-[58px]
                     rounded-full
-                    transition-all
+                    transition-colors
                     duration-300
+                    select-none
                     ${
                       isActive
                         ? 'text-[#23212C] font-black'
