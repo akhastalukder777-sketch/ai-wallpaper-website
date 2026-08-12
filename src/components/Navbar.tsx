@@ -71,20 +71,6 @@ export default function Navbar({
   });
 
   /* ============================================================
-     MOBILE NAV
-  ============================================================ */
-
-  const mobileNavContainerRef = useRef<HTMLDivElement | null>(null);
-
-  const [mobileIndicator, setMobileIndicator] = useState({
-    index: 0,
-    opacity: 1,
-    isMoving: false,
-    scaleX: 1,
-    scaleY: 1,
-  });
-
-  /* ============================================================
      NAV ITEMS
   ============================================================ */
 
@@ -187,7 +173,7 @@ export default function Navbar({
   }, []);
 
   /* ============================================================
-     DESKTOP INDICATOR
+     DESKTOP INDICATOR UPDATE
   ============================================================ */
 
   const updateDesktopIndicator = () => {
@@ -207,6 +193,20 @@ export default function Navbar({
           prev.width !== activeEl.offsetWidth),
     }));
   };
+
+  useEffect(() => {
+    updateDesktopIndicator();
+
+    const handleResize = () => {
+      updateDesktopIndicator();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [activeNav]);
 
   /* ============================================================
      MOBILE ACTIVE ID
@@ -230,46 +230,6 @@ export default function Navbar({
   };
 
   const mobileActiveId = getMobileActiveId();
-
-  /* ============================================================
-     MOBILE INDICATOR INDEX
-  ============================================================ */
-
-  const getMobileIndex = (id: string) => {
-    const index = mobileNavItems.findIndex(
-      (item) => item.id === id
-    );
-
-    return index >= 0 ? index : 0;
-  };
-
-  /* ============================================================
-     UPDATE INDICATORS
-  ============================================================ */
-
-  useEffect(() => {
-    updateDesktopIndicator();
-
-    const handleResize = () => {
-      updateDesktopIndicator();
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [activeNav]);
-
-  useEffect(() => {
-    const newIndex = getMobileIndex(mobileActiveId);
-
-    setMobileIndicator((prev) => ({
-      ...prev,
-      index: newIndex,
-      opacity: 1,
-    }));
-  }, [mobileActiveId]);
 
   /* ============================================================
      NAV CLICK
@@ -305,84 +265,19 @@ export default function Navbar({
   ============================================================ */
 
   const handleMobileNavClick = (id: string) => {
-    const newIndex = getMobileIndex(id);
-    const oldIndex = mobileIndicator.index;
-
-    const distance = Math.abs(newIndex - oldIndex);
-
-    const stretch =
-      distance > 0
-        ? Math.min(1.18, 1 + distance * 0.07)
-        : 1;
-
-    /* More */
     if (id === 'More') {
       setIsMobileMoreOpen((prev) => !prev);
-
-      setMobileIndicator({
-        index: newIndex,
-        opacity: 1,
-        isMoving: distance > 0,
-        scaleX: stretch,
-        scaleY: 2 - stretch,
-      });
-
       return;
     }
 
-    /* Random */
     if (id === 'Random') {
       onNavChange?.('Random');
       onRandomClick?.();
-
       setIsMobileMoreOpen(false);
     } else {
       onNavChange?.(id);
       setIsMobileMoreOpen(false);
     }
-
-    setMobileIndicator({
-      index: newIndex,
-      opacity: 1,
-      isMoving: distance > 0,
-      scaleX: stretch,
-      scaleY: 2 - stretch,
-    });
-
-    /*
-      Small reset after animation.
-      Using window.setTimeout avoids the NodeJS Timeout
-      type problem.
-    */
-    window.setTimeout(() => {
-      setMobileIndicator((prev) => ({
-        ...prev,
-        scaleX: 1,
-        scaleY: 1,
-        isMoving: false,
-      }));
-    }, 480);
-  };
-
-  /* ============================================================
-     MOBILE BUBBLE POSITION
-  ============================================================ */
-
-  const mobileBubbleStyle: React.CSSProperties = {
-    width: '20%',
-    left: `${mobileIndicator.index * 20}%`,
-    top: '-18px',
-
-    opacity: mobileIndicator.opacity,
-
-    transform: `translate3d(0, 0, 0) scaleX(${mobileIndicator.scaleX}) scaleY(${mobileIndicator.scaleY})`,
-
-    transition:
-      'left 480ms cubic-bezier(0.34, 1.45, 0.64, 1), ' +
-      'transform 480ms cubic-bezier(0.34, 1.45, 0.64, 1), ' +
-      'opacity 250ms ease',
-
-    transformOrigin: 'center center',
   };
 
   /* ============================================================
@@ -880,18 +775,19 @@ export default function Navbar({
       </header>
 
       {/* ========================================================
-          MOBILE BOTTOM NAVBAR
+          MOBILE BOTTOM FLOATING GLASS NAVBAR (SCREENSHOT 2 EXACT)
       ======================================================== */}
 
       <div
         className={`
           lg:hidden
           fixed
-          bottom-3
-          left-3
-          right-3
+          bottom-[calc(16px+env(safe-area-inset-bottom))]
+          left-0
+          right-0
           z-[100]
-          max-w-md
+          w-[92%]
+          max-w-[420px]
           mx-auto
           transition-all
           duration-300
@@ -903,107 +799,149 @@ export default function Navbar({
         `}
       >
         <div
-          ref={mobileNavContainerRef}
           className="
-            glass-navbar-dark
+            glass-navbar-floating
             relative
             rounded-full
-            px-1.5
-            py-1.5
             w-full
+            h-[74px]
+            px-2
             overflow-visible
             isolate
+            flex
+            items-center
           "
         >
-          {/* ==================================================
-              LIQUID GLASS ACTIVE BUBBLE
-          ================================================== */}
+          {/* NAV ITEMS GRID */}
 
-          <div
-            aria-hidden="true"
-            className="
-              absolute
-              liquid-bubble-raised-milky
-              pointer-events-none
-              z-0
-              will-change-transform
-            "
-            style={mobileBubbleStyle}
-          />
-
-          {/* ==================================================
-              NAV ITEMS
-          ================================================== */}
-
-          <div
-            className="
-              relative
-              z-10
-              grid
-              grid-cols-5
-              w-full
-            "
-          >
+          <div className="grid grid-cols-5 w-full items-center h-full relative z-10">
             {mobileNavItems.map((item) => {
-              const isActive =
-                mobileActiveId === item.id;
-
+              const isActive = mobileActiveId === item.id;
               const Icon = item.icon;
+              const isCenter = item.id === 'Random';
 
+              /* ==================================================
+                 CENTER RAISED CIRCLE ITEM (RANDOM)
+              ================================================== */
+              if (isCenter) {
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    aria-pressed={isActive}
+                    onClick={() => handleMobileNavClick(item.id)}
+                    className="
+                      relative
+                      flex
+                      flex-col
+                      items-center
+                      justify-end
+                      h-full
+                      pb-2.5
+                      group
+                      focus:outline-none
+                    "
+                  >
+                    {/* RAISED CENTER CIRCLE BUBBLE */}
+                    <div
+                      className={`
+                        center-raised-circle
+                        absolute
+                        -top-7
+                        left-1/2
+                        -translate-x-1/2
+                        w-[70px]
+                        h-[70px]
+                        rounded-full
+                        flex
+                        items-center
+                        justify-center
+                        z-20
+                        transition-transform
+                        duration-200
+                        ${
+                          isActive
+                            ? 'scale-105 ring-2 ring-white/90 shadow-xl'
+                            : 'active:scale-95 hover:scale-105'
+                        }
+                      `}
+                    >
+                      <Icon
+                        className="w-6 h-6 text-[#23212C]"
+                        strokeWidth={2.4}
+                      />
+                    </div>
+
+                    {/* LABEL BELOW CIRCLE */}
+                    <span
+                      className={`
+                        text-[11px]
+                        font-extrabold
+                        tracking-tight
+                        transition-colors
+                        duration-200
+                        z-10
+                        mt-auto
+                        ${
+                          isActive
+                            ? 'text-[#23212C]'
+                            : 'text-[#23212C]/80 group-hover:text-[#23212C]'
+                        }
+                      `}
+                    >
+                      {item.label}
+                    </span>
+                  </button>
+                );
+              }
+
+              /* ==================================================
+                 STANDARD NAVIGATION ITEMS
+              ================================================== */
               return (
                 <button
                   key={item.id}
                   type="button"
                   aria-pressed={isActive}
-                  onClick={() =>
-                    handleMobileNavClick(item.id)
-                  }
-                  className={`
-                    relative
-                    min-w-0
-                    h-[58px]
+                  onClick={() => handleMobileNavClick(item.id)}
+                  className="
                     flex
                     flex-col
                     items-center
                     justify-center
-                    rounded-full
-                    select-none
-                    touch-manipulation
-                    transition-all
-                    duration-300
-                    outline-none
-                    ${
-                      isActive
-                        ? 'text-[#23212C] -translate-y-[8px] scale-[1.04]'
-                        : 'text-white/80'
-                    }
-                  `}
+                    h-full
+                    group
+                    focus:outline-none
+                    relative
+                  "
                 >
-                  <Icon
-                    className="
-                      w-[22px]
-                      h-[22px]
-                      shrink-0
-                      transition-transform
-                      duration-300
-                    "
-                    strokeWidth={
-                      isActive ? 2.6 : 2
-                    }
-                  />
-
-                  <span
-                    className="
-                      mt-1
-                      text-[10px]
-                      leading-none
-                      font-extrabold
-                      tracking-tight
-                      whitespace-nowrap
-                    "
+                  <div
+                    className={`
+                      flex
+                      flex-col
+                      items-center
+                      justify-center
+                      px-3
+                      py-1.5
+                      rounded-full
+                      transition-all
+                      duration-250
+                      ${
+                        isActive
+                          ? 'bg-white/40 backdrop-blur-md border border-white/60 shadow-sm text-[#23212C] scale-105'
+                          : 'text-[#23212C]/75 hover:text-[#23212C] hover:bg-white/15'
+                      }
+                    `}
                   >
-                    {item.label}
-                  </span>
+                    <Icon
+                      className="w-5 h-5 shrink-0 transition-transform duration-200"
+                      strokeWidth={isActive ? 2.6 : 2}
+                    />
+
+                    <span className="mt-0.5 text-[10px] leading-tight font-extrabold tracking-tight">
+                      {item.label}
+                    </span>
+                  </div>
                 </button>
               );
             })}
@@ -1018,12 +956,12 @@ export default function Navbar({
           <div
             className="
               absolute
-              bottom-[68px]
+              bottom-[86px]
               left-0
               right-0
               bg-[#23212C]/95
               border
-              border-white/10
+              border-white/20
               rounded-3xl
               p-4
               shadow-2xl
@@ -1057,9 +995,7 @@ export default function Navbar({
 
               <button
                 type="button"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
+                onClick={() => setIsMobileMoreOpen(false)}
                 className="
                   p-1.5
                   text-slate-400
@@ -1132,9 +1068,7 @@ export default function Navbar({
             >
               <Link
                 href="/privacy-policy"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
+                onClick={() => setIsMobileMoreOpen(false)}
                 className="
                   flex
                   items-center
@@ -1148,9 +1082,7 @@ export default function Navbar({
 
               <Link
                 href="/terms-of-service"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
+                onClick={() => setIsMobileMoreOpen(false)}
                 className="
                   flex
                   items-center
@@ -1164,9 +1096,7 @@ export default function Navbar({
 
               <Link
                 href="/about"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
+                onClick={() => setIsMobileMoreOpen(false)}
                 className="
                   flex
                   items-center

@@ -144,22 +144,27 @@ a {
 
 
 /* ============================================================
-   MOBILE DARK GLASS NAVBAR
+   MOBILE FLOATING GLASS NAVBAR (REFERENCE DESIGN)
 ============================================================ */
 
-.glass-navbar-dark {
+.glass-navbar-floating {
   position: relative;
 
-  background: rgba(35, 33, 44, 0.62);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0.12) 45%,
+    rgba(255, 255, 255, 0.20)
+  );
 
-  backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
 
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.45);
 
   box-shadow:
-    0 14px 35px rgba(0, 0, 0, 0.32),
-    inset 0 1px 1px rgba(255, 255, 255, 0.12);
+    0 10px 32px rgba(0, 0, 0, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.40);
 
   touch-action: manipulation;
 
@@ -171,50 +176,23 @@ a {
 
 
 /* ============================================================
-   LIQUID MILKY GLASS ACTIVE BUBBLE
+   CENTER RAISED CIRCLE BUBBLE
 ============================================================ */
 
-.liquid-bubble-raised-milky {
-  position: absolute;
+.center-raised-circle {
+  background: rgba(255, 255, 255, 0.85);
 
-  height: 72px;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.92),
-      rgba(255, 255, 255, 0.68)
-    );
-
-  backdrop-filter:
-    blur(24px)
-    saturate(165%);
-
-  -webkit-backdrop-filter:
-    blur(24px)
-    saturate(165%);
-
-  border:
-    1.5px solid rgba(255, 255, 255, 0.96);
-
-  border-radius: 9999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
 
   box-shadow:
-    0 -7px 20px rgba(255, 255, 255, 0.28),
-    0 12px 28px rgba(0, 0, 0, 0.32),
-    inset 0 2px 4px rgba(255, 255, 255, 0.95),
-    inset 0 -2px 5px rgba(255, 255, 255, 0.25);
+    0 8px 25px rgba(0, 0, 0, 0.18),
+    inset 0 1px 2px rgba(255, 255, 255, 0.95);
 
-  pointer-events: none;
-
-  will-change:
-    left,
-    transform;
-
-  transform-origin: center center;
-
-  -webkit-user-select: none;
-  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -223,7 +201,7 @@ a {
 ============================================================ */
 
 @media (max-width: 1023px) {
-  .glass-navbar-dark button {
+  .glass-navbar-floating button {
     touch-action: manipulation;
 
     -webkit-user-select: none;
@@ -232,13 +210,13 @@ a {
     -webkit-tap-highlight-color: transparent;
   }
 
-  .glass-navbar-dark button:focus {
+  .glass-navbar-floating button:focus {
     outline: none;
   }
 
-  .glass-navbar-dark button:focus-visible {
+  .glass-navbar-floating button:focus-visible {
     outline:
-      2px solid rgba(241, 254, 200, 0.55);
+      2px solid rgba(35, 33, 44, 0.55);
 
     outline-offset: 2px;
   }
