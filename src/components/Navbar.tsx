@@ -231,6 +231,21 @@ export default function Navbar({
 
   const mobileActiveId = getMobileActiveId();
 
+  /*
+   * IMPORTANT:
+   * This replaces the old fixed Random bubble.
+   *
+   * One single indicator moves between all 5 items.
+   * So Random has NO separate raised circle.
+   */
+
+  const mobileActiveIndex = Math.max(
+    0,
+    mobileNavItems.findIndex(
+      (item) => item.id === mobileActiveId
+    )
+  );
+
   /* ============================================================
      NAV CLICK
   ============================================================ */
@@ -261,7 +276,7 @@ export default function Navbar({
   };
 
   /* ============================================================
-     MOBILE CLICK
+     MOBILE NAV CLICK
   ============================================================ */
 
   const handleMobileNavClick = (id: string) => {
@@ -493,17 +508,12 @@ export default function Navbar({
                         ? 'scaleX(1.12) scaleY(0.88)'
                         : 'scale(1)'
                     }`,
-
                     width: desktopIndicator.width,
-
                     height: desktopIndicator.height,
-
                     opacity: desktopIndicator.opacity,
-
                     borderRadius: desktopIndicator.isMoving
                       ? '22px 12px 24px 10px'
                       : '9999px',
-
                     transition:
                       'transform 550ms cubic-bezier(0.34, 1.45, 0.64, 1), ' +
                       'width 550ms cubic-bezier(0.34, 1.45, 0.64, 1), ' +
@@ -689,7 +699,7 @@ export default function Navbar({
                         }
                       `}
                     >
-                      <item.icon className="w-3.5 h-3.5" />
+                      <Icon className="w-3.5 h-3.5" />
 
                       <span>{item.label}</span>
                     </button>
@@ -775,7 +785,12 @@ export default function Navbar({
       </header>
 
       {/* ========================================================
-          MOBILE BOTTOM FLOATING GLASS NAVBAR (SCREENSHOT 2 EXACT)
+          MOBILE BOTTOM FLOATING GLASS NAVBAR
+          
+          IMPORTANT:
+          - NO fixed Random bubble
+          - NO raised Random circle
+          - One smooth active indicator moves between items
       ======================================================== */}
 
       <div
@@ -804,7 +819,7 @@ export default function Navbar({
             relative
             rounded-full
             w-full
-            h-[74px]
+            h-[78px]
             px-2
             overflow-visible
             isolate
@@ -812,107 +827,108 @@ export default function Navbar({
             items-center
           "
         >
-          {/* NAV ITEMS GRID */}
+          {/* ====================================================
+              MOBILE NAV GRID
+          ==================================================== */}
 
-          <div className="grid grid-cols-5 w-full items-center h-full relative z-10">
+          <div
+            className="
+              grid
+              grid-cols-5
+              w-full
+              h-full
+              items-center
+              relative
+            "
+          >
+            {/* ==================================================
+                SINGLE MOVING ACTIVE INDICATOR
+
+                This replaces the old fixed Random bubble.
+                It smoothly moves between all 5 items.
+            ================================================== */}
+
+            <div
+              className="
+                mobile-active-indicator
+                absolute
+                top-1/2
+                w-[68px]
+                h-[62px]
+                rounded-full
+                pointer-events-none
+                z-0
+              "
+              style={{
+                left: `${mobileActiveIndex * 20 + 10}%`,
+              }}
+            />
+
             {mobileNavItems.map((item) => {
-              const isActive = mobileActiveId === item.id;
+              const isActive =
+                mobileActiveId === item.id;
+
               const Icon = item.icon;
-              const isCenter = item.id === 'Random';
 
-              /* ==================================================
-                 CENTER RAISED CIRCLE ITEM (RANDOM)
-              ================================================== */
-              if (isCenter) {
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    aria-pressed={isActive}
-                    onClick={() => handleMobileNavClick(item.id)}
-                    className="
-                      relative
-                      flex
-                      flex-col
-                      items-center
-                      justify-end
-                      h-full
-                      pb-2.5
-                      group
-                      focus:outline-none
-                    "
-                  >
-                    
-                    {/* LABEL BELOW CIRCLE */}
-                    <span
-                      className={`
-                        text-[11px]
-                        font-extrabold
-                        tracking-tight
-                        transition-colors
-                        duration-200
-                        z-10
-                        mt-auto
-                        ${
-                          isActive
-                            ? 'text-[#23212C]'
-                            : 'text-[#23212C]/80 group-hover:text-[#23212C]'
-                        }
-                      `}
-                    >
-                      {item.label}
-                    </span>
-                  </button>
-                );
-              }
-
-              /* ==================================================
-                 STANDARD NAVIGATION ITEMS
-              ================================================== */
               return (
                 <button
                   key={item.id}
                   type="button"
                   aria-pressed={isActive}
-                  onClick={() => handleMobileNavClick(item.id)}
-                  className="
+                  onClick={() =>
+                    handleMobileNavClick(item.id)
+                  }
+                  className={`
+                    relative
+                    z-10
                     flex
                     flex-col
                     items-center
                     justify-center
                     h-full
+                    min-w-0
                     group
                     focus:outline-none
-                    relative
-                  "
+                    rounded-full
+                    transition-transform
+                    duration-200
+                    ${
+                      isActive
+                        ? 'text-[#23212C]'
+                        : 'text-[#23212C]/75'
+                    }
+                  `}
                 >
-                  <div
-                    className={`
-                      flex
-                      flex-col
-                      items-center
-                      justify-center
-                      px-3
-                      py-1.5
-                      rounded-full
+                  <Icon
+                    className="
+                      w-[25px]
+                      h-[25px]
+                      shrink-0
                       transition-all
-                      duration-250
+                      duration-300
+                    "
+                    strokeWidth={isActive ? 2.6 : 2.1}
+                  />
+
+                  <span
+                    className={`
+                      mt-1
+                      text-[12px]
+                      leading-none
+                      font-extrabold
+                      tracking-tight
+                      whitespace-nowrap
+                      transition-all
+                      duration-300
                       ${
                         isActive
-                          ? 'bg-white/40 backdrop-blur-md border border-white/60 shadow-sm text-[#23212C] scale-105'
-                          : 'text-[#23212C]/75 hover:text-[#23212C] hover:bg-white/15'
+                          ? 'text-[#23212C]'
+                          : 'text-[#23212C]/75'
                       }
                     `}
                   >
-                    <Icon
-                      className="w-5 h-5 shrink-0 transition-transform duration-200"
-                      strokeWidth={isActive ? 2.6 : 2}
-                    />
-
-                    <span className="mt-0.5 text-[10px] leading-tight font-extrabold tracking-tight">
-                      {item.label}
-                    </span>
-                  </div>
+                    {item.label}
+                  </span>
                 </button>
               );
             })}
@@ -927,7 +943,7 @@ export default function Navbar({
           <div
             className="
               absolute
-              bottom-[86px]
+              bottom-[90px]
               left-0
               right-0
               bg-[#23212C]/95
@@ -966,7 +982,9 @@ export default function Navbar({
 
               <button
                 type="button"
-                onClick={() => setIsMobileMoreOpen(false)}
+                onClick={() =>
+                  setIsMobileMoreOpen(false)
+                }
                 className="
                   p-1.5
                   text-slate-400
@@ -1039,7 +1057,9 @@ export default function Navbar({
             >
               <Link
                 href="/privacy-policy"
-                onClick={() => setIsMobileMoreOpen(false)}
+                onClick={() =>
+                  setIsMobileMoreOpen(false)
+                }
                 className="
                   flex
                   items-center
@@ -1053,7 +1073,9 @@ export default function Navbar({
 
               <Link
                 href="/terms-of-service"
-                onClick={() => setIsMobileMoreOpen(false)}
+                onClick={() =>
+                  setIsMobileMoreOpen(false)
+                }
                 className="
                   flex
                   items-center
@@ -1067,7 +1089,9 @@ export default function Navbar({
 
               <Link
                 href="/about"
-                onClick={() => setIsMobileMoreOpen(false)}
+                onClick={() =>
+                  setIsMobileMoreOpen(false)
+                }
                 className="
                   flex
                   items-center
