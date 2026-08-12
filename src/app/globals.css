@@ -3,7 +3,7 @@
 @import "tailwindcss";
 
 /* ============================================================
-ROOT VARIABLES
+   ROOT VARIABLES
 ============================================================ */
 
 :root {
@@ -13,16 +13,18 @@ ROOT VARIABLES
   --cosmic: #23212C;
 }
 
+
 /* ============================================================
-HTML
+   HTML
 ============================================================ */
 
 html {
   scroll-behavior: smooth;
 }
 
+
 /* ============================================================
-BODY
+   BODY
 ============================================================ */
 
 body {
@@ -47,8 +49,9 @@ body {
   letter-spacing: -0.01em;
 }
 
+
 /* ============================================================
-BOX SIZING
+   BOX SIZING
 ============================================================ */
 
 *,
@@ -57,8 +60,9 @@ BOX SIZING
   box-sizing: border-box;
 }
 
+
 /* ============================================================
-TYPOGRAPHY
+   TYPOGRAPHY
 ============================================================ */
 
 h1,
@@ -77,8 +81,9 @@ a {
   font-weight: 800;
 }
 
+
 /* ============================================================
-BUTTON / LINK RESET
+   BUTTON / LINK RESET
 ============================================================ */
 
 button {
@@ -89,8 +94,9 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+
 /* ============================================================
-CUSTOM SCROLLBAR
+   CUSTOM SCROLLBAR
 ============================================================ */
 
 ::-webkit-scrollbar {
@@ -111,6 +117,7 @@ CUSTOM SCROLLBAR
   background: #3b3745;
 }
 
+
 /* Firefox */
 
 * {
@@ -118,8 +125,9 @@ CUSTOM SCROLLBAR
   scrollbar-color: #23212C #F1FEC8;
 }
 
+
 /* ============================================================
-GLASS NAVBAR
+   GLASS TOP NAVBAR
 ============================================================ */
 
 .glass-navbar {
@@ -134,97 +142,111 @@ GLASS NAVBAR
     0 12px 32px -8px rgba(35, 33, 44, 0.12);
 }
 
+
 /* ============================================================
-DARK MOBILE NAVBAR
+   MOBILE DARK GLASS NAVBAR
 ============================================================ */
 
 .glass-navbar-dark {
-  background: rgba(35, 33, 44, 0.65);
+  position: relative;
 
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(35, 33, 44, 0.62);
 
-  border: 1px solid rgba(241, 254, 200, 0.18);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
 
   box-shadow:
-    0 12px 32px -8px rgba(0, 0, 0, 0.35);
+    0 14px 35px rgba(0, 0, 0, 0.32),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12);
 
-  /*
-    Important for mobile browser touch handling.
-  */
   touch-action: manipulation;
 
-  /*
-    Prevent the browser from treating the navbar
-    as a text-selection / gesture area.
-  */
   -webkit-user-select: none;
   user-select: none;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
+
 /* ============================================================
-MOBILE NAVBAR ACTIVE LIQUID GLASS BUBBLE
-
-Navbar.tsx uses:
-.liquid-bubble-raised-milky
-
-DO NOT REMOVE THIS CLASS.
+   LIQUID MILKY GLASS ACTIVE BUBBLE
 ============================================================ */
 
 .liquid-bubble-raised-milky {
-  background: rgba(255, 255, 255, 0.82);
+  position: absolute;
 
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  height: 72px;
 
-  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.92),
+      rgba(255, 255, 255, 0.68)
+    );
+
+  backdrop-filter:
+    blur(24px)
+    saturate(165%);
+
+  -webkit-backdrop-filter:
+    blur(24px)
+    saturate(165%);
+
+  border:
+    1.5px solid rgba(255, 255, 255, 0.96);
+
+  border-radius: 9999px;
 
   box-shadow:
-    0 -6px 20px rgba(255, 255, 255, 0.25),
-    0 10px 24px -4px rgba(0, 0, 0, 0.35),
-    inset 0 1px 2px rgba(255, 255, 255, 1);
+    0 -7px 20px rgba(255, 255, 255, 0.28),
+    0 12px 28px rgba(0, 0, 0, 0.32),
+    inset 0 2px 4px rgba(255, 255, 255, 0.95),
+    inset 0 -2px 5px rgba(255, 255, 255, 0.25);
 
   pointer-events: none;
 
-  will-change: transform;
+  will-change:
+    left,
+    transform;
 
-  /*
-    Keeps the liquid bubble on its own compositing layer
-    on mobile browsers.
-  */
   transform-origin: center center;
 
-  /*
-    Prevents the browser from selecting / dragging
-    the transparent bubble.
-  */
   -webkit-user-select: none;
   user-select: none;
 }
 
-/* ============================================================
-MOBILE NAVBAR ACTIVE LIQUID PILL
 
-Kept for compatibility if another component uses it.
+/* ============================================================
+   MOBILE NAV BUTTON SAFETY
 ============================================================ */
 
-.liquid-pill-active {
-  background: rgba(255, 255, 255, 0.72);
+@media (max-width: 1023px) {
+  .glass-navbar-dark button {
+    touch-action: manipulation;
 
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+    -webkit-user-select: none;
+    user-select: none;
 
-  border: 1.5px solid rgba(255, 255, 255, 0.90);
+    -webkit-tap-highlight-color: transparent;
+  }
 
-  box-shadow:
-    0 6px 20px -2px rgba(35, 33, 44, 0.16),
-    inset 0 1px 2px rgba(255, 255, 255, 0.95);
+  .glass-navbar-dark button:focus {
+    outline: none;
+  }
 
-  pointer-events: none;
+  .glass-navbar-dark button:focus-visible {
+    outline:
+      2px solid rgba(241, 254, 200, 0.55);
+
+    outline-offset: 2px;
+  }
 }
 
+
 /* ============================================================
-GLASS EFFECT
+   GLASS EFFECT
 ============================================================ */
 
 .glass-effect {
@@ -237,8 +259,9 @@ GLASS EFFECT
     1px solid rgba(35, 33, 44, 0.08);
 }
 
+
 /* ============================================================
-GLASS CARD
+   GLASS CARD
 ============================================================ */
 
 .glass-card {
@@ -263,8 +286,9 @@ GLASS CARD
     0 16px 36px 0 rgba(35, 33, 44, 0.25);
 }
 
+
 /* ============================================================
-GLASS HOVER PANEL
+   GLASS HOVER PANEL
 ============================================================ */
 
 .glass-hover-panel {
@@ -277,16 +301,18 @@ GLASS HOVER PANEL
     1px solid rgba(241, 254, 200, 0.20);
 }
 
+
 /* ============================================================
-MASONRY
+   MASONRY
 ============================================================ */
 
 .break-inside-avoid-column {
   break-inside: avoid;
 }
 
+
 /* ============================================================
-LOAD MORE BUTTON
+   LOAD MORE BUTTON
 ============================================================ */
 
 .load-more-stretch {
@@ -334,8 +360,9 @@ LOAD MORE BUTTON
   will-change: transform;
 }
 
+
 /* ============================================================
-LOAD MORE - DESKTOP MOUSE HOVER
+   LOAD MORE - DESKTOP MOUSE HOVER
 ============================================================ */
 
 @media (hover: hover) and (pointer: fine) {
@@ -359,8 +386,9 @@ LOAD MORE - DESKTOP MOUSE HOVER
   }
 }
 
+
 /* ============================================================
-LOAD MORE - ACTIVE / PRESS
+   LOAD MORE - ACTIVE / PRESS
 ============================================================ */
 
 .load-more-stretch:active {
@@ -377,8 +405,9 @@ LOAD MORE - ACTIVE / PRESS
   transition-duration: 120ms;
 }
 
+
 /* ============================================================
-LOAD MORE TEXT
+   LOAD MORE TEXT
 ============================================================ */
 
 .load-more-text {
@@ -390,8 +419,9 @@ LOAD MORE TEXT
   white-space: nowrap;
 }
 
+
 /* ============================================================
-LOAD MORE ARROW
+   LOAD MORE ARROW
 ============================================================ */
 
 .load-more-arrow {
@@ -404,8 +434,9 @@ LOAD MORE ARROW
     transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+
 /* ============================================================
-MOBILE LOAD MORE
+   MOBILE LOAD MORE
 ============================================================ */
 
 @media (max-width: 640px) {
@@ -430,8 +461,9 @@ MOBILE LOAD MORE
   }
 }
 
+
 /* ============================================================
-SMALL MOBILE
+   SMALL MOBILE
 ============================================================ */
 
 @media (max-width: 380px) {
@@ -445,41 +477,12 @@ SMALL MOBILE
   }
 }
 
+
 /* ============================================================
-MOBILE NAVBAR SAFETY
+   MOBILE VIEWPORT SAFETY
 ============================================================ */
 
 @media (max-width: 1023px) {
-  .glass-navbar-dark {
-    touch-action: manipulation;
-  }
-
-  .glass-navbar-dark button {
-    -webkit-user-select: none;
-    user-select: none;
-
-    touch-action: manipulation;
-  }
-
-  .glass-navbar-dark button:focus {
-    outline: none;
-  }
-
-  .glass-navbar-dark button:focus-visible {
-    outline: 2px solid rgba(241, 254, 200, 0.55);
-    outline-offset: 2px;
-  }
-}
-
-/* ============================================================
-MOBILE VIEWPORT / BROWSER SAFETY
-============================================================ */
-
-@media (max-width: 1023px) {
-  /*
-    Prevents mobile browser viewport changes from creating
-    horizontal overflow while the bottom navbar is fixed.
-  */
   html,
   body {
     max-width: 100%;
@@ -487,8 +490,9 @@ MOBILE VIEWPORT / BROWSER SAFETY
   }
 }
 
+
 /* ============================================================
-REDUCED MOTION
+   REDUCED MOTION
 ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
