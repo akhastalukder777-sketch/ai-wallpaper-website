@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+
 import Link from 'next/link';
 
 import {
@@ -90,6 +96,9 @@ export default function Navbar({
   const mobileNavRefs = useRef<
     Map<string, HTMLButtonElement>
   >(new Map());
+
+  const mobileNavContainerRef =
+    useRef<HTMLDivElement | null>(null);
 
   const [mobileIndicator, setMobileIndicator] = useState({
     left: 0,
@@ -213,7 +222,7 @@ export default function Navbar({
   }, []);
 
   /* =========================================================
-     DESKTOP INDICATOR
+     DESKTOP INDICATOR UPDATE
   ========================================================= */
 
   const updateDesktopIndicator = () => {
@@ -240,16 +249,11 @@ export default function Navbar({
 
   /* =========================================================
      MOBILE ACTIVE ID
-     
-     IMPORTANT FIX:
-     যখন More drawer open থাকবে,
-     More button-ই active থাকবে।
   ========================================================= */
 
   const getMobileActiveId = () => {
     /*
-      FIX:
-      More drawer open থাকলে More bubble active থাকবে।
+      More drawer open থাকলে More button-ই active থাকবে।
     */
     if (isMobileMoreOpen) {
       return 'More';
@@ -285,25 +289,42 @@ export default function Navbar({
   };
 
   /* =========================================================
-     MOBILE INDICATOR
+     MOBILE INDICATOR UPDATE
+     
+     FIX:
+     Container-এর actual position অনুযায়ী bubble position
+     calculate করা হচ্ছে।
   ========================================================= */
 
-  const updateMobileIndicator = () => {
-    const targetId = getMobileActiveId();
-
+  const updateMobileIndicator = (
+    targetId = getMobileActiveId()
+  ) => {
     const button =
       mobileNavRefs.current.get(targetId);
 
-    if (!button) {
+    const container =
+      mobileNavContainerRef.current;
+
+    if (!button || !container) {
       return;
     }
 
+    const buttonRect =
+      button.getBoundingClientRect();
+
+    const containerRect =
+      container.getBoundingClientRect();
+
     setMobileIndicator((prev) => ({
       ...prev,
-      left: button.offsetLeft,
-      width: button.offsetWidth,
-      height: button.offsetHeight,
-      top: button.offsetTop,
+      left:
+        buttonRect.left -
+        containerRect.left,
+      width: buttonRect.width,
+      height: buttonRect.height,
+      top:
+        buttonRect.top -
+        containerRect.top,
       opacity: 1,
     }));
   };
@@ -312,13 +333,14 @@ export default function Navbar({
      UPDATE INDICATORS
   ========================================================= */
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const update = () => {
       updateDesktopIndicator();
       updateMobileIndicator();
     };
 
-    const timer = window.setTimeout(update, 50);
+    const timer =
+      window.setTimeout(update, 30);
 
     const handleResize = () => {
       update();
@@ -343,6 +365,27 @@ export default function Navbar({
   ]);
 
   /* =========================================================
+     KEEP MOBILE BUBBLE CORRECT AFTER FONT / LAYOUT LOAD
+  ========================================================= */
+
+  useEffect(() => {
+    const update = () => {
+      updateMobileIndicator();
+    };
+
+    const timer1 =
+      window.setTimeout(update, 100);
+
+    const timer2 =
+      window.setTimeout(update, 300);
+
+    return () => {
+      window.clearTimeout(timer1);
+      window.clearTimeout(timer2);
+    };
+  }, []);
+
+  /* =========================================================
      MAIN NAVIGATION HANDLER
   ========================================================= */
 
@@ -365,7 +408,6 @@ export default function Navbar({
     */
     if (id === 'More') {
       setIsMobileMoreOpen((prev) => !prev);
-
       return;
     }
 
@@ -384,9 +426,9 @@ export default function Navbar({
   /* =========================================================
      MOBILE NAV CLICK
      
-     FIXED:
-     More button এখন bubble-এর active position
-     ঠিকভাবে ধরে রাখবে।
+     FIX:
+     Bubble movement এখন container-relative এবং state
+     update-এর সাথে conflict করবে না।
   ========================================================= */
 
   const handleMobileNavClick = (
@@ -402,28 +444,26 @@ export default function Navbar({
     if (id === 'More') {
       const willOpen = !isMobileMoreOpen;
 
+      /*
+        Bubble immediately More button-এ যাবে।
+      */
+      updateMobileIndicator('More');
+
+      setMobileIndicator((prev) => ({
+        ...prev,
+        scaleX: 1,
+        scaleY: 1,
+        isMoving: false,
+      }));
+
       setIsMobileMoreOpen(willOpen);
 
       /*
-        More button-এ bubble immediately move করবে।
+        State update হওয়ার পরে আবার exact position update।
       */
       requestAnimationFrame(() => {
-        const target =
-          mobileNavRefs.current.get('More');
-
-        if (!target) {
-          return;
-        }
-
-        setMobileIndicator({
-          left: target.offsetLeft,
-          width: target.offsetWidth,
-          height: target.offsetHeight,
-          top: target.offsetTop,
-          opacity: 1,
-          scaleX: 1,
-          scaleY: 1,
-          isMoving: false,
+        requestAnimationFrame(() => {
+          updateMobileIndicator('More');
         });
       });
 
@@ -447,7 +487,6 @@ export default function Navbar({
 
     else {
       onNavChange?.(id);
-
       setIsMobileMoreOpen(false);
     }
 
@@ -455,11 +494,25 @@ export default function Navbar({
        LIQUID STRETCH
     ===================================================== */
 
-    const previousLeft =
-      mobileIndicator.left;
+    const container =
+      mobileNavContainerRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    const buttonRect =
+      button.getBoundingClientRect();
+
+    const containerRect =
+      container.getBoundingClientRect();
 
     const newLeft =
-      button.offsetLeft;
+      buttonRect.left -
+      containerRect.left;
+
+    const previousLeft =
+      mobileIndicator.left;
 
     const distance =
       Math.abs(newLeft - previousLeft);
@@ -474,9 +527,11 @@ export default function Navbar({
 
     setMobileIndicator({
       left: newLeft,
-      width: button.offsetWidth,
-      height: button.offsetHeight,
-      top: button.offsetTop,
+      width: buttonRect.width,
+      height: buttonRect.height,
+      top:
+        buttonRect.top -
+        containerRect.top,
       opacity: 1,
       scaleX: stretch,
       scaleY: 2 - stretch,
@@ -490,6 +545,10 @@ export default function Navbar({
         scaleY: 1,
         isMoving: false,
       }));
+
+      requestAnimationFrame(() => {
+        updateMobileIndicator();
+      });
     }, 450);
   };
 
@@ -733,19 +792,14 @@ export default function Navbar({
                         0
                       )
                     `,
-
                     width:
                       `${desktopIndicator.width}px`,
-
                     height:
                       `${desktopIndicator.height}px`,
-
                     opacity:
                       desktopIndicator.opacity,
-
                     borderRadius:
                       '9999px',
-
                     transition:
                       'all 450ms cubic-bezier(0.34, 1.45, 0.64, 1)',
                   }}
@@ -1067,16 +1121,23 @@ export default function Navbar({
 
               <button
                 type="button"
-                onClick={() =>
+                onClick={() => {
                   setIsMobileMoreOpen(
                     false
-                  )
-                }
+                  );
+
+                  requestAnimationFrame(
+                    () => {
+                      updateMobileIndicator();
+                    }
+                  );
+                }}
                 className="
                   p-1
                   text-slate-400
                   hover:text-white
                 "
+                aria-label="Close More Navigation"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1224,6 +1285,7 @@ export default function Navbar({
         ===================================================== */}
 
         <div
+          ref={mobileNavContainerRef}
           className="
             glass-navbar-dark
             rounded-full
@@ -1235,6 +1297,7 @@ export default function Navbar({
             relative
             shadow-2xl
             overflow-hidden
+            isolation-isolate
           "
         >
           {/* ===================================================
@@ -1249,6 +1312,7 @@ export default function Navbar({
               will-change-transform
               z-0
             "
+            aria-hidden="true"
             style={{
               transform: `
                 translate3d(
@@ -1259,21 +1323,16 @@ export default function Navbar({
                 scaleX(${mobileIndicator.scaleX})
                 scaleY(${mobileIndicator.scaleY})
               `,
-
               width:
                 `${mobileIndicator.width}px`,
-
               height:
                 `${mobileIndicator.height}px`,
-
               opacity:
                 mobileIndicator.opacity,
-
               borderRadius:
                 mobileIndicator.isMoving
                   ? '28px 12px 28px 12px'
                   : '9999px',
-
               transition:
                 'transform 450ms cubic-bezier(0.34, 1.45, 0.64, 1), width 450ms cubic-bezier(0.34, 1.45, 0.64, 1), height 450ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 450ms ease, opacity 250ms ease',
             }}
