@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-
 import {
   Search,
   Sparkles,
@@ -19,20 +18,16 @@ import {
   FileText,
   Info,
 } from 'lucide-react';
-
 import { CATEGORIES } from '../data/wallpapers';
 
 interface NavbarProps {
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
   favoriteCount?: number;
-
   activeCategory?: string;
   onSelectCategory?: (category: string) => void;
-
   activeNav?: string;
   onNavChange?: (nav: string) => void;
-
   onRandomClick?: () => void;
 }
 
@@ -40,62 +35,35 @@ export default function Navbar({
   searchQuery = '',
   onSearchChange,
   favoriteCount = 0,
-
   activeCategory = 'All',
   onSelectCategory,
-
   activeNav = 'Home',
   onNavChange,
-
   onRandomClick,
 }: NavbarProps) {
-  /* =========================================================
-     STATE
-  ========================================================= */
-
-  const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
-
-  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] =
-    useState(false);
-
+  const [isMobileMoreOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
-  /* Scroll visibility */
+  // Scroll Direction Auto-Hiding States (Opposite behavior)
   const [showTopNav, setShowTopNav] = useState(true);
   const [showBottomNav, setShowBottomNav] = useState(true);
-
   const lastScrollY = useRef(0);
 
-  /* =========================================================
-     DESKTOP INDICATOR
-  ========================================================= */
-
-  const desktopNavRefs = useRef<
-    Map<string, HTMLButtonElement | HTMLDivElement>
-  >(new Map());
-
+  // Desktop Liquid Indicator Refs & State
+  const desktopNavRefs = useRef<Map<string, HTMLButtonElement | HTMLAnchorElement>>(new Map());
   const [desktopIndicator, setDesktopIndicator] = useState({
     left: 0,
     width: 0,
     height: 0,
     top: 0,
     opacity: 0,
+    isMoving: false,
   });
 
-  /* =========================================================
-     MOBILE NAV CONTAINER
-  ========================================================= */
-
+  // Mobile Bottom Milky Glass Indicator Container Refs & State
   const mobileNavContainerRef = useRef<HTMLDivElement | null>(null);
-
-  /* =========================================================
-     MOBILE NAV ITEMS
-  ========================================================= */
-
-  const mobileNavRefs = useRef<Map<string, HTMLButtonElement>>(
-    new Map()
-  );
-
+  const mobileNavRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const [mobileIndicator, setMobileIndicator] = useState({
     left: 0,
     width: 0,
@@ -107,101 +75,39 @@ export default function Navbar({
     isMoving: false,
   });
 
-  /*
-    IMPORTANT:
-    Browser setTimeout returns number.
-    Using number here prevents the
-    NodeJS.Timeout / number TypeScript error.
-  */
-  const mobileIndicatorTimer = useRef<number | null>(null);
-
-  /* =========================================================
-     DESKTOP NAV ITEMS
-  ========================================================= */
-
   const desktopNavItems = [
-    {
-      id: 'Home',
-      label: 'Home',
-      icon: HomeIcon,
-    },
-    {
-      id: 'Latest',
-      label: 'Latest',
-      icon: Clock,
-    },
-    {
-      id: 'Trending',
-      label: 'Trending',
-      icon: Flame,
-    },
-    {
-      id: 'Categories',
-      label: 'Categories',
-      icon: Grid,
-      hasDropdown: true,
-    },
-    {
-      id: 'Random',
-      label: 'Random',
-      icon: Dices,
-    },
+    { id: 'Home', label: 'Home', icon: HomeIcon },
+    { id: 'Latest', label: 'Latest', icon: Clock },
+    { id: 'Trending', label: 'Trending', icon: Flame, iconColor: 'text-[#23212C]' },
+    { id: 'Categories', label: 'Categories', icon: Grid, hasDropdown: true },
+    { id: 'Random', label: 'Random', icon: Dices },
   ];
-
-  /* =========================================================
-     MOBILE NAV ITEMS
-  ========================================================= */
 
   const mobileNavItems = [
-    {
-      id: 'Home',
-      label: 'Home',
-      icon: HomeIcon,
-    },
-    {
-      id: 'Trending',
-      label: 'Trending',
-      icon: Flame,
-    },
-    {
-      id: 'Random',
-      label: 'Random',
-      icon: Dices,
-    },
-    {
-      id: 'Saved',
-      label: 'Saved',
-      icon: Heart,
-    },
-    {
-      id: 'More',
-      label: 'More',
-      icon: MoreHorizontal,
-    },
+    { id: 'Home', label: 'Home', icon: HomeIcon },
+    { id: 'Trending', label: 'Trending', icon: Flame },
+    { id: 'Random', label: 'Random', icon: Dices },
+    { id: 'Saved', label: 'Saved', icon: Heart },
+    { id: 'More', label: 'More', icon: MoreHorizontal },
   ];
 
-  /* =========================================================
-     SCROLL BEHAVIOR
-  ========================================================= */
-
+  // Detect Scroll Direction: Scroll DOWN -> Hide Top Nav / Show Bottom Nav; Scroll UP -> Show Top Nav / Hide Bottom Nav
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      if (currentScrollY <= 40) {
+      if (currentScrollY < 50) {
         setShowTopNav(true);
         setShowBottomNav(true);
         lastScrollY.current = currentScrollY;
         return;
       }
 
-      const difference = currentScrollY - lastScrollY.current;
-
-      if (Math.abs(difference) < 8) {
+      if (Math.abs(currentScrollY - lastScrollY.current) < 8) {
         return;
       }
 
-      if (difference > 0) {
+      if (currentScrollY > lastScrollY.current) {
         setShowTopNav(false);
         setShowBottomNav(true);
       } else {
@@ -212,361 +118,128 @@ export default function Navbar({
       lastScrollY.current = currentScrollY;
     };
 
-    window.addEventListener('scroll', handleScroll, {
-      passive: true,
-    });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  /* =========================================================
-     DESKTOP INDICATOR
-  ========================================================= */
-
+  // Recalculate Desktop Indicator
   const updateDesktopIndicator = () => {
-    const element = desktopNavRefs.current.get(activeNav);
-
-    if (!element) {
+    const activeEl = desktopNavRefs.current.get(activeNav);
+    if (activeEl) {
       setDesktopIndicator((prev) => ({
-        ...prev,
-        opacity: 0,
+        left: activeEl.offsetLeft,
+        width: activeEl.offsetWidth,
+        height: activeEl.offsetHeight,
+        top: activeEl.offsetTop,
+        opacity: 1,
+        isMoving:
+          prev.opacity > 0 &&
+          (prev.left !== activeEl.offsetLeft || prev.width !== activeEl.offsetWidth),
       }));
-
-      return;
     }
-
-    setDesktopIndicator({
-      left: element.offsetLeft,
-      width: element.offsetWidth,
-      height: element.offsetHeight,
-      top: element.offsetTop,
-      opacity: 1,
-    });
   };
 
-  /* =========================================================
-     MOBILE ACTIVE ID
-  ========================================================= */
-
-  const getMobileActiveId = () => {
-    /*
-      When More drawer is open,
-      More button stays active.
-    */
-
-    if (isMobileMoreOpen) {
-      return 'More';
-    }
-
-    if (activeNav === 'Home') {
-      return 'Home';
-    }
-
-    if (activeNav === 'Trending') {
-      return 'Trending';
-    }
-
-    if (activeNav === 'Random') {
-      return 'Random';
-    }
-
-    if (activeNav === 'Saved') {
-      return 'Saved';
-    }
-
-    /*
-      Latest / Categories are inside More.
-    */
-
-    if (
-      activeNav === 'Latest' ||
-      activeNav === 'Categories'
-    ) {
-      return 'More';
-    }
-
-    return 'Home';
-  };
-
-  /* =========================================================
-     MOBILE INDICATOR
-     ROBUST MOBILE BROWSER POSITIONING
-  ========================================================= */
-
+  // Recalculate Mobile Bottom Indicator based on exact DOM Button Offset
   const updateMobileIndicator = () => {
-    const targetId = getMobileActiveId();
-
-    const button = mobileNavRefs.current.get(targetId);
+    const targetId =
+      activeNav === 'Saved'
+        ? 'Saved'
+        : activeNav === 'Home' || activeNav === 'Trending' || activeNav === 'Random'
+        ? activeNav
+        : 'More';
+    const activeBtn = mobileNavRefs.current.get(targetId);
     const container = mobileNavContainerRef.current;
 
-    if (!button || !container) {
-      return;
-    }
+    if (!activeBtn || !container) return;
 
-    const buttonRect = button.getBoundingClientRect();
+    const buttonRect = activeBtn.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
 
     const left = buttonRect.left - containerRect.left;
     const top = buttonRect.top - containerRect.top;
 
-    setMobileIndicator((prev) => ({
-      ...prev,
-      left,
-      width: buttonRect.width,
-      height: buttonRect.height,
-      top,
-      opacity: 1,
-    }));
+    setMobileIndicator((prev) => {
+      if (prev.isMoving) return prev; // Avoid interrupting active slide motion
+
+      return {
+        ...prev,
+        left,
+        width: buttonRect.width,
+        height: buttonRect.height,
+        top,
+        opacity: 1,
+      };
+    });
   };
 
-  /* =========================================================
-     UPDATE INDICATORS
-  ========================================================= */
-
   useEffect(() => {
-    const update = () => {
-      updateDesktopIndicator();
-
-      requestAnimationFrame(() => {
-        updateMobileIndicator();
-      });
-    };
-
-    const timer = window.setTimeout(update, 80);
+    updateDesktopIndicator();
+    requestAnimationFrame(() => {
+      updateMobileIndicator();
+    });
 
     const handleResize = () => {
-      update();
+      updateDesktopIndicator();
+      updateMobileIndicator();
     };
 
     window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.clearTimeout(timer);
-
-      window.removeEventListener(
-        'resize',
-        handleResize
-      );
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, [activeNav, isMobileMoreOpen]);
-
-  /* =========================================================
-     MOBILE BROWSER / VISUAL VIEWPORT
-  ========================================================= */
-
-  useEffect(() => {
-    const handleViewportResize = () => {
-      requestAnimationFrame(() => {
-        updateMobileIndicator();
-      });
-    };
-
-    window.visualViewport?.addEventListener(
-      'resize',
-      handleViewportResize
-    );
-
-    window.visualViewport?.addEventListener(
-      'scroll',
-      handleViewportResize
-    );
-
-    return () => {
-      window.visualViewport?.removeEventListener(
-        'resize',
-        handleViewportResize
-      );
-
-      window.visualViewport?.removeEventListener(
-        'scroll',
-        handleViewportResize
-      );
-    };
-  }, [activeNav, isMobileMoreOpen]);
-
-  /* =========================================================
-     CLEANUP TIMER
-  ========================================================= */
-
-  useEffect(() => {
-    return () => {
-      if (mobileIndicatorTimer.current !== null) {
-        window.clearTimeout(
-          mobileIndicatorTimer.current
-        );
-
-        mobileIndicatorTimer.current = null;
-      }
-    };
-  }, []);
-
-  /* =========================================================
-     MAIN NAVIGATION HANDLER
-  ========================================================= */
 
   const handleNavClick = (id: string) => {
-    /*
-      Random
-    */
-
     if (id === 'Random') {
       onNavChange?.('Random');
       onRandomClick?.();
-
-      setIsMobileMoreOpen(false);
+      setIsMobileMenuOpen(false);
       setIsCategoryDropdownOpen(false);
-
       return;
     }
-
-    /*
-      More
-    */
 
     if (id === 'More') {
-      setIsMobileMoreOpen((prev) => !prev);
-
+      setIsMobileMenuOpen((prev) => !prev);
       return;
     }
 
-    /*
-      Normal navigation
-    */
-
     onNavChange?.(id);
-
-    setIsMobileMoreOpen(false);
+    setIsMobileMenuOpen(false);
 
     if (id !== 'Categories') {
       setIsCategoryDropdownOpen(false);
     }
   };
 
-  /* =========================================================
-     MOBILE NAV CLICK
-  ========================================================= */
-
   const handleMobileNavClick = (
     id: string,
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     const button = event.currentTarget;
+    const container = mobileNavContainerRef.current;
 
-    /* =====================================================
-       MORE
-    ===================================================== */
+    if (!container) return;
+
+    const buttonRect = button.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    const newLeft = buttonRect.left - containerRect.left;
+    const newTop = buttonRect.top - containerRect.top;
+    const previousLeft = mobileIndicator.left;
+    const distance = Math.abs(newLeft - previousLeft);
+
+    const stretch = distance > 10 ? Math.min(1.28, 1 + distance / 220) : 1;
 
     if (id === 'More') {
-      const willOpen = !isMobileMoreOpen;
-
-      setIsMobileMoreOpen(willOpen);
-
-      /*
-        Immediately position bubble on More.
-      */
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const target =
-            mobileNavRefs.current.get('More');
-
-          const container =
-            mobileNavContainerRef.current;
-
-          if (!target || !container) {
-            return;
-          }
-
-          const targetRect =
-            target.getBoundingClientRect();
-
-          const containerRect =
-            container.getBoundingClientRect();
-
-          setMobileIndicator((prev) => ({
-            ...prev,
-            left:
-              targetRect.left -
-              containerRect.left,
-            width: targetRect.width,
-            height: targetRect.height,
-            top:
-              targetRect.top -
-              containerRect.top,
-            opacity: 1,
-            scaleX: 1,
-            scaleY: 1,
-            isMoving: false,
-          }));
-        });
-      });
-
-      return;
-    }
-
-    /* =====================================================
-       GET CURRENT BUBBLE POSITION
-    ===================================================== */
-
-    const container =
-      mobileNavContainerRef.current;
-
-    if (!container) {
-      return;
-    }
-
-    const buttonRect =
-      button.getBoundingClientRect();
-
-    const containerRect =
-      container.getBoundingClientRect();
-
-    const newLeft =
-      buttonRect.left - containerRect.left;
-
-    const newTop =
-      buttonRect.top - containerRect.top;
-
-    const previousLeft =
-      mobileIndicator.left;
-
-    const distance =
-      Math.abs(newLeft - previousLeft);
-
-    const stretch =
-      distance > 10
-        ? Math.min(
-            1.20,
-            1 + distance / 300
-          )
-        : 1;
-
-    /* =====================================================
-       RANDOM
-    ===================================================== */
-
-    if (id === 'Random') {
+      setIsMobileMenuOpen((prev) => !prev);
+    } else if (id === 'Random') {
       onNavChange?.('Random');
       onRandomClick?.();
-
-      setIsMobileMoreOpen(false);
-    }
-
-    /* =====================================================
-       HOME / TRENDING / SAVED
-    ===================================================== */
-
-    else {
+      setIsMobileMenuOpen(false);
+    } else {
       onNavChange?.(id);
-      setIsMobileMoreOpen(false);
+      setIsMobileMenuOpen(false);
     }
 
-    /* =====================================================
-       LIQUID STRETCH
-    ===================================================== */
-
+    // Set fluid liquid stretch animation from OLD position to NEW position
     setMobileIndicator({
       left: newLeft,
       width: buttonRect.width,
@@ -578,154 +251,56 @@ export default function Navbar({
       isMoving: distance > 10,
     });
 
-    /*
-      Clear previous timer safely.
-    */
-
-    if (mobileIndicatorTimer.current !== null) {
-      window.clearTimeout(
-        mobileIndicatorTimer.current
-      );
-    }
-
-    mobileIndicatorTimer.current =
-      window.setTimeout(() => {
-        setMobileIndicator((prev) => ({
-          ...prev,
-          scaleX: 1,
-          scaleY: 1,
-          isMoving: false,
-        }));
-
-        mobileIndicatorTimer.current = null;
-      }, 450);
+    setTimeout(() => {
+      setMobileIndicator((prev) => ({
+        ...prev,
+        scaleX: 1,
+        scaleY: 1,
+        isMoving: false,
+      }));
+    }, 480);
   };
 
-  /* =========================================================
-     CATEGORY SELECT
-  ========================================================= */
-
-  const handleCategorySelect = (
-    category: string
-  ) => {
-    onSelectCategory?.(category);
-
-    setIsCategoryDropdownOpen(false);
-    setIsMobileMoreOpen(false);
-
-    onNavChange?.('Categories');
-
-    requestAnimationFrame(() => {
-      const element =
-        document.getElementById('categories');
-
-      if (element) {
-        element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      }
-    });
+  const getMobileActiveId = () => {
+    if (isMobileMoreOpen) return 'More';
+    if (activeNav === 'Home') return 'Home';
+    if (activeNav === 'Trending') return 'Trending';
+    if (activeNav === 'Random') return 'Random';
+    if (activeNav === 'Saved') return 'Saved';
+    if (activeNav === 'Latest' || activeNav === 'Categories') return 'More';
+    return 'Home';
   };
 
-  /* =========================================================
-     MOBILE ACTIVE
-  ========================================================= */
-
-  const mobileActiveId =
-    getMobileActiveId();
-
-  /* =========================================================
-     RENDER
-  ========================================================= */
+  const mobileActiveId = getMobileActiveId();
 
   return (
     <>
-      {/* =====================================================
-          DESKTOP / TOP NAVBAR
-      ===================================================== */}
-
+      {/* ================================================== */}
+      {/* FLOATING TOP NAVBAR (SLIDES UP ON SCROLL DOWN) */}
+      {/* ================================================== */}
       <header
-        className={`
-          sticky top-3 z-50
-          px-2 sm:px-6 lg:px-8
-          max-w-7xl mx-auto
-          w-full
-          transition-all duration-300
-          transform
-          ${
-            showTopNav
-              ? 'translate-y-0 opacity-100'
-              : '-translate-y-24 opacity-0 pointer-events-none'
-          }
-        `}
+        className={`sticky top-3 z-50 px-2 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full transition-all duration-300 transform ${
+          showTopNav ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0 pointer-events-none'
+        }`}
       >
-        <div
-          className="
-            glass-navbar
-            rounded-full
-            px-3.5 sm:px-6
-            py-2
-            flex items-center
-            justify-between
-            gap-2
-            overflow-visible
-            shadow-xl
-          "
-        >
-          {/* =================================================
-              MOBILE SEARCH
-          ================================================= */}
-
+        <div className="glass-navbar rounded-full px-3.5 sm:px-6 py-2 flex items-center justify-between gap-2 overflow-hidden shadow-xl">
+          
+          {/* SEARCH ACTIVE STATE ON MOBILE */}
           {isSearchExpanded ? (
-            <div
-              className="
-                flex-1 flex items-center gap-2
-                bg-white/95
-                rounded-full
-                border border-[#23212C]/20
-                px-3 py-1.5
-                shadow-inner
-                w-full
-                overflow-hidden
-              "
-            >
+            <div className="flex-1 flex items-center gap-2 bg-white/95 rounded-full border border-[#23212C]/20 px-3 py-1.5 shadow-inner transition-all duration-300 w-full overflow-hidden animate-fade-in">
               <Search className="w-4 h-4 text-[#23212C]/70 shrink-0" />
-
               <input
                 type="text"
                 autoFocus
                 placeholder="Search 4K pins, cars, anime..."
                 value={searchQuery}
-                onChange={(e) =>
-                  onSearchChange?.(
-                    e.target.value
-                  )
-                }
-                className="
-                  w-full
-                  bg-transparent
-                  text-xs
-                  font-bold
-                  text-[#23212C]
-                  outline-none
-                  placeholder-slate-500
-                "
+                onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+                className="w-full bg-transparent text-xs font-bold text-[#23212C] focus:outline-none placeholder-slate-500"
               />
-
               <button
                 type="button"
-                onClick={() =>
-                  setIsSearchExpanded(false)
-                }
-                className="
-                  p-1
-                  rounded-full
-                  text-[#23212C]/70
-                  hover:text-[#23212C]
-                  hover:bg-slate-200
-                  shrink-0
-                "
+                onClick={() => setIsSearchExpanded(false)}
+                className="p-1 rounded-full text-[#23212C]/70 hover:text-[#23212C] hover:bg-slate-200 shrink-0"
                 aria-label="Close Search"
               >
                 <X className="w-4 h-4" />
@@ -733,371 +308,145 @@ export default function Navbar({
             </div>
           ) : (
             <>
-              {/* =================================================
-                  LOGO
-              ================================================= */}
-
+              {/* LEFT: Logo & Brand */}
               <Link
                 href="/"
-                onClick={() =>
-                  handleNavClick('Home')
-                }
-                className="
-                  flex items-center gap-2
-                  group shrink-0
-                  pr-2.5 sm:pr-4
-                  border-r border-[#23212C]/15
-                "
+                onClick={() => handleNavClick('Home')}
+                className="flex items-center gap-2 group shrink-0 pr-2.5 sm:pr-4 border-r border-[#23212C]/15"
               >
-                <div
-                  className="
-                    w-8 h-8 sm:w-9 sm:h-9
-                    rounded-full
-                    bg-[#23212C]
-                    p-0.5
-                    shadow-md
-                    group-hover:scale-105
-                    transition-transform
-                  "
-                >
-                  <div
-                    className="
-                      w-full h-full
-                      bg-[#23212C]
-                      rounded-full
-                      flex items-center justify-center
-                    "
-                  >
-                    <Sparkles
-                      className="
-                        w-4 h-4
-                        text-[#F1FEC8]
-                        group-hover:rotate-12
-                        transition-transform
-                      "
-                    />
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#23212C] p-0.5 shadow-md group-hover:scale-105 transition-transform duration-300">
+                  <div className="w-full h-full bg-[#23212C] rounded-full flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-[#F1FEC8] group-hover:rotate-12 transition-transform duration-300" />
                   </div>
                 </div>
-
                 <div>
-                  <span
-                    className="
-                      text-sm sm:text-lg
-                      font-extrabold
-                      text-[#23212C]
-                      tracking-tight
-                    "
-                  >
-                    Wallpapers.
+                  <span className="text-sm sm:text-lg font-extrabold text-[#23212C] tracking-tight">
+                    Wallpapers<span className="text-slate-800">.</span>
                   </span>
-
-                  <span
-                    className="
-                      hidden xl:block
-                      text-[9px]
-                      font-bold
-                      text-slate-800
-                      uppercase
-                      tracking-widest
-                      -mt-1
-                    "
-                  >
+                  <span className="hidden xl:block text-[9px] font-bold text-slate-800 uppercase tracking-widest -mt-1">
                     4K & Ultra HD
                   </span>
                 </div>
               </Link>
 
-              {/* =================================================
-                  DESKTOP CENTER NAV
-              ================================================= */}
-
-              <nav
-                className="
-                  hidden lg:flex
-                  items-center
-                  gap-1
-                  relative
-                  py-1 px-1
-                "
-              >
-                {/* DESKTOP LIQUID INDICATOR */}
-
+              {/* CENTER: Floating Desktop Navigation */}
+              <nav className="hidden lg:flex items-center gap-1 relative py-1 px-1">
                 <div
-                  className="
-                    absolute
-                    bg-[#23212C]
-                    shadow-md
-                    shadow-black/20
-                    pointer-events-none
-                    z-0
-                  "
+                  className="absolute bg-[#23212C] shadow-md shadow-black/20 pointer-events-none will-change-transform"
                   style={{
-                    transform: `
-                      translate3d(
-                        ${desktopIndicator.left}px,
-                        ${desktopIndicator.top}px,
-                        0
-                      )
-                    `,
-
-                    width:
-                      `${desktopIndicator.width}px`,
-
-                    height:
-                      `${desktopIndicator.height}px`,
-
-                    opacity:
-                      desktopIndicator.opacity,
-
-                    borderRadius:
-                      '9999px',
-
+                    transform: `translate3d(${desktopIndicator.left}px, ${desktopIndicator.top}px, 0) ${
+                      desktopIndicator.isMoving ? 'scaleX(1.12) scaleY(0.88)' : 'scale(1)'
+                    }`,
+                    width: `${desktopIndicator.width}px`,
+                    height: `${desktopIndicator.height}px`,
+                    opacity: desktopIndicator.opacity,
+                    borderRadius: desktopIndicator.isMoving ? '22px 12px 24px 10px' : '9999px',
                     transition:
-                      'all 450ms cubic-bezier(0.34, 1.45, 0.64, 1)',
+                      'transform 550ms cubic-bezier(0.34, 1.45, 0.64, 1), width 550ms cubic-bezier(0.34, 1.45, 0.64, 1), height 550ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 550ms ease-out, opacity 300ms ease',
                   }}
                 />
 
-                {desktopNavItems.map(
-                  (item) => {
-                    const Icon = item.icon;
+                {desktopNavItems.map((item) => {
+                  const isActive = activeNav === item.id;
+                  const Icon = item.icon;
 
-                    const isActive =
-                      activeNav === item.id;
-
-                    if (
-                      item.hasDropdown
-                    ) {
-                      return (
-                        <div
-                          key={item.id}
-                          className="relative"
-                          ref={(el) => {
-                            if (el) {
-                              desktopNavRefs.current.set(
-                                item.id,
-                                el
-                              );
-                            } else {
-                              desktopNavRefs.current.delete(
-                                item.id
-                              );
-                            }
-                          }}
-                        >
-                          <button
-                            type="button"
-                            aria-pressed={
-                              isActive
-                            }
-                            onClick={() => {
-                              setIsCategoryDropdownOpen(
-                                (prev) =>
-                                  !prev
-                              );
-
-                              onNavChange?.(
-                                'Categories'
-                              );
-                            }}
-                            className={`
-                              relative z-10
-                              flex items-center gap-1.5
-                              px-3.5 py-1.5
-                              rounded-full
-                              text-xs font-bold
-                              transition-colors duration-200
-                              ${
-                                isActive
-                                  ? 'text-[#F1FEC8]'
-                                  : 'text-[#23212C]/80 hover:text-[#23212C] hover:bg-slate-900/10'
-                              }
-                            `}
-                          >
-                            <Icon className="w-3.5 h-3.5" />
-
-                            <span>
-                              {item.label}
-                            </span>
-
-                            <ChevronDown
-                              className={`
-                                w-3 h-3
-                                transition-transform
-                                ${
-                                  isCategoryDropdownOpen
-                                    ? 'rotate-180'
-                                    : ''
-                                }
-                              `}
-                            />
-                          </button>
-
-                          {isCategoryDropdownOpen && (
-                            <div
-                              className="
-                                absolute
-                                left-0
-                                top-full
-                                mt-3
-                                w-64
-                                bg-[#23212C]/95
-                                border border-slate-700/60
-                                rounded-3xl
-                                shadow-2xl
-                                backdrop-blur-2xl
-                                p-3
-                                z-[100]
-                                grid grid-cols-2
-                                gap-1
-                              "
-                            >
-                              {CATEGORIES.map(
-                                (cat) => (
-                                  <button
-                                    key={cat}
-                                    type="button"
-                                    onClick={() =>
-                                      handleCategorySelect(
-                                        cat
-                                      )
-                                    }
-                                    className={`
-                                      text-left
-                                      px-3 py-2
-                                      rounded-xl
-                                      text-xs
-                                      transition-all
-                                      ${
-                                        activeCategory ===
-                                        cat
-                                          ? 'bg-[#F1FEC8] text-[#23212C] font-bold'
-                                          : 'text-slate-300 hover:bg-slate-800 hover:text-[#F1FEC8]'
-                                      }
-                                    `}
-                                  >
-                                    {cat}
-                                  </button>
-                                )
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    }
-
+                  if (item.hasDropdown) {
                     return (
-                      <button
-                        key={item.id}
-                        ref={(el) => {
-                          if (el) {
-                            desktopNavRefs.current.set(
-                              item.id,
-                              el
-                            );
-                          } else {
-                            desktopNavRefs.current.delete(
-                              item.id
-                            );
-                          }
-                        }}
-                        type="button"
-                        aria-current={
-                          isActive
-                            ? 'page'
-                            : undefined
-                        }
-                        onClick={() =>
-                          handleNavClick(
-                            item.id
-                          )
-                        }
-                        className={`
-                          relative z-10
-                          flex items-center gap-1.5
-                          px-3.5 py-1.5
-                          rounded-full
-                          text-xs font-bold
-                          transition-colors duration-200
-                          ${
+                      <div key={item.id} className="relative">
+                        <button
+                          ref={(el) => {
+                            if (el) desktopNavRefs.current.set(item.id, el);
+                            else desktopNavRefs.current.delete(item.id);
+                          }}
+                          type="button"
+                          aria-pressed={isActive}
+                          onClick={() => {
+                            setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
+                            handleNavClick(item.id);
+                          }}
+                          className={`relative z-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-colors duration-200 ${
                             isActive
                               ? 'text-[#F1FEC8]'
                               : 'text-[#23212C]/80 hover:text-[#23212C] hover:bg-slate-900/10'
-                          }
-                        `}
-                      >
-                        <Icon className="w-3.5 h-3.5" />
+                          }`}
+                        >
+                          <Icon className="w-3.5 h-3.5" />
+                          <span>{item.label}</span>
+                          <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isCategoryDropdownOpen ? 'rotate-180' : ''}`} />
+                        </button>
 
-                        <span>
-                          {item.label}
-                        </span>
-                      </button>
+                        {isCategoryDropdownOpen && (
+                          <div className="absolute left-0 mt-3 w-64 bg-[#23212C]/95 border border-slate-700/60 rounded-3xl shadow-2xl backdrop-blur-2xl p-3 z-50 grid grid-cols-2 gap-1 animate-fade-in">
+                            {CATEGORIES.map((cat) => (
+                              <button
+                                key={cat}
+                                type="button"
+                                onClick={() => {
+                                  if (onSelectCategory) onSelectCategory(cat);
+                                  setIsCategoryDropdownOpen(false);
+                                  const categoriesElement = document.getElementById('categories');
+                                  if (categoriesElement) {
+                                    categoriesElement.scrollIntoView({ behavior: 'smooth' });
+                                  }
+                                }}
+                                className={`text-left px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                                  activeCategory === cat
+                                    ? 'bg-[#F1FEC8] text-[#23212C] font-bold shadow-md'
+                                    : 'text-slate-300 hover:bg-slate-800 hover:text-[#F1FEC8]'
+                                }`}
+                              >
+                                {cat}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     );
                   }
-                )}
+
+                  return (
+                    <button
+                      key={item.id}
+                      ref={(el) => {
+                        if (el) desktopNavRefs.current.set(item.id, el);
+                        else desktopNavRefs.current.delete(item.id);
+                      }}
+                      type="button"
+                      aria-current={isActive ? 'page' : undefined}
+                      onClick={() => handleNavClick(item.id)}
+                      className={`relative z-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-colors duration-200 ${
+                        isActive
+                          ? 'text-[#F1FEC8]'
+                          : 'text-[#23212C]/80 hover:text-[#23212C] hover:bg-slate-900/10'
+                      }`}
+                    >
+                      <Icon className={`w-3.5 h-3.5 ${item.iconColor || ''}`} />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
               </nav>
 
-              {/* =================================================
-                  RIGHT ACTIONS
-              ================================================= */}
-
-              <div
-                className="
-                  flex items-center
-                  gap-1.5 sm:gap-2
-                  pl-2 sm:pl-4
-                  border-l border-[#23212C]/15
-                  shrink-0
-                "
-              >
+              {/* RIGHT: Search Toggle & Favorites Counter */}
+              <div className="flex items-center gap-1.5 sm:gap-2 pl-2 sm:pl-4 border-l border-[#23212C]/15 shrink-0">
                 <button
                   type="button"
-                  onClick={() =>
-                    setIsSearchExpanded(true)
-                  }
-                  className="
-                    p-2
-                    rounded-full
-                    text-[#23212C]
-                    hover:bg-slate-900/10
-                    transition-all
-                  "
-                  aria-label="Search"
+                  onClick={() => setIsSearchExpanded(true)}
+                  className="p-2 rounded-full text-[#23212C] hover:bg-slate-900/10 transition-all flex items-center gap-1 text-xs font-bold"
+                  aria-label="Search Pins"
                 >
-                  <Search className="w-4 h-4" />
+                  <Search className="w-4 h-4 text-[#23212C]" />
                 </button>
 
                 <button
                   type="button"
-                  onClick={() =>
-                    handleNavClick('Saved')
-                  }
-                  className="
-                    relative
-                    p-2
-                    rounded-full
-                    text-[#23212C]
-                    hover:bg-slate-900/10
-                    transition-all
-                  "
-                  aria-label="Saved Favorites"
+                  onClick={() => handleNavClick('Saved')}
+                  className="relative p-2 rounded-full text-[#23212C] hover:bg-slate-900/10 transition-all flex items-center justify-center"
+                  aria-label="Favorites"
                 >
-                  <Heart className="w-4 h-4" />
-
+                  <Heart className="w-4 h-4 text-[#23212C]" />
                   {favoriteCount > 0 && (
-                    <span
-                      className="
-                        absolute
-                        -top-0.5
-                        -right-0.5
-                        w-4 h-4
-                        bg-[#23212C]
-                        text-[#F1FEC8]
-                        text-[9px]
-                        font-bold
-                        rounded-full
-                        flex items-center justify-center
-                      "
-                    >
+                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#23212C] text-[#F1FEC8] text-[9px] font-bold rounded-full flex items-center justify-center">
                       {favoriteCount}
                     </span>
                   )}
@@ -1108,355 +457,107 @@ export default function Navbar({
         </div>
       </header>
 
-      {/* =======================================================
-          MOBILE BOTTOM NAVBAR
-      ======================================================= */}
-
+      {/* ========================================================================= */}
+      {/* MOBILE FLOATING MAGIC LIQUID NAVBAR (OVERFLOW VISIBLE - PROTRUDING BUBBLE) */}
+      {/* ========================================================================= */}
       <div
-        className={`
-          lg:hidden
-          fixed
-          bottom-3
-          left-3
-          right-3
-          z-[90]
-          max-w-md
-          mx-auto
-          transition-all duration-300
-          ${
-            showBottomNav
-              ? 'translate-y-0 opacity-100'
-              : 'translate-y-28 opacity-0 pointer-events-none'
-          }
-        `}
+        className={`lg:hidden fixed bottom-3 left-3 right-3 z-50 max-w-md mx-auto transition-all duration-300 transform ${
+          showBottomNav ? 'translate-y-0 opacity-100' : 'translate-y-28 opacity-0 pointer-events-none'
+        }`}
       >
-        {/* =====================================================
-            MORE DRAWER
-        ===================================================== */}
-
-        {isMobileMoreOpen && (
+        <div
+          ref={mobileNavContainerRef}
+          className="glass-navbar-dark rounded-full px-2 py-1.5 flex items-center justify-around relative shadow-2xl overflow-visible touch-manipulation isolate"
+        >
+          {/* Protruding Floating Milky-White Glass Active Bubble (Elevated -18px above top edge) */}
           <div
-            className="
-              absolute
-              bottom-16
-              left-0
-              right-0
-              bg-[#23212C]/96
-              border border-slate-700/60
-              rounded-3xl
-              p-4
-              shadow-2xl
-              backdrop-blur-2xl
-              text-xs
-              z-[100]
-            "
-          >
-            <div
-              className="
-                flex items-center
-                justify-between
-                border-b
-                border-slate-800
-                pb-3
-                mb-3
-              "
-            >
-              <span
-                className="
-                  font-bold
-                  text-white
-                  uppercase
-                  tracking-wider
-                  text-[11px]
-                "
-              >
-                More Navigation
-              </span>
+            className="absolute liquid-bubble-raised-milky pointer-events-none will-change-transform z-0"
+            style={{
+              transform: `translate3d(${mobileIndicator.left}px, -18px, 0) ${
+                mobileIndicator.isMoving ? `scaleX(${mobileIndicator.scaleX}) scaleY(${mobileIndicator.scaleY})` : 'scale(1)'
+              }`,
+              width: `${mobileIndicator.width}px`,
+              height: `${mobileIndicator.height + 14}px`,
+              opacity: mobileIndicator.opacity,
+              borderRadius: mobileIndicator.isMoving ? '28px 12px 30px 10px' : '9999px',
+              transition:
+                'transform 480ms cubic-bezier(0.34, 1.45, 0.64, 1), width 480ms cubic-bezier(0.34, 1.45, 0.64, 1), height 480ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 480ms ease, opacity 250ms ease',
+              transformOrigin: 'center center',
+            }}
+          />
 
+          {mobileNavItems.map((item) => {
+            const isActive = mobileActiveId === item.id;
+            const Icon = item.icon;
+
+            return (
               <button
+                key={item.id}
+                ref={(el) => {
+                  if (el) mobileNavRefs.current.set(item.id, el);
+                  else mobileNavRefs.current.delete(item.id);
+                }}
                 type="button"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
-                className="
-                  p-1
-                  text-slate-400
-                  hover:text-white
-                "
-                aria-label="Close More Navigation"
+                aria-pressed={isActive}
+                onClick={(event) => handleMobileNavClick(item.id, event)}
+                className={`relative z-10 flex flex-col items-center justify-center gap-0.5 px-3 py-1.5 min-w-[58px] rounded-full transition-all duration-300 select-none ${
+                  isActive
+                    ? 'text-[#23212C] font-black -translate-y-2 scale-105'
+                    : 'text-slate-300 hover:text-white'
+                }`}
               >
+                <Icon className="w-4 h-4 transition-transform duration-300" />
+                <span className="text-[10px] font-extrabold tracking-tight whitespace-nowrap">
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Mobile "More" Drawer Menu */}
+        {isMobileMoreOpen && (
+          <div className="absolute bottom-16 left-0 right-0 bg-[#23212C]/95 border border-slate-700/60 rounded-3xl p-4 shadow-2xl backdrop-blur-2xl text-xs space-y-4 animate-fade-in z-50">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+              <span className="font-bold text-white uppercase tracking-wider text-[11px]">More Navigation</span>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="p-1 text-slate-400 hover:text-white">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <button
-                type="button"
-                onClick={() => {
-                  onNavChange?.('Latest');
-
-                  setIsMobileMoreOpen(false);
-
-                  window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth',
-                  });
+                onClick={(e) => {
+                  handleNavClick('Latest');
                 }}
-                className="
-                  flex items-center gap-2
-                  p-3
-                  rounded-xl
-                  bg-slate-900
-                  border border-slate-800
-                  text-slate-200
-                  hover:bg-slate-800
-                  transition-colors
-                "
+                className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:bg-slate-800"
               >
-                <Clock className="w-4 h-4" />
-                Latest Pins
+                <Clock className="w-4 h-4 text-indigo-400" /> Latest Pins
               </button>
 
               <button
-                type="button"
-                onClick={() => {
-                  onNavChange?.('Categories');
-
-                  setIsMobileMoreOpen(false);
-
-                  requestAnimationFrame(() => {
-                    document
-                      .getElementById('categories')
-                      ?.scrollIntoView({
-                        behavior: 'smooth',
-                      });
-                  });
+                onClick={(e) => {
+                  handleNavClick('Categories');
                 }}
-                className="
-                  flex items-center gap-2
-                  p-3
-                  rounded-xl
-                  bg-slate-900
-                  border border-slate-800
-                  text-slate-200
-                  hover:bg-slate-800
-                  transition-colors
-                "
+                className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:bg-slate-800"
               >
-                <Grid className="w-4 h-4" />
-                Categories
+                <Grid className="w-4 h-4 text-[#F1FEC8]" /> Categories
               </button>
             </div>
 
-            <div
-              className="
-                pt-3
-                mt-3
-                border-t
-                border-slate-800/80
-                flex flex-wrap
-                items-center
-                justify-between
-                text-[11px]
-                text-slate-400
-                gap-3
-              "
-            >
-              <Link
-                href="/privacy-policy"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
-                className="
-                  hover:text-[#F1FEC8]
-                  flex items-center gap-1
-                "
-              >
-                <ShieldCheck className="w-3 h-3" />
-                Privacy
+            <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] text-slate-400 gap-2">
+              <Link href="/privacy-policy" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#F1FEC8] flex items-center gap-1">
+                <ShieldCheck className="w-3 h-3" /> Privacy
               </Link>
-
-              <Link
-                href="/terms-of-service"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
-                className="
-                  hover:text-[#F1FEC8]
-                  flex items-center gap-1
-                "
-              >
-                <FileText className="w-3 h-3" />
-                Terms
+              <Link href="/terms-of-service" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#F1FEC8] flex items-center gap-1">
+                <FileText className="w-3 h-3" /> Terms
               </Link>
-
-              <Link
-                href="/about"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
-                className="
-                  hover:text-[#F1FEC8]
-                  flex items-center gap-1
-                "
-              >
-                <Info className="w-3.5 h-3.5" />
-                About
+              <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#F1FEC8] flex items-center gap-1">
+                <Info className="w-3.5 h-3.5" /> About
               </Link>
             </div>
           </div>
         )}
-
-        {/* =====================================================
-            MOBILE BOTTOM NAV
-        ===================================================== */}
-
-        <div
-          ref={mobileNavContainerRef}
-          className="
-            glass-navbar-dark
-            rounded-full
-            px-2
-            py-1.5
-            flex
-            items-center
-            justify-around
-            relative
-            shadow-2xl
-            overflow-hidden
-            touch-manipulation
-            isolate
-          "
-        >
-          {/* ===================================================
-              MILKY LIQUID ACTIVE BUBBLE
-          =================================================== */}
-
-          <div
-            className="
-              absolute
-              liquid-bubble-raised-milky
-              pointer-events-none
-              will-change-transform
-              z-0
-            "
-            style={{
-              transform: `
-                translate3d(
-                  ${mobileIndicator.left}px,
-                  ${mobileIndicator.top}px,
-                  0
-                )
-                scaleX(${mobileIndicator.scaleX})
-                scaleY(${mobileIndicator.scaleY})
-              `,
-
-              width:
-                `${mobileIndicator.width}px`,
-
-              height:
-                `${mobileIndicator.height}px`,
-
-              opacity:
-                mobileIndicator.opacity,
-
-              borderRadius:
-                mobileIndicator.isMoving
-                  ? '28px 12px 28px 12px'
-                  : '9999px',
-
-              transition:
-                'transform 450ms cubic-bezier(0.34, 1.45, 0.64, 1), width 450ms cubic-bezier(0.34, 1.45, 0.64, 1), height 450ms cubic-bezier(0.34, 1.45, 0.64, 1), border-radius 450ms ease, opacity 250ms ease',
-
-              transformOrigin:
-                'center center',
-            }}
-          />
-
-          {/* ===================================================
-              MOBILE ITEMS
-          =================================================== */}
-
-          {mobileNavItems.map(
-            (item) => {
-              const Icon = item.icon;
-
-              const isActive =
-                mobileActiveId === item.id;
-
-              return (
-                <button
-                  key={item.id}
-                  ref={(el) => {
-                    if (el) {
-                      mobileNavRefs.current.set(
-                        item.id,
-                        el
-                      );
-                    } else {
-                      mobileNavRefs.current.delete(
-                        item.id
-                      );
-                    }
-                  }}
-                  type="button"
-                  aria-pressed={isActive}
-                  onClick={(event) =>
-                    handleMobileNavClick(
-                      item.id,
-                      event
-                    )
-                  }
-                  className={`
-                    relative
-                    z-10
-                    flex
-                    flex-col
-                    items-center
-                    justify-center
-                    gap-0.5
-                    px-3
-                    py-1.5
-                    min-w-[58px]
-                    rounded-full
-                    transition-colors
-                    duration-300
-                    select-none
-                    ${
-                      isActive
-                        ? 'text-[#23212C] font-black'
-                        : 'text-slate-300 hover:text-white'
-                    }
-                  `}
-                >
-                  <Icon
-                    className={`
-                      w-5 h-5
-                      transition-transform
-                      duration-300
-                      ${
-                        isActive
-                          ? 'scale-105'
-                          : ''
-                      }
-                    `}
-                  />
-
-                  <span
-                    className="
-                      text-[10px]
-                      font-extrabold
-                      tracking-tight
-                      whitespace-nowrap
-                    "
-                  >
-                    {item.label}
-                  </span>
-                </button>
-              );
-            }
-          )}
-        </div>
       </div>
     </>
   );
