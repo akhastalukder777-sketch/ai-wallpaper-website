@@ -127,19 +127,145 @@ a {
 
 
 /* ============================================================
-   GLASS TOP NAVBAR
+   DESKTOP TOP GLASS NAVBAR CAPSULE (SCREENSHOT 2)
 ============================================================ */
 
-.glass-navbar {
-  background: rgba(241, 254, 200, 0.52);
+.glass-navbar-desktop {
+  background: rgba(255, 255, 255, 0.42);
 
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
 
-  border: 1px solid rgba(35, 33, 44, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.65);
 
   box-shadow:
-    0 12px 32px -8px rgba(35, 33, 44, 0.12);
+    0 12px 36px rgba(35, 33, 44, 0.08),
+    inset 0 1px 2px rgba(255, 255, 255, 0.80);
+}
+
+
+/* ============================================================
+   INDIVIDUAL NAVBAR PILL CHIPS (SCREENSHOT 2)
+============================================================ */
+
+.nav-pill-chip {
+  background: rgba(255, 255, 255, 0.55);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255, 255, 255, 0.75);
+
+  box-shadow:
+    0 4px 12px rgba(35, 33, 44, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.80);
+
+  color: #23212C;
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-pill-chip:hover {
+  background: rgba(255, 255, 255, 0.82);
+
+  border-color: rgba(255, 255, 255, 0.95);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 16px rgba(35, 33, 44, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95);
+}
+
+.nav-pill-chip-active {
+  background: rgba(255, 255, 255, 0.95);
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+
+  box-shadow:
+    0 6px 18px rgba(35, 33, 44, 0.10),
+    inset 0 1px 2px rgba(255, 255, 255, 1);
+
+  color: #23212C;
+}
+
+
+/* ============================================================
+   GLASS ICON BUTTONS (SEARCH / SAVED)
+============================================================ */
+
+.glass-icon-btn {
+  background: rgba(255, 255, 255, 0.55);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255, 255, 255, 0.75);
+
+  box-shadow:
+    0 4px 12px rgba(35, 33, 44, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.80);
+
+  color: #23212C;
+  transition: all 200ms ease;
+}
+
+.glass-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.85);
+
+  border-color: rgba(255, 255, 255, 0.95);
+
+  transform: scale(1.05);
+}
+
+
+/* ============================================================
+   EXPLORE CATEGORIES GLASS PILLS (SCREENSHOT 2)
+============================================================ */
+
+.glass-category-pill {
+  background: rgba(255, 255, 255, 0.50);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255, 255, 255, 0.70);
+
+  box-shadow:
+    0 4px 14px rgba(35, 33, 44, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.75);
+
+  color: #23212C;
+  transition: all 220ms ease;
+}
+
+.glass-category-pill:hover {
+  background: rgba(255, 255, 255, 0.80);
+
+  border-color: rgba(255, 255, 255, 0.90);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 18px rgba(35, 33, 44, 0.08);
+}
+
+.glass-category-pill-active {
+  background: rgba(255, 255, 255, 0.95);
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+
+  box-shadow:
+    0 6px 20px rgba(35, 33, 44, 0.12),
+    inset 0 1px 2px rgba(255, 255, 255, 1);
+
+  color: #23212C;
+  font-weight: 800;
 }
 
 
@@ -185,18 +311,6 @@ a {
 /* ============================================================
    MOBILE ACTIVE MOVING INDICATOR
 ============================================================ */
-
-/*
-  IMPORTANT:
-
-  This is NOT a Random-only bubble.
-
-  It is ONE active indicator that smoothly moves between:
-
-  Home -> Trending -> Random -> Saved -> More
-
-  Therefore Random no longer has a permanently raised bubble.
-*/
 
 .mobile-active-indicator {
   transform:

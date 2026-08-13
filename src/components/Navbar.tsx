@@ -44,31 +44,13 @@ export default function Navbar({
   onRandomClick,
 }: NavbarProps) {
   const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
-  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] =
-    useState(false);
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   const [showTopNav, setShowTopNav] = useState(true);
   const [showBottomNav, setShowBottomNav] = useState(true);
 
   const lastScrollY = useRef(0);
-
-  /* ============================================================
-     DESKTOP INDICATOR
-  ============================================================ */
-
-  const desktopNavRefs = useRef<
-    Map<string, HTMLButtonElement | HTMLAnchorElement>
-  >(new Map());
-
-  const [desktopIndicator, setDesktopIndicator] = useState({
-    left: 0,
-    width: 0,
-    height: 0,
-    top: 0,
-    opacity: 0,
-    isMoving: false,
-  });
 
   /* ============================================================
      NAV ITEMS
@@ -173,42 +155,6 @@ export default function Navbar({
   }, []);
 
   /* ============================================================
-     DESKTOP INDICATOR UPDATE
-  ============================================================ */
-
-  const updateDesktopIndicator = () => {
-    const activeEl = desktopNavRefs.current.get(activeNav);
-
-    if (!activeEl) return;
-
-    setDesktopIndicator((prev) => ({
-      left: activeEl.offsetLeft,
-      width: activeEl.offsetWidth,
-      height: activeEl.offsetHeight,
-      top: activeEl.offsetTop,
-      opacity: 1,
-      isMoving:
-        prev.opacity > 0 &&
-        (prev.left !== activeEl.offsetLeft ||
-          prev.width !== activeEl.offsetWidth),
-    }));
-  };
-
-  useEffect(() => {
-    updateDesktopIndicator();
-
-    const handleResize = () => {
-      updateDesktopIndicator();
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [activeNav]);
-
-  /* ============================================================
      MOBILE ACTIVE ID
   ============================================================ */
 
@@ -231,19 +177,9 @@ export default function Navbar({
 
   const mobileActiveId = getMobileActiveId();
 
-  /*
-   * IMPORTANT:
-   * This replaces the old fixed Random bubble.
-   *
-   * One single indicator moves between all 5 items.
-   * So Random has NO separate raised circle.
-   */
-
   const mobileActiveIndex = Math.max(
     0,
-    mobileNavItems.findIndex(
-      (item) => item.id === mobileActiveId
-    )
+    mobileNavItems.findIndex((item) => item.id === mobileActiveId)
   );
 
   /* ============================================================
@@ -302,14 +238,14 @@ export default function Navbar({
   return (
     <>
       {/* ========================================================
-          DESKTOP / TOP NAVBAR
+          DESKTOP / TOP GLASS CAPSULE NAVBAR (SCREENSHOT 2)
       ======================================================== */}
 
       <header
         className={`
           sticky top-3 z-50
           px-2 sm:px-6 lg:px-8
-          max-w-7xl mx-auto
+          max-w-6xl mx-auto
           w-full
           transition-all duration-300
           transform
@@ -322,14 +258,14 @@ export default function Navbar({
       >
         <div
           className="
-            glass-navbar
+            glass-navbar-desktop
             rounded-full
-            px-3.5 sm:px-6
-            py-2
+            px-4 sm:px-5
+            py-2.5
             flex
             items-center
             justify-between
-            gap-2
+            gap-3
             overflow-visible
             shadow-xl
           "
@@ -347,8 +283,8 @@ export default function Navbar({
                 rounded-full
                 border
                 border-[#23212C]/20
-                px-3
-                py-1.5
+                px-4
+                py-2
                 shadow-inner
                 w-full
                 overflow-hidden
@@ -361,9 +297,7 @@ export default function Navbar({
                 autoFocus
                 placeholder="Search 4K pins, cars, anime..."
                 value={searchQuery}
-                onChange={(e) =>
-                  onSearchChange?.(e.target.value)
-                }
+                onChange={(e) => onSearchChange?.(e.target.value)}
                 className="
                   w-full
                   bg-transparent
@@ -385,6 +319,7 @@ export default function Navbar({
                   hover:text-[#23212C]
                   hover:bg-slate-200
                   shrink-0
+                  cursor-pointer
                 "
                 aria-label="Close Search"
               >
@@ -393,7 +328,7 @@ export default function Navbar({
             </div>
           ) : (
             <>
-              {/* LOGO */}
+              {/* LOGO AREA */}
 
               <Link
                 href="/"
@@ -401,19 +336,15 @@ export default function Navbar({
                 className="
                   flex
                   items-center
-                  gap-2
+                  gap-2.5
                   group
                   shrink-0
-                  pr-2.5
-                  sm:pr-4
-                  border-r
-                  border-[#23212C]/15
+                  pr-3
                 "
               >
                 <div
                   className="
-                    w-8 h-8
-                    sm:w-9 sm:h-9
+                    w-9 h-9
                     rounded-full
                     bg-[#23212C]
                     p-0.5
@@ -433,163 +364,59 @@ export default function Navbar({
                       justify-center
                     "
                   >
-                    <Sparkles
-                      className="
-                        w-4 h-4
-                        text-[#F1FEC8]
-                        group-hover:rotate-12
-                        transition-transform
-                        duration-300
-                      "
-                    />
+                    <Sparkles className="w-4 h-4 text-[#F1FEC8]" />
                   </div>
                 </div>
 
                 <div>
-                  <span
-                    className="
-                      text-sm
-                      sm:text-lg
-                      font-extrabold
-                      text-[#23212C]
-                      tracking-tight
-                    "
-                  >
+                  <span className="text-base sm:text-lg font-extrabold text-[#23212C] tracking-tight">
                     Wallpapers<span className="text-slate-800">.</span>
                   </span>
-
-                  <span
-                    className="
-                      hidden xl:block
-                      text-[9px]
-                      font-bold
-                      text-slate-800
-                      uppercase
-                      tracking-widest
-                      -mt-1
-                    "
-                  >
+                  <span className="hidden xl:block text-[9px] font-bold text-slate-700 uppercase tracking-widest -mt-1">
                     4K & Ultra HD
                   </span>
                 </div>
               </Link>
 
-              {/* DESKTOP NAV */}
+              {/* DESKTOP NAV CHIPS (SCREENSHOT 2 INDIVIDUAL FLOATING PILLS) */}
 
-              <nav
-                className="
-                  hidden
-                  lg:flex
-                  items-center
-                  gap-1
-                  relative
-                  py-1
-                  px-1
-                "
-              >
-                {/* DESKTOP ACTIVE BUBBLE */}
-
-                <div
-                  className="
-                    absolute
-                    bg-[#23212C]
-                    shadow-md
-                    shadow-black/20
-                    pointer-events-none
-                    will-change-transform
-                  "
-                  style={{
-                    transform: `translate3d(
-                      ${desktopIndicator.left}px,
-                      ${desktopIndicator.top}px,
-                      0
-                    ) ${
-                      desktopIndicator.isMoving
-                        ? 'scaleX(1.12) scaleY(0.88)'
-                        : 'scale(1)'
-                    }`,
-                    width: desktopIndicator.width,
-                    height: desktopIndicator.height,
-                    opacity: desktopIndicator.opacity,
-                    borderRadius: desktopIndicator.isMoving
-                      ? '22px 12px 24px 10px'
-                      : '9999px',
-                    transition:
-                      'transform 550ms cubic-bezier(0.34, 1.45, 0.64, 1), ' +
-                      'width 550ms cubic-bezier(0.34, 1.45, 0.64, 1), ' +
-                      'height 550ms cubic-bezier(0.34, 1.45, 0.64, 1), ' +
-                      'border-radius 550ms ease-out, ' +
-                      'opacity 300ms ease',
-                  }}
-                />
-
+              <nav className="hidden lg:flex items-center gap-2 relative">
                 {desktopNavItems.map((item) => {
                   const isActive = activeNav === item.id;
                   const Icon = item.icon;
 
                   if (item.hasDropdown) {
                     return (
-                      <div
-                        key={item.id}
-                        className="relative"
-                      >
+                      <div key={item.id} className="relative">
                         <button
-                          ref={(el) => {
-                            if (el) {
-                              desktopNavRefs.current.set(
-                                item.id,
-                                el
-                              );
-                            } else {
-                              desktopNavRefs.current.delete(
-                                item.id
-                              );
-                            }
-                          }}
                           type="button"
                           aria-pressed={isActive}
                           onClick={() => {
-                            setIsCategoryDropdownOpen(
-                              (prev) => !prev
-                            );
-
+                            setIsCategoryDropdownOpen((prev) => !prev);
                             handleNavClick(item.id);
                           }}
                           className={`
-                            relative
-                            z-10
-                            flex
-                            items-center
-                            gap-1.5
-                            px-3.5
-                            py-1.5
+                            px-4 py-2
                             rounded-full
                             text-xs
-                            font-bold
-                            transition-colors
-                            duration-200
+                            font-extrabold
+                            flex
+                            items-center
+                            gap-2
+                            cursor-pointer
                             ${
                               isActive
-                                ? 'text-[#F1FEC8]'
-                                : 'text-[#23212C]/80 hover:text-[#23212C] hover:bg-slate-900/10'
+                                ? 'nav-pill-chip-active'
+                                : 'nav-pill-chip'
                             }
                           `}
                         >
-                          <Icon className="w-3.5 h-3.5" />
-
+                          <Icon className="w-4 h-4" />
                           <span>{item.label}</span>
-
                           <ChevronDown
-                            className={`
-                              w-3 h-3
-                              transition-transform
-                              duration-200
-                              ${
-                                isCategoryDropdownOpen
-                                  ? 'rotate-180'
-                                  : ''
-                              }
-                            `}
+                            className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                              isCategoryDropdownOpen ? 'rotate-180' : ''
+                            }`}
                           />
                         </button>
 
@@ -600,9 +427,9 @@ export default function Navbar({
                               left-0
                               mt-3
                               w-64
-                              bg-[#23212C]/95
+                              bg-white/95
                               border
-                              border-slate-700/60
+                              border-white
                               rounded-3xl
                               shadow-2xl
                               backdrop-blur-2xl
@@ -610,7 +437,7 @@ export default function Navbar({
                               z-50
                               grid
                               grid-cols-2
-                              gap-1
+                              gap-1.5
                             "
                           >
                             {CATEGORIES.map((cat) => (
@@ -619,16 +446,9 @@ export default function Navbar({
                                 type="button"
                                 onClick={() => {
                                   onSelectCategory?.(cat);
-
-                                  setIsCategoryDropdownOpen(
-                                    false
-                                  );
-
+                                  setIsCategoryDropdownOpen(false);
                                   const element =
-                                    document.getElementById(
-                                      'categories'
-                                    );
-
+                                    document.getElementById('categories');
                                   element?.scrollIntoView({
                                     behavior: 'smooth',
                                   });
@@ -639,12 +459,13 @@ export default function Navbar({
                                   py-2
                                   rounded-xl
                                   text-xs
-                                  font-medium
+                                  font-bold
+                                  cursor-pointer
                                   transition-all
                                   ${
                                     activeCategory === cat
-                                      ? 'bg-[#F1FEC8] text-[#23212C] font-bold shadow-md'
-                                      : 'text-slate-300 hover:bg-slate-800 hover:text-[#F1FEC8]'
+                                      ? 'bg-[#23212C] text-[#F1FEC8] shadow-md'
+                                      : 'text-[#23212C] hover:bg-slate-100'
                                   }
                                 `}
                               >
@@ -660,79 +481,46 @@ export default function Navbar({
                   return (
                     <button
                       key={item.id}
-                      ref={(el) => {
-                        if (el) {
-                          desktopNavRefs.current.set(
-                            item.id,
-                            el
-                          );
-                        } else {
-                          desktopNavRefs.current.delete(
-                            item.id
-                          );
-                        }
-                      }}
                       type="button"
-                      aria-current={
-                        isActive ? 'page' : undefined
-                      }
-                      onClick={() =>
-                        handleNavClick(item.id)
-                      }
+                      aria-current={isActive ? 'page' : undefined}
+                      onClick={() => handleNavClick(item.id)}
                       className={`
-                        relative
-                        z-10
-                        flex
-                        items-center
-                        gap-1.5
-                        px-3.5
-                        py-1.5
+                        px-4 py-2
                         rounded-full
                         text-xs
-                        font-bold
-                        transition-colors
-                        duration-200
+                        font-extrabold
+                        flex
+                        items-center
+                        gap-2
+                        cursor-pointer
                         ${
                           isActive
-                            ? 'text-[#F1FEC8]'
-                            : 'text-[#23212C]/80 hover:text-[#23212C] hover:bg-slate-900/10'
+                            ? 'nav-pill-chip-active'
+                            : 'nav-pill-chip'
                         }
                       `}
                     >
-                      <Icon className="w-3.5 h-3.5" />
-
+                      <Icon className="w-4 h-4" />
                       <span>{item.label}</span>
                     </button>
                   );
                 })}
               </nav>
 
-              {/* RIGHT ACTIONS */}
+              {/* RIGHT ACTIONS (SEARCH / FAVORITES GLASS BUTTONS) */}
 
-              <div
-                className="
-                  flex
-                  items-center
-                  gap-1.5
-                  sm:gap-2
-                  pl-2
-                  sm:pl-4
-                  border-l
-                  border-[#23212C]/15
-                  shrink-0
-                "
-              >
+              <div className="flex items-center gap-2 shrink-0">
                 <button
                   type="button"
-                  onClick={() =>
-                    setIsSearchExpanded(true)
-                  }
+                  onClick={() => setIsSearchExpanded(true)}
                   className="
-                    p-2
+                    glass-icon-btn
+                    w-9 h-9
                     rounded-full
-                    text-[#23212C]
-                    hover:bg-slate-900/10
-                    transition-all
+                    flex
+                    items-center
+                    justify-center
+                    cursor-pointer
                   "
                   aria-label="Search Pins"
                 >
@@ -741,16 +529,16 @@ export default function Navbar({
 
                 <button
                   type="button"
-                  onClick={() =>
-                    handleNavClick('Saved')
-                  }
+                  onClick={() => handleNavClick('Saved')}
                   className="
+                    glass-icon-btn
                     relative
-                    p-2
+                    w-9 h-9
                     rounded-full
-                    text-[#23212C]
-                    hover:bg-slate-900/10
-                    transition-all
+                    flex
+                    items-center
+                    justify-center
+                    cursor-pointer
                   "
                   aria-label="Favorites"
                 >
@@ -760,18 +548,19 @@ export default function Navbar({
                     <span
                       className="
                         absolute
-                        -top-0.5
-                        -right-0.5
-                        w-4
-                        h-4
+                        -top-1
+                        -right-1
+                        w-4.5
+                        h-4.5
                         bg-[#23212C]
                         text-[#F1FEC8]
                         text-[9px]
-                        font-bold
+                        font-extrabold
                         rounded-full
                         flex
                         items-center
                         justify-center
+                        shadow-md
                       "
                     >
                       {favoriteCount}
@@ -786,11 +575,6 @@ export default function Navbar({
 
       {/* ========================================================
           MOBILE BOTTOM FLOATING GLASS NAVBAR
-          
-          IMPORTANT:
-          - NO fixed Random bubble
-          - NO raised Random circle
-          - One smooth active indicator moves between items
       ======================================================== */}
 
       <div
@@ -827,9 +611,7 @@ export default function Navbar({
             items-center
           "
         >
-          {/* ====================================================
-              MOBILE NAV GRID
-          ==================================================== */}
+          {/* MOBILE NAV GRID */}
 
           <div
             className="
@@ -841,12 +623,7 @@ export default function Navbar({
               relative
             "
           >
-            {/* ==================================================
-                SINGLE MOVING ACTIVE INDICATOR
-
-                This replaces the old fixed Random bubble.
-                It smoothly moves between all 5 items.
-            ================================================== */}
+            {/* SINGLE MOVING ACTIVE INDICATOR */}
 
             <div
               className="
@@ -865,9 +642,7 @@ export default function Navbar({
             />
 
             {mobileNavItems.map((item) => {
-              const isActive =
-                mobileActiveId === item.id;
-
+              const isActive = mobileActiveId === item.id;
               const Icon = item.icon;
 
               return (
@@ -875,9 +650,7 @@ export default function Navbar({
                   key={item.id}
                   type="button"
                   aria-pressed={isActive}
-                  onClick={() =>
-                    handleMobileNavClick(item.id)
-                  }
+                  onClick={() => handleMobileNavClick(item.id)}
                   className={`
                     relative
                     z-10
@@ -890,6 +663,7 @@ export default function Navbar({
                     group
                     focus:outline-none
                     rounded-full
+                    cursor-pointer
                     transition-transform
                     duration-200
                     ${
@@ -935,9 +709,7 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* ======================================================
-            MORE DRAWER
-        ====================================================== */}
+        {/* MORE DRAWER */}
 
         {isMobileMoreOpen && (
           <div
@@ -982,14 +754,13 @@ export default function Navbar({
 
               <button
                 type="button"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
+                onClick={() => setIsMobileMoreOpen(false)}
                 className="
                   p-1.5
                   text-slate-400
                   hover:text-white
                   rounded-full
+                  cursor-pointer
                 "
               >
                 <X className="w-4 h-4" />
@@ -999,9 +770,7 @@ export default function Navbar({
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
-                onClick={() => {
-                  handleNavClick('Latest');
-                }}
+                onClick={() => handleNavClick('Latest')}
                 className="
                   flex
                   items-center
@@ -1012,6 +781,7 @@ export default function Navbar({
                   border
                   border-slate-800
                   text-slate-200
+                  cursor-pointer
                 "
               >
                 <Clock className="w-4 h-4" />
@@ -1020,9 +790,7 @@ export default function Navbar({
 
               <button
                 type="button"
-                onClick={() => {
-                  handleNavClick('Categories');
-                }}
+                onClick={() => handleNavClick('Categories')}
                 className="
                   flex
                   items-center
@@ -1033,6 +801,7 @@ export default function Navbar({
                   border
                   border-slate-800
                   text-slate-200
+                  cursor-pointer
                 "
               >
                 <Grid className="w-4 h-4" />
@@ -1057,9 +826,7 @@ export default function Navbar({
             >
               <Link
                 href="/privacy-policy"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
+                onClick={() => setIsMobileMoreOpen(false)}
                 className="
                   flex
                   items-center
@@ -1073,9 +840,7 @@ export default function Navbar({
 
               <Link
                 href="/terms-of-service"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
+                onClick={() => setIsMobileMoreOpen(false)}
                 className="
                   flex
                   items-center
@@ -1089,9 +854,7 @@ export default function Navbar({
 
               <Link
                 href="/about"
-                onClick={() =>
-                  setIsMobileMoreOpen(false)
-                }
+                onClick={() => setIsMobileMoreOpen(false)}
                 className="
                   flex
                   items-center
