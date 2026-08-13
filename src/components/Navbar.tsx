@@ -133,11 +133,9 @@ export default function Navbar({
       }
 
       if (currentScrollY > lastScrollY.current) {
-        // Scroll DOWN
         setShowTopNav(false);
         setShowBottomNav(true);
       } else {
-        // Scroll UP
         setShowTopNav(true);
         setShowBottomNav(false);
       }
@@ -238,14 +236,14 @@ export default function Navbar({
   return (
     <>
       {/* ========================================================
-          DESKTOP / TOP GLASS CAPSULE NAVBAR (SCREENSHOT 2)
+          DESKTOP / TOP GLASS CAPSULE NAVBAR
       ======================================================== */}
 
       <header
         className={`
           sticky top-3 z-50
           px-2 sm:px-6 lg:px-8
-          max-w-6xl mx-auto
+          max-w-[1240px] mx-auto
           w-full
           transition-all duration-300
           transform
@@ -260,14 +258,14 @@ export default function Navbar({
           className="
             glass-navbar-desktop
             rounded-full
-            px-4 sm:px-5
+            px-4 sm:px-5 lg:px-6
             py-2.5
+            min-h-[62px]
             flex
             items-center
             justify-between
-            gap-3
+            gap-4
             overflow-visible
-            shadow-xl
           "
         >
           {/* SEARCH EXPANDED */}
@@ -328,7 +326,7 @@ export default function Navbar({
             </div>
           ) : (
             <>
-              {/* LOGO AREA */}
+              {/* LOGO */}
 
               <Link
                 href="/"
@@ -339,7 +337,8 @@ export default function Navbar({
                   gap-2.5
                   group
                   shrink-0
-                  pr-3
+                  pr-2
+                  lg:pr-4
                 "
               >
                 <div
@@ -372,15 +371,16 @@ export default function Navbar({
                   <span className="text-base sm:text-lg font-extrabold text-[#23212C] tracking-tight">
                     Wallpapers<span className="text-slate-800">.</span>
                   </span>
+
                   <span className="hidden xl:block text-[9px] font-bold text-slate-700 uppercase tracking-widest -mt-1">
                     4K & Ultra HD
                   </span>
                 </div>
               </Link>
 
-              {/* DESKTOP NAV CHIPS (SCREENSHOT 2 INDIVIDUAL FLOATING PILLS) */}
+              {/* DESKTOP NAV */}
 
-              <nav className="hidden lg:flex items-center gap-2 relative">
+              <nav className="hidden lg:flex items-center justify-center gap-2 flex-1">
                 {desktopNavItems.map((item) => {
                   const isActive = activeNav === item.id;
                   const Icon = item.icon;
@@ -396,7 +396,7 @@ export default function Navbar({
                             handleNavClick(item.id);
                           }}
                           className={`
-                            px-4 py-2
+                            px-4 py-2.5
                             rounded-full
                             text-xs
                             font-extrabold
@@ -404,6 +404,7 @@ export default function Navbar({
                             items-center
                             gap-2
                             cursor-pointer
+                            whitespace-nowrap
                             ${
                               isActive
                                 ? 'nav-pill-chip-active'
@@ -412,11 +413,19 @@ export default function Navbar({
                           `}
                         >
                           <Icon className="w-4 h-4" />
+
                           <span>{item.label}</span>
+
                           <ChevronDown
-                            className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                              isCategoryDropdownOpen ? 'rotate-180' : ''
-                            }`}
+                            className={`
+                              w-3.5 h-3.5
+                              transition-transform duration-200
+                              ${
+                                isCategoryDropdownOpen
+                                  ? 'rotate-180'
+                                  : ''
+                              }
+                            `}
                           />
                         </button>
 
@@ -447,8 +456,10 @@ export default function Navbar({
                                 onClick={() => {
                                   onSelectCategory?.(cat);
                                   setIsCategoryDropdownOpen(false);
+
                                   const element =
                                     document.getElementById('categories');
+
                                   element?.scrollIntoView({
                                     behavior: 'smooth',
                                   });
@@ -485,7 +496,7 @@ export default function Navbar({
                       aria-current={isActive ? 'page' : undefined}
                       onClick={() => handleNavClick(item.id)}
                       className={`
-                        px-4 py-2
+                        px-4 py-2.5
                         rounded-full
                         text-xs
                         font-extrabold
@@ -493,6 +504,7 @@ export default function Navbar({
                         items-center
                         gap-2
                         cursor-pointer
+                        whitespace-nowrap
                         ${
                           isActive
                             ? 'nav-pill-chip-active'
@@ -501,13 +513,14 @@ export default function Navbar({
                       `}
                     >
                       <Icon className="w-4 h-4" />
+
                       <span>{item.label}</span>
                     </button>
                   );
                 })}
               </nav>
 
-              {/* RIGHT ACTIONS (SEARCH / FAVORITES GLASS BUTTONS) */}
+              {/* RIGHT ACTIONS */}
 
               <div className="flex items-center gap-2 shrink-0">
                 <button
@@ -515,7 +528,7 @@ export default function Navbar({
                   onClick={() => setIsSearchExpanded(true)}
                   className="
                     glass-icon-btn
-                    w-9 h-9
+                    w-10 h-10
                     rounded-full
                     flex
                     items-center
@@ -524,7 +537,7 @@ export default function Navbar({
                   "
                   aria-label="Search Pins"
                 >
-                  <Search className="w-4 h-4" />
+                  <Search className="w-[17px] h-[17px]" />
                 </button>
 
                 <button
@@ -533,7 +546,7 @@ export default function Navbar({
                   className="
                     glass-icon-btn
                     relative
-                    w-9 h-9
+                    w-10 h-10
                     rounded-full
                     flex
                     items-center
@@ -542,7 +555,7 @@ export default function Navbar({
                   "
                   aria-label="Favorites"
                 >
-                  <Heart className="w-4 h-4 text-[#23212C]" />
+                  <Heart className="w-[17px] h-[17px] text-[#23212C]" />
 
                   {favoriteCount > 0 && (
                     <span
@@ -550,8 +563,9 @@ export default function Navbar({
                         absolute
                         -top-1
                         -right-1
-                        w-4.5
+                        min-w-4.5
                         h-4.5
+                        px-1
                         bg-[#23212C]
                         text-[#F1FEC8]
                         text-[9px]
@@ -623,7 +637,7 @@ export default function Navbar({
               relative
             "
           >
-            {/* SINGLE MOVING ACTIVE INDICATOR */}
+            {/* ONE MOVING ACTIVE INDICATOR */}
 
             <div
               className="

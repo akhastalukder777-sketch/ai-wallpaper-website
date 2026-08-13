@@ -7,12 +7,11 @@
 ============================================================ */
 
 :root {
-  --background: #F1FEC8;
-  --foreground: #23212C;
-  --vanilla: #F1FEC8;
-  --cosmic: #23212C;
+  --background: #f1fec8;
+  --foreground: #23212c;
+  --vanilla: #f1fec8;
+  --cosmic: #23212c;
 }
-
 
 /* ============================================================
    HTML & BODY
@@ -71,7 +70,6 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
-
 /* ============================================================
    CUSTOM SCROLLBAR
 ============================================================ */
@@ -82,11 +80,11 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: #F1FEC8;
+  background: #f1fec8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #23212C;
+  background: #23212c;
   border-radius: 9999px;
 }
 
@@ -96,153 +94,199 @@ a {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #23212C #F1FEC8;
+  scrollbar-color: #23212c #f1fec8;
 }
 
-
 /* ============================================================
-   DESKTOP TOP GLASS NAVBAR CAPSULE (SCREENSHOT 2)
+   DESKTOP TOP GLASS NAVBAR
+   Reference: wide floating capsule
 ============================================================ */
 
 .glass-navbar-desktop {
-  background: rgba(255, 255, 255, 0.45);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.72),
+      rgba(255, 255, 255, 0.48) 48%,
+      rgba(255, 255, 255, 0.62)
+    );
 
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
 
-  border: 1px solid rgba(255, 255, 255, 0.70);
+  border: 1px solid rgba(255, 255, 255, 0.82);
 
   box-shadow:
-    0 12px 36px rgba(35, 33, 44, 0.08),
-    inset 0 1px 2px rgba(255, 255, 255, 0.85);
+    0 10px 30px rgba(35, 33, 44, 0.07),
+    0 2px 8px rgba(35, 33, 44, 0.035),
+    inset 0 1px 2px rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.25);
+
+  overflow: visible;
 }
 
-
 /* ============================================================
-   INDIVIDUAL NAVBAR PILL CHIPS (SCREENSHOT 2)
+   DESKTOP NAV PILL CHIPS
 ============================================================ */
 
 .nav-pill-chip {
-  background: rgba(255, 255, 255, 0.55);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.82),
+      rgba(255, 255, 255, 0.56)
+    );
 
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px) saturate(145%);
+  -webkit-backdrop-filter: blur(14px) saturate(145%);
 
-  border: 1px solid rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.88);
 
   box-shadow:
-    0 4px 12px rgba(35, 33, 44, 0.05),
-    inset 0 1px 1px rgba(255, 255, 255, 0.80);
+    0 3px 10px rgba(35, 33, 44, 0.045),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95);
 
-  color: #23212C;
-  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: #23212c;
+
+  transition:
+    transform 220ms cubic-bezier(0.34, 1.45, 0.64, 1),
+    background 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
 }
 
 .nav-pill-chip:hover {
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.94);
 
-  border-color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 1);
 
   transform: translateY(-1px);
 
   box-shadow:
-    0 6px 16px rgba(35, 33, 44, 0.08),
-    inset 0 1px 1px rgba(255, 255, 255, 0.95);
+    0 6px 16px rgba(35, 33, 44, 0.075),
+    inset 0 1px 1px rgba(255, 255, 255, 1);
 }
 
 .nav-pill-chip-active {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
 
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
-  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.98);
 
   box-shadow:
-    0 6px 18px rgba(35, 33, 44, 0.10),
+    0 5px 15px rgba(35, 33, 44, 0.075),
     inset 0 1px 2px rgba(255, 255, 255, 1);
 
-  color: #23212C;
+  color: #23212c;
   font-weight: 800;
 }
 
-
 /* ============================================================
-   GLASS ICON BUTTONS (SEARCH / SAVED)
+   GLASS ICON BUTTONS
 ============================================================ */
 
 .glass-icon-btn {
-  background: rgba(255, 255, 255, 0.55);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.82),
+      rgba(255, 255, 255, 0.56)
+    );
 
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px) saturate(145%);
+  -webkit-backdrop-filter: blur(14px) saturate(145%);
 
-  border: 1px solid rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.88);
 
   box-shadow:
     0 4px 12px rgba(35, 33, 44, 0.05),
-    inset 0 1px 1px rgba(255, 255, 255, 0.80);
+    inset 0 1px 1px rgba(255, 255, 255, 0.92);
 
-  color: #23212C;
-  transition: all 200ms ease;
+  color: #23212c;
+
+  transition:
+    transform 220ms cubic-bezier(0.34, 1.45, 0.64, 1),
+    background 220ms ease,
+    box-shadow 220ms ease;
 }
 
 .glass-icon-btn:hover {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.94);
 
-  border-color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 1);
 
-  transform: scale(1.05);
+  transform: scale(1.045);
+
+  box-shadow:
+    0 6px 16px rgba(35, 33, 44, 0.075),
+    inset 0 1px 1px rgba(255, 255, 255, 1);
 }
 
-
 /* ============================================================
-   EXPLORE CATEGORIES GLASS PILLS (SCREENSHOT 2)
+   CATEGORY PILLS
+   Reference: same floating glass style as screenshot
 ============================================================ */
 
 .glass-category-pill {
-  background: rgba(255, 255, 255, 0.50);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.72),
+      rgba(255, 255, 255, 0.48)
+    );
 
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(15px) saturate(145%);
+  -webkit-backdrop-filter: blur(15px) saturate(145%);
 
-  border: 1px solid rgba(255, 255, 255, 0.70);
+  border: 1px solid rgba(255, 255, 255, 0.82);
 
   box-shadow:
-    0 4px 14px rgba(35, 33, 44, 0.05),
-    inset 0 1px 1px rgba(255, 255, 255, 0.75);
+    0 4px 13px rgba(35, 33, 44, 0.045),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
 
-  color: #23212C;
-  transition: all 220ms ease;
+  color: #23212c;
+
+  transition:
+    transform 220ms cubic-bezier(0.34, 1.45, 0.64, 1),
+    background 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
 }
 
 .glass-category-pill:hover {
-  background: rgba(255, 255, 255, 0.80);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.94),
+      rgba(255, 255, 255, 0.72)
+    );
 
-  border-color: rgba(255, 255, 255, 0.90);
+  border-color: rgba(255, 255, 255, 0.98);
 
   transform: translateY(-1px);
 
   box-shadow:
-    0 6px 18px rgba(35, 33, 44, 0.08);
+    0 7px 18px rgba(35, 33, 44, 0.075),
+    inset 0 1px 1px rgba(255, 255, 255, 1);
 }
 
 .glass-category-pill-active {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.97);
 
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
 
-  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 1);
 
   box-shadow:
-    0 6px 20px rgba(35, 33, 44, 0.12),
+    0 6px 18px rgba(35, 33, 44, 0.085),
     inset 0 1px 2px rgba(255, 255, 255, 1);
 
-  color: #23212C;
+  color: #23212c;
   font-weight: 800;
 }
-
 
 /* ============================================================
    MOBILE FLOATING GLASS NAVBAR
@@ -254,9 +298,9 @@ a {
   background:
     linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.22),
-      rgba(255, 255, 255, 0.06) 45%,
-      rgba(255, 255, 255, 0.12)
+      rgba(255, 255, 255, 0.25),
+      rgba(255, 255, 255, 0.08) 45%,
+      rgba(255, 255, 255, 0.15)
     );
 
   backdrop-filter:
@@ -267,12 +311,11 @@ a {
     blur(22px)
     saturate(140%);
 
-  border:
-    1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.38);
 
   box-shadow:
     0 8px 30px rgba(0, 0, 0, 0.18),
-    inset 0 1px 1px rgba(255, 255, 255, 0.30);
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
 
   touch-action: manipulation;
 
@@ -282,9 +325,11 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
-
 /* ============================================================
    MOBILE ACTIVE MOVING INDICATOR
+   IMPORTANT:
+   This is ONE moving indicator only.
+   No fixed Random bubble.
 ============================================================ */
 
 .mobile-active-indicator {
@@ -295,8 +340,8 @@ a {
   background:
     linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.72),
-      rgba(255, 255, 255, 0.40)
+      rgba(255, 255, 255, 0.74),
+      rgba(255, 255, 255, 0.42)
     );
 
   backdrop-filter:
@@ -307,8 +352,7 @@ a {
     blur(18px)
     saturate(140%);
 
-  border:
-    1px solid rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 
   box-shadow:
     0 6px 18px rgba(0, 0, 0, 0.12),
@@ -320,11 +364,8 @@ a {
     width 350ms ease,
     height 350ms ease;
 
-  will-change:
-    left,
-    transform;
+  will-change: left, transform;
 }
-
 
 /* ============================================================
    MOBILE NAV BUTTON SAFETY
@@ -352,7 +393,6 @@ a {
   }
 }
 
-
 /* ============================================================
    GLASS EFFECT
 ============================================================ */
@@ -367,13 +407,12 @@ a {
     1px solid rgba(35, 33, 44, 0.08);
 }
 
-
 /* ============================================================
    GLASS CARD
 ============================================================ */
 
 .glass-card {
-  background: #23212C;
+  background: #23212c;
 
   backdrop-filter: blur(8px);
 
@@ -394,30 +433,27 @@ a {
     0 16px 36px 0 rgba(35, 33, 44, 0.25);
 }
 
-
 /* ============================================================
    GLASS HOVER PANEL
 ============================================================ */
 
 .glass-hover-panel {
-  background: rgba(35, 33, 44, 0.70);
+  background: rgba(35, 33, 44, 0.7);
 
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 
   border:
-    1px solid rgba(241, 254, 200, 0.20);
+    1px solid rgba(241, 254, 200, 0.2);
 }
-
 
 /* ============================================================
    MASONRY
 ============================================================ */
 
 .break-inside-avoid-column {
-  break-inside: avoid;
+  break-inside: avoid-column;
 }
-
 
 /* ============================================================
    LOAD MORE BUTTON
@@ -435,8 +471,8 @@ a {
 
   gap: 12px;
 
-  background: #23212C;
-  color: #F1FEC8;
+  background: #23212c;
+  color: #f1fec8;
 
   border:
     1.5px solid rgba(241, 254, 200, 0.25);
@@ -468,7 +504,6 @@ a {
   will-change: transform;
 }
 
-
 /* ============================================================
    LOAD MORE - DESKTOP MOUSE HOVER
 ============================================================ */
@@ -483,7 +518,7 @@ a {
     background: #2d2838;
 
     border-color:
-      rgba(241, 254, 200, 0.50);
+      rgba(241, 254, 200, 0.5);
 
     box-shadow:
       0 16px 35px -4px rgba(35, 33, 44, 0.45);
@@ -493,7 +528,6 @@ a {
     transform: translateY(4px);
   }
 }
-
 
 /* ============================================================
    LOAD MORE - ACTIVE / PRESS
@@ -508,11 +542,10 @@ a {
   background: #1d1b25;
 
   box-shadow:
-    0 5px 14px -4px rgba(35, 33, 44, 0.30);
+    0 5px 14px -4px rgba(35, 33, 44, 0.3);
 
   transition-duration: 120ms;
 }
-
 
 /* ============================================================
    LOAD MORE TEXT
@@ -527,7 +560,6 @@ a {
   white-space: nowrap;
 }
 
-
 /* ============================================================
    LOAD MORE ARROW
 ============================================================ */
@@ -541,7 +573,6 @@ a {
   transition:
     transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 
 /* ============================================================
    MOBILE LOAD MORE
@@ -569,7 +600,6 @@ a {
   }
 }
 
-
 /* ============================================================
    SMALL MOBILE
 ============================================================ */
@@ -584,7 +614,6 @@ a {
     font-size: 13px;
   }
 }
-
 
 /* ============================================================
    MOBILE NAV RESPONSIVE
@@ -614,7 +643,6 @@ a {
   }
 }
 
-
 /* ============================================================
    MOBILE VIEWPORT SAFETY
 ============================================================ */
@@ -626,7 +654,6 @@ a {
     overflow-x: hidden;
   }
 }
-
 
 /* ============================================================
    REDUCED MOTION

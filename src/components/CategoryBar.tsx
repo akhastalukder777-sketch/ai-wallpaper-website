@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { CATEGORIES } from '../data/wallpapers';
 import { Layers } from 'lucide-react';
 
@@ -40,21 +40,45 @@ export default function CategoryBar({
   selectedCategory,
   onSelectCategory,
 }: CategoryBarProps) {
-  const categoryBtnRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
-  const trackRef = useRef<HTMLDivElement>(null);
-
   return (
     <div id="categories" className="w-full py-6">
+      {/* CATEGORY TITLE */}
+
       <div className="flex items-center gap-2 mb-4">
         <Layers className="w-5 h-5 text-[#23212C]" />
+
         <h2 className="text-lg font-bold text-[#23212C] tracking-tight">
           Explore Categories
         </h2>
       </div>
 
-      {/* Horizontally Scrollable Categories Track */}
-      <div className="flex items-center overflow-x-auto pb-3 pt-1 scrollbar-none no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 relative">
-        <div ref={trackRef} className="relative flex items-center gap-2 min-w-max py-1">
+      {/* HORIZONTAL CATEGORY PILLS */}
+
+      <div
+        className="
+          flex
+          items-center
+          overflow-x-auto
+          pb-3
+          pt-1
+          scrollbar-none
+          no-scrollbar
+          -mx-4
+          px-4
+          sm:mx-0
+          sm:px-0
+          relative
+        "
+      >
+        <div
+          className="
+            flex
+            items-center
+            gap-2
+            min-w-max
+            py-1
+          "
+        >
           {CATEGORIES.map((category) => {
             const isActive = selectedCategory === category;
             const icon = CATEGORY_ICONS[category] || '✨';
@@ -62,10 +86,6 @@ export default function CategoryBar({
             return (
               <button
                 key={category}
-                ref={(el) => {
-                  if (el) categoryBtnRefs.current.set(category, el);
-                  else categoryBtnRefs.current.delete(category);
-                }}
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => onSelectCategory(category)}
@@ -82,8 +102,6 @@ export default function CategoryBar({
                   items-center
                   gap-1.5
                   cursor-pointer
-                  transition-all
-                  duration-200
                   ${
                     isActive
                       ? 'glass-category-pill-active'
@@ -91,7 +109,10 @@ export default function CategoryBar({
                   }
                 `}
               >
-                <span className="text-sm leading-none">{icon}</span>
+                <span className="text-sm leading-none">
+                  {icon}
+                </span>
+
                 <span>{category}</span>
               </button>
             );
