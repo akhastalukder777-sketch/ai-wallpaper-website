@@ -542,7 +542,7 @@ export default function Navbar({
                   "
                   aria-label="Favorites"
                 >
-                  <Heart className="w-4 h-4" />
+                  <Heart className="w-4 h-4 text-[#23212C]" />
 
                   {favoriteCount > 0 && (
                     <span
