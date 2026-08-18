@@ -63,10 +63,10 @@ export default function WallpaperCard({
         setIsHovered(false);
         setIsMobileTapped(false);
       }}
-      className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] hover:z-30 hover:shadow-2xl hover:shadow-[#23212C]/30 break-inside-avoid mb-4 flex flex-col"
+      className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] hover:z-30 hover:shadow-2xl hover:shadow-[#0B1F4D]/30 break-inside-avoid mb-4 flex flex-col"
     >
       {/* Natural Aspect Ratio Image Container */}
-      <div className="relative w-full overflow-hidden bg-[#23212C] rounded-3xl">
+      <div className="relative w-full overflow-hidden bg-[#0B1F4D] rounded-3xl">
         <img
           src={imgSrc}
           alt={wallpaper.title}
@@ -85,30 +85,30 @@ export default function WallpaperCard({
         >
           {/* Top Panel Controls */}
           <div className="flex items-center justify-between gap-2">
-            <span className="px-3 py-1 rounded-full bg-[#23212C]/90 backdrop-blur-md text-[#F1FEC8] text-[11px] font-semibold tracking-wide border border-[#F1FEC8]/20 shadow-md">
+            <span className="px-3 py-1 rounded-full premium-category-badge text-[11px] font-semibold tracking-wide border border-[#DFF7FF]/20 shadow-md">
               {wallpaper.category}
             </span>
 
             {/* Save 4K Button */}
             <button
               onClick={handleDownload}
-              className="px-4 py-2 rounded-full bg-[#F1FEC8] hover:bg-[#e2faae] text-[#23212C] text-xs font-bold shadow-lg shadow-[#F1FEC8]/20 flex items-center gap-1.5 transition-transform active:scale-95"
+              className="px-4 py-2 rounded-full premium-save-btn text-[#0B1F4D] text-xs font-bold flex items-center gap-1.5 transition-transform active:scale-95"
             >
-              <Download className="w-3.5 h-3.5 text-[#23212C]" />
+              <Download className="w-3.5 h-3.5 text-[#0B1F4D]" />
               Save 4K
             </button>
           </div>
 
           {/* Center Hover Preview Button */}
           <div className="flex justify-center">
-            <span className="px-4 py-2 rounded-full bg-[#23212C]/90 text-white text-xs font-semibold backdrop-blur-md border border-[#F1FEC8]/30 shadow-xl flex items-center gap-2">
-              <Maximize2 className="w-3.5 h-3.5 text-[#F1FEC8]" /> View Pin
+            <span className="px-4 py-2 rounded-full premium-view-pill text-white text-xs font-semibold backdrop-blur-md border border-[#DFF7FF]/30 shadow-xl flex items-center gap-2">
+              <Maximize2 className="w-3.5 h-3.5 text-[#DFF7FF]" /> View Pin
             </span>
           </div>
 
           {/* Bottom Action Footer */}
           <div className="flex items-center justify-between text-xs text-white">
-            <div className="flex items-center gap-2 bg-[#23212C]/90 px-2.5 py-1 rounded-full backdrop-blur-md text-[11px] border border-[#F1FEC8]/20">
+            <div className="flex items-center gap-2 premium-views-pill px-2.5 py-1 rounded-full backdrop-blur-md text-[11px]">
               <Eye className="w-3.5 h-3.5 text-slate-400" />
               <span>{(wallpaper.views || 100).toLocaleString()}</span>
             </div>
@@ -117,12 +117,12 @@ export default function WallpaperCard({
               onClick={handleLike}
               className={`p-2.5 rounded-full backdrop-blur-md transition-all ${
                 isFavorite
-                  ? 'bg-[#F1FEC8] text-[#23212C] shadow-lg shadow-[#F1FEC8]/40'
-                  : 'bg-[#23212C]/90 text-slate-200 hover:text-[#F1FEC8] border border-[#F1FEC8]/20'
+                  ? 'premium-favorite-active text-[#0B1F4D]'
+                  : 'premium-favorite-btn text-slate-200'
               }`}
               aria-label="Favorite Pin"
             >
-              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#23212C]' : ''}`} />
+              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#0B1F4D]' : ''}`} />
             </button>
           </div>
         </div>

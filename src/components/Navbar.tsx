@@ -280,7 +280,7 @@ export default function Navbar({
                 bg-white/95
                 rounded-full
                 border
-                border-[#23212C]/20
+                border-[#0B1F4D]/20
                 px-4
                 py-2
                 shadow-inner
@@ -288,7 +288,7 @@ export default function Navbar({
                 overflow-hidden
               "
             >
-              <Search className="w-4 h-4 text-[#23212C]/70 shrink-0" />
+              <Search className="w-4 h-4 text-[#0B1F4D]/70 shrink-0" />
 
               <input
                 type="text"
@@ -301,7 +301,7 @@ export default function Navbar({
                   bg-transparent
                   text-xs
                   font-bold
-                  text-[#23212C]
+                  text-[#0B1F4D]
                   outline-none
                   placeholder-slate-500
                 "
@@ -313,8 +313,8 @@ export default function Navbar({
                 className="
                   p-1
                   rounded-full
-                  text-[#23212C]/70
-                  hover:text-[#23212C]
+                  text-[#0B1F4D]/70
+                  hover:text-[#0B1F4D]
                   hover:bg-slate-200
                   shrink-0
                   cursor-pointer
@@ -341,35 +341,13 @@ export default function Navbar({
                   lg:pr-4
                 "
               >
-                <div
-                  className="
-                    w-9 h-9
-                    rounded-full
-                    bg-[#23212C]
-                    p-0.5
-                    shadow-md
-                    group-hover:scale-105
-                    transition-transform
-                    duration-300
-                  "
-                >
-                  <div
-                    className="
-                      w-full h-full
-                      bg-[#23212C]
-                      rounded-full
-                      flex
-                      items-center
-                      justify-center
-                    "
-                  >
-                    <Sparkles className="w-4 h-4 text-[#F1FEC8]" />
-                  </div>
+                <div className="premium-logo-mark group-hover:scale-105 transition-transform duration-300">
+                  <div className="premium-logo-w">W</div>
                 </div>
 
                 <div>
-                  <span className="text-base sm:text-lg font-extrabold text-[#23212C] tracking-tight">
-                    Wallpapers<span className="text-slate-800">.</span>
+                  <span className="premium-brand-name text-base sm:text-lg font-extrabold tracking-tight">
+                    Wallpapers<span className="premium-brand-dot">.</span>
                   </span>
 
                   <span className="hidden xl:block text-[9px] font-bold text-slate-700 uppercase tracking-widest -mt-1">
@@ -475,8 +453,8 @@ export default function Navbar({
                                   transition-all
                                   ${
                                     activeCategory === cat
-                                      ? 'bg-[#23212C] text-[#F1FEC8] shadow-md'
-                                      : 'text-[#23212C] hover:bg-slate-100'
+                                      ? 'bg-[#0B1F4D] text-[#DFF7FF] shadow-md'
+                                      : 'text-[#0B1F4D] hover:bg-slate-100'
                                   }
                                 `}
                               >
@@ -544,7 +522,7 @@ export default function Navbar({
                   type="button"
                   onClick={() => handleNavClick('Saved')}
                   className="
-                    glass-icon-btn
+                    glass-icon-btn premium-heart-btn
                     relative
                     w-10 h-10
                     rounded-full
@@ -555,7 +533,7 @@ export default function Navbar({
                   "
                   aria-label="Favorites"
                 >
-                  <Heart className="w-[17px] h-[17px] text-[#23212C]" />
+                  <Heart className="w-[17px] h-[17px] text-[#0B1F4D]" />
 
                   {favoriteCount > 0 && (
                     <span
@@ -566,8 +544,8 @@ export default function Navbar({
                         min-w-4.5
                         h-4.5
                         px-1
-                        bg-[#23212C]
-                        text-[#F1FEC8]
+                        bg-[#0B1F4D]
+                        text-[#DFF7FF]
                         text-[9px]
                         font-extrabold
                         rounded-full
@@ -682,8 +660,8 @@ export default function Navbar({
                     duration-200
                     ${
                       isActive
-                        ? 'text-[#23212C]'
-                        : 'text-[#23212C]/75'
+                        ? 'text-[#0B1F4D]'
+                        : 'text-[#0B1F4D]/75'
                     }
                   `}
                 >
@@ -710,8 +688,8 @@ export default function Navbar({
                       duration-300
                       ${
                         isActive
-                          ? 'text-[#23212C]'
-                          : 'text-[#23212C]/75'
+                          ? 'text-[#0B1F4D]'
+                          : 'text-[#0B1F4D]/75'
                       }
                     `}
                   >
@@ -732,7 +710,7 @@ export default function Navbar({
               bottom-[90px]
               left-0
               right-0
-              bg-[#23212C]/95
+              bg-[#0B1F4D]/95
               border
               border-white/20
               rounded-3xl
@@ -845,7 +823,7 @@ export default function Navbar({
                   flex
                   items-center
                   gap-1
-                  hover:text-[#F1FEC8]
+                  hover:text-[#DFF7FF]
                 "
               >
                 <ShieldCheck className="w-3 h-3" />
@@ -859,7 +837,7 @@ export default function Navbar({
                   flex
                   items-center
                   gap-1
-                  hover:text-[#F1FEC8]
+                  hover:text-[#DFF7FF]
                 "
               >
                 <FileText className="w-3 h-3" />
@@ -873,7 +851,7 @@ export default function Navbar({
                   flex
                   items-center
                   gap-1
-                  hover:text-[#F1FEC8]
+                  hover:text-[#DFF7FF]
                 "
               >
                 <Info className="w-3.5 h-3.5" />

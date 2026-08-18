@@ -45,9 +45,9 @@ export default function CategoryBar({
       {/* CATEGORY TITLE */}
 
       <div className="flex items-center gap-2 mb-4">
-        <Layers className="w-5 h-5 text-[#23212C]" />
+        <Layers className="w-5 h-5 text-[#0B1F4D]" />
 
-        <h2 className="text-lg font-bold text-[#23212C] tracking-tight">
+        <h2 className="text-lg font-bold text-[#0B1F4D] tracking-tight">
           Explore Categories
         </h2>
       </div>
@@ -104,7 +104,7 @@ export default function CategoryBar({
                   cursor-pointer
                   ${
                     isActive
-                      ? 'glass-category-pill-active'
+                      ? 'glass-category-pill-active premium-category-active'
                       : 'glass-category-pill'
                   }
                 `}
