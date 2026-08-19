@@ -1242,7 +1242,7 @@ export default function Home() {
             </div>
 
             <div>
-              Built for High Speed, SEO & Google AdSense Approval.
+              Built for High Speed.
             </div>
 
           </div>
