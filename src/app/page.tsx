@@ -389,12 +389,12 @@ export default function Home() {
     <div
       className="
         min-h-screen
-        bg-[#F1FEC8]
-        text-[#090d12]
+        bg-transparent
+        text-[#0B1F4D]
         flex
         flex-col
-        selection:bg-[#090d12]
-        selection:text-[#F1FEC8]
+        selection:bg-[#2D8CFF]
+        selection:text-white
       "
     >
 
@@ -507,10 +507,10 @@ export default function Home() {
               px-4
               py-1.5
               rounded-full
-              bg-slate-900/10
+              bg-white/60
               border
-              border-slate-900/20
-              text-[#090d12]
+              border-white/90
+              text-[#0B1F4D]
               text-xs
               font-bold
               backdrop-blur-md
@@ -522,7 +522,7 @@ export default function Home() {
               className="
                 w-4
                 h-4
-                text-[#090d12]
+                text-[#2D8CFF]
                 animate-spin
               "
               style={{
@@ -546,7 +546,7 @@ export default function Home() {
               sm:text-5xl
               font-black
               tracking-tight
-              text-[#090d12]
+              text-[#0B1F4D]
               leading-tight
             "
           >
@@ -558,9 +558,9 @@ export default function Home() {
             <span
               className="
                 bg-gradient-to-r
-                from-[#090d12]
-                via-slate-800
-                to-indigo-950
+                from-[#0B1F4D]
+                via-[#178DFF]
+                to-[#00BFA6]
                 bg-clip-text
                 text-transparent
               "
@@ -577,7 +577,7 @@ export default function Home() {
             className="
               text-sm
               sm:text-base
-              text-slate-700
+              text-[#46617D]
               font-medium
               max-w-xl
               mx-auto
@@ -634,7 +634,7 @@ export default function Home() {
                   border-slate-900/20
                   rounded-2xl
                   text-sm
-                  text-[#090d12]
+                  text-[#0B1F4D]
                   placeholder-slate-500
                   focus:outline-none
                   focus:border-[#090d12]
@@ -690,7 +690,7 @@ export default function Home() {
             justify-between
             my-4
             border-b
-            border-slate-900/15
+            border-white/80
             pb-3
           "
         >
@@ -707,7 +707,7 @@ export default function Home() {
               className="
                 w-5
                 h-5
-                text-[#090d12]
+                text-[#0B1F4D]
               "
             />
 
@@ -715,7 +715,7 @@ export default function Home() {
               className="
                 text-lg
                 font-bold
-                text-[#090d12]
+                text-[#0B1F4D]
                 tracking-tight
               "
             >
@@ -744,10 +744,10 @@ export default function Home() {
                 py-0.5
                 rounded-full
                 bg-slate-900/10
-                text-[#090d12]
+                text-[#0B1F4D]
                 font-semibold
                 border
-                border-slate-900/20
+                border-white/90
                 ml-1
               "
             >
@@ -909,9 +909,10 @@ export default function Home() {
               text-center
               space-y-4
               rounded-3xl
-              bg-white/50
+              bg-white/60
               border
-              border-slate-900/10
+              border-white/80
+              backdrop-blur-xl
             "
           >
 
@@ -929,7 +930,7 @@ export default function Home() {
               className="
                 text-lg
                 font-semibold
-                text-[#090d12]
+                text-[#0B1F4D]
               "
             >
               No pins found
@@ -967,9 +968,9 @@ export default function Home() {
                 px-5
                 py-2.5
                 rounded-full
-                bg-[#090d12]
-                hover:bg-slate-800
-                text-[#F1FEC8]
+                bg-gradient-to-r from-[#2D8CFF] to-[#00BFA6]
+                hover:from-[#178DFF] hover:to-[#00A98F]
+                text-white
                 text-xs
                 font-bold
                 transition-colors
@@ -1032,11 +1033,12 @@ export default function Home() {
       <footer
         className="
           mt-auto
-          bg-[#090d12]
+          bg-white/55
+          backdrop-blur-xl
           border-t
-          border-slate-800/80
+          border-white/80
           py-12
-          text-slate-400
+          text-[#46617D]
           text-xs
         "
       >
@@ -1078,7 +1080,7 @@ export default function Home() {
                   justify-center
                   md:justify-start
                   gap-2
-                  text-white
+                  text-[#0B1F4D]
                   font-bold
                   text-lg
                 "
@@ -1088,7 +1090,7 @@ export default function Home() {
                   className="
                     w-5
                     h-5
-                    text-[#F1FEC8]
+                    text-[#2D8CFF]
                   "
                 />
 
@@ -1099,7 +1101,7 @@ export default function Home() {
 
               <p
                 className="
-                  text-slate-500
+                  text-[#5F7893]
                   max-w-md
                 "
               >
@@ -1118,7 +1120,7 @@ export default function Home() {
                 items-center
                 justify-center
                 gap-6
-                text-slate-400
+                text-[#46617D]
                 font-medium
               "
             >
@@ -1126,7 +1128,7 @@ export default function Home() {
               <Link
                 href="/privacy-policy"
                 className="
-                  hover:text-[#F1FEC8]
+                  hover:text-[#178DFF]
                   transition-colors
                   flex
                   items-center
@@ -1144,7 +1146,7 @@ export default function Home() {
               <Link
                 href="/terms-of-service"
                 className="
-                  hover:text-[#F1FEC8]
+                  hover:text-[#178DFF]
                   transition-colors
                   flex
                   items-center
@@ -1162,7 +1164,7 @@ export default function Home() {
               <Link
                 href="/about"
                 className="
-                  hover:text-[#F1FEC8]
+                  hover:text-[#178DFF]
                   transition-colors
                   flex
                   items-center
@@ -1180,7 +1182,7 @@ export default function Home() {
               <Link
                 href="/contact"
                 className="
-                  hover:text-[#F1FEC8]
+                  hover:text-[#178DFF]
                   transition-colors
                   flex
                   items-center
@@ -1198,7 +1200,7 @@ export default function Home() {
               <Link
                 href="/disclaimer"
                 className="
-                  hover:text-[#F1FEC8]
+                  hover:text-[#178DFF]
                   transition-colors
                   flex
                   items-center
