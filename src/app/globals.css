@@ -7,7 +7,7 @@
 ============================================================ */
 
 :root {
-  --background: #F5FCFF;
+  --background: #EAF7FB;
   --foreground: #0B1F4D;
   --vanilla: #DFF7FF;
   --cosmic: #0B1F4D;
@@ -101,7 +101,6 @@ a {
 
 /* ============================================================
    DESKTOP TOP GLASS NAVBAR
-   Reference: wide floating capsule
 ============================================================ */
 
 .glass-navbar-desktop {
@@ -126,10 +125,6 @@ a {
 
   overflow: visible;
 }
-
-/* ============================================================
-   DESKTOP NAV PILL CHIPS
-============================================================ */
 
 .nav-pill-chip {
   background:
@@ -159,11 +154,8 @@ a {
 
 .nav-pill-chip:hover {
   background: rgba(255, 255, 255, 0.94);
-
   border-color: rgba(255, 255, 255, 1);
-
   transform: translateY(-1px);
-
   box-shadow:
     0 6px 16px rgba(35, 33, 44, 0.075),
     inset 0 1px 1px rgba(255, 255, 255, 1);
@@ -171,23 +163,15 @@ a {
 
 .nav-pill-chip-active {
   background: rgba(255, 255, 255, 0.96);
-
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-
   border: 1px solid rgba(255, 255, 255, 0.98);
-
   box-shadow:
     0 5px 15px rgba(35, 33, 44, 0.075),
     inset 0 1px 2px rgba(255, 255, 255, 1);
-
   color: #23212c;
   font-weight: 800;
 }
-
-/* ============================================================
-   GLASS ICON BUTTONS
-============================================================ */
 
 .glass-icon-btn {
   background:
@@ -216,11 +200,8 @@ a {
 
 .glass-icon-btn:hover {
   background: rgba(255, 255, 255, 0.94);
-
   border-color: rgba(255, 255, 255, 1);
-
   transform: scale(1.045);
-
   box-shadow:
     0 6px 16px rgba(35, 33, 44, 0.075),
     inset 0 1px 1px rgba(255, 255, 255, 1);
@@ -263,11 +244,8 @@ a {
       rgba(255, 255, 255, 0.94),
       rgba(255, 255, 255, 0.72)
     );
-
   border-color: rgba(255, 255, 255, 0.98);
-
   transform: translateY(-1px);
-
   box-shadow:
     0 7px 18px rgba(35, 33, 44, 0.075),
     inset 0 1px 1px rgba(255, 255, 255, 1);
@@ -275,16 +253,12 @@ a {
 
 .glass-category-pill-active {
   background: rgba(255, 255, 255, 0.97);
-
   backdrop-filter: blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
-
   border: 1px solid rgba(255, 255, 255, 1);
-
   box-shadow:
     0 6px 18px rgba(35, 33, 44, 0.085),
     inset 0 1px 2px rgba(255, 255, 255, 1);
-
   color: #23212c;
   font-weight: 800;
 }
@@ -296,65 +270,37 @@ a {
 .load-more-stretch {
   min-width: 190px;
   height: 58px;
-
   padding: 0 28px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   gap: 12px;
-
   background: #23212c;
   color: #f1fec8;
-
-  border:
-    1.5px solid rgba(241, 254, 200, 0.25);
-
+  border: 1.5px solid rgba(241, 254, 200, 0.25);
   border-radius: 9999px;
-
-  box-shadow:
-    0 10px 25px -5px rgba(35, 33, 44, 0.35);
-
-  font-family:
-    "Inter",
-    "Manrope",
-    "Syne",
-    sans-serif;
-
+  box-shadow: 0 10px 25px -5px rgba(35, 33, 44, 0.35);
+  font-family: "Inter", "Manrope", "Syne", sans-serif;
   font-size: 14px;
   font-weight: 800;
-
   cursor: pointer;
   user-select: none;
-
   -webkit-tap-highlight-color: transparent;
-
   transition:
     transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 450ms ease,
     background-color 300ms ease,
     border-color 300ms ease;
-
   will-change: transform;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .load-more-stretch:hover {
-    transform:
-      scaleX(1.07)
-      scaleY(0.95)
-      translateY(-2px);
-
+    transform: scaleX(1.07) scaleY(0.95) translateY(-2px);
     background: #2d2838;
-
-    border-color:
-      rgba(241, 254, 200, 0.5);
-
-    box-shadow:
-      0 16px 35px -4px rgba(35, 33, 44, 0.45);
+    border-color: rgba(241, 254, 200, 0.5);
+    box-shadow: 0 16px 35px -4px rgba(35, 33, 44, 0.45);
   }
-
   .load-more-stretch:hover .load-more-arrow {
     transform: translateY(4px);
   }
@@ -375,7 +321,7 @@ a {
 }
 
 /* ============================================================
-   THEME COLORS & GLOBAL ACCENTS
+   THEME COLORS & ACCENTS
 ============================================================ */
 
 :root {
@@ -384,14 +330,14 @@ a {
   --premium-cyan: #52D8FF;
   --premium-mint: #7FFFD4;
   --premium-soft: #DFF7FF;
-  --premium-bg: #F5FCFF;
+  --premium-bg: #EAF7FB;
 }
 
 body {
   background:
-    radial-gradient(circle at 8% 18%, rgba(82,216,255,.24), transparent 28%),
-    radial-gradient(circle at 92% 22%, rgba(127,255,212,.24), transparent 26%),
-    linear-gradient(135deg, #F5FCFF 0%, #ECF9FF 46%, #F8FFFF 100%);
+    radial-gradient(circle at 10% 20%, rgba(82,216,255,.22), transparent 30%),
+    radial-gradient(circle at 90% 25%, rgba(127,255,212,.20), transparent 28%),
+    linear-gradient(135deg, #EAF7FB 0%, #E3F4F9 50%, #EDF8FC 100%);
   color: var(--premium-navy);
   font-family: "Inter", "Manrope", system-ui, sans-serif;
 }
@@ -401,9 +347,9 @@ h1,h2,h3,h4,h5,h6,button,a {
 }
 
 .glass-navbar-desktop {
-  background: linear-gradient(135deg, rgba(255,255,255,.72), rgba(223,247,255,.38), rgba(255,255,255,.64)) !important;
-  border-color: rgba(255,255,255,.88) !important;
-  box-shadow: 0 14px 40px rgba(45,140,255,.13), inset 0 1px 2px rgba(255,255,255,.95) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.82), rgba(223,247,255,.45), rgba(255,255,255,.75)) !important;
+  border-color: rgba(255,255,255,.90) !important;
+  box-shadow: 0 14px 40px rgba(45,140,255,.10), inset 0 1px 2px rgba(255,255,255,.95) !important;
 }
 
 .nav-pill-chip, .nav-pill-chip-active, .glass-icon-btn {
@@ -411,44 +357,44 @@ h1,h2,h3,h4,h5,h6,button,a {
 }
 
 .nav-pill-chip-active {
-  background: linear-gradient(135deg, rgba(82,216,255,.72), rgba(127,255,212,.68)) !important;
+  background: linear-gradient(135deg, rgba(82,216,255,.75), rgba(127,255,212,.70)) !important;
   border-color: rgba(255,255,255,.95) !important;
   box-shadow: 0 6px 18px rgba(45,140,255,.20), inset 0 1px 2px rgba(255,255,255,.95) !important;
 }
 
 .glass-icon-btn {
-  background: linear-gradient(135deg, rgba(255,255,255,.78), rgba(223,247,255,.50)) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.80), rgba(223,247,255,.50)) !important;
   border-color: rgba(255,255,255,.92) !important;
 }
 
 .glass-category-pill {
-  background: linear-gradient(135deg, rgba(255,255,255,.68), rgba(223,247,255,.42)) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.75), rgba(223,247,255,.45)) !important;
   border-color: rgba(255,255,255,.90) !important;
   color: var(--premium-navy) !important;
-  box-shadow: 0 5px 14px rgba(45,140,255,.08), inset 0 1px 1px rgba(255,255,255,.9) !important;
+  box-shadow: 0 5px 14px rgba(45,140,255,.06), inset 0 1px 1px rgba(255,255,255,.9) !important;
 }
 
 .glass-category-pill:hover {
-  background: linear-gradient(135deg, rgba(255,255,255,.88), rgba(82,216,255,.20)) !important;
-  box-shadow: 0 8px 20px rgba(45,140,255,.13), inset 0 1px 1px rgba(255,255,255,1) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(82,216,255,.22)) !important;
+  box-shadow: 0 8px 20px rgba(45,140,255,.12), inset 0 1px 1px rgba(255,255,255,1) !important;
 }
 
 .glass-category-pill-active, .premium-category-active {
   background: linear-gradient(135deg, #2D8CFF 0%, #52D8FF 52%, #7FFFD4 100%) !important;
   color: #fff !important;
   border-color: rgba(255,255,255,.92) !important;
-  box-shadow: 0 8px 22px rgba(45,140,255,.30), inset 0 1px 2px rgba(255,255,255,.55) !important;
+  box-shadow: 0 8px 22px rgba(45,140,255,.28), inset 0 1px 2px rgba(255,255,255,.55) !important;
 }
 
 .glass-card {
-  background: rgba(255,255,255,.30) !important;
+  background: rgba(255,255,255,.35) !important;
   border-color: rgba(82,216,255,.24) !important;
-  box-shadow: 0 8px 24px rgba(7,27,77,.08) !important;
+  box-shadow: 0 8px 24px rgba(7,27,77,.06) !important;
 }
 
 .glass-card:hover {
   border-color: rgba(82,216,255,.62) !important;
-  box-shadow: 0 18px 38px rgba(45,140,255,.18) !important;
+  box-shadow: 0 18px 38px rgba(45,140,255,.16) !important;
 }
 
 .load-more-stretch {
@@ -464,28 +410,28 @@ h1,h2,h3,h4,h5,h6,button,a {
 }
 
 /* ============================================================
-   NEW HERO SECTION STYLES (MATCHING SCREENSHOT 2)
+   PIXEL-PERFECT HERO STYLES (MATCHING SCREENSHOT #2)
    ============================================================ */
 
-.premium-hero {
+.premium-hero-card {
   position: relative;
-  min-height: 460px;
+  min-height: 520px;
   width: 100%;
   overflow: hidden;
-  border-radius: 36px;
+  border-radius: 40px;
   background: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
   box-shadow:
-    0 24px 60px rgba(45, 140, 255, 0.12),
-    0 6px 20px rgba(7, 27, 77, 0.04),
+    0 25px 65px -12px rgba(2, 132, 199, 0.12),
+    0 10px 25px -5px rgba(11, 31, 77, 0.04),
     inset 0 1px 2px rgba(255, 255, 255, 1);
   display: flex;
   align-items: center;
   isolation: isolate;
 }
 
-/* BACKGROUND IMAGE & OVERLAYS */
-.premium-hero-bg-wrapper {
+/* BACKGROUND DESK SETUP IMAGE */
+.premium-hero-bg-container {
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -495,14 +441,14 @@ h1,h2,h3,h4,h5,h6,button,a {
   justify-content: flex-end;
 }
 
-.premium-hero-bg-img {
+.premium-hero-workspace-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: right center;
+  object-position: right 30%;
 }
 
-.premium-hero-gradient-overlay {
+.premium-hero-fade-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
@@ -510,168 +456,169 @@ h1,h2,h3,h4,h5,h6,button,a {
     #ffffff 0%,
     rgba(255, 255, 255, 0.98) 32%,
     rgba(255, 255, 255, 0.88) 46%,
-    rgba(255, 255, 255, 0.40) 65%,
+    rgba(255, 255, 255, 0.35) 68%,
     rgba(255, 255, 255, 0) 100%
   );
 }
 
 /* LEFT HERO CONTENT */
-.premium-hero-content {
+.premium-hero-left-content {
   position: relative;
   z-index: 10;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 48px 24px 48px 56px;
+  padding: 50px 24px 50px 56px;
   max-width: 650px;
 }
 
-/* BADGE */
-.premium-hero-badge {
+/* TOP PILL BADGE */
+.hero-top-badge {
   width: fit-content;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(45, 140, 255, 0.18);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(45, 140, 255, 0.20);
   box-shadow:
-    0 4px 12px rgba(7, 27, 77, 0.05),
+    0 4px 12px rgba(7, 27, 77, 0.04),
     inset 0 1px 1px rgba(255, 255, 255, 1);
   color: #0B1F4D;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 800;
-  backdrop-filter: blur(10px);
-  margin-bottom: 20px;
+  backdrop-filter: blur(12px);
+  margin-bottom: 22px;
 }
 
-/* HERO TITLE */
-.premium-hero-title {
+/* MAIN TITLE */
+.hero-main-title {
   margin: 0;
   color: #0B1F4D;
-  font-size: clamp(38px, 3.8vw, 56px);
-  line-height: 1.05;
+  font-size: clamp(40px, 4.2vw, 60px);
+  line-height: 1.06;
   letter-spacing: -0.04em;
   font-weight: 800;
 }
 
-.premium-hero-highlight {
-  background: linear-gradient(90deg, #178DFF 0%, #00B4D8 50%, #00BFA6 100%);
+/* BLUE-CYAN-TEAL GRADIENT TEXT */
+.hero-gradient-text {
+  background: linear-gradient(90deg, #178DFF 0%, #00B4D8 45%, #00BFA6 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
   display: inline-block;
 }
 
-/* DESCRIPTION */
-.premium-hero-description {
+/* SUBTITLE */
+.hero-subtext {
   margin-top: 18px;
   max-width: 480px;
   color: #46617D;
-  font-size: 14.5px;
+  font-size: 15px;
   line-height: 1.6;
   font-weight: 600;
 }
 
-/* 4 FEATURE PILLS */
-.premium-hero-features {
+/* 4 FEATURE PILLS GRID */
+.hero-feature-pill-grid {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 26px;
+  gap: 12px;
+  margin-top: 28px;
   flex-wrap: wrap;
 }
 
-.premium-feature-pill {
-  min-height: 48px;
+.hero-feature-item {
+  min-height: 52px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.95);
+  gap: 10px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.98);
   box-shadow:
     0 6px 16px rgba(7, 27, 77, 0.05),
     inset 0 1px 1px rgba(255, 255, 255, 1);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
 }
 
-.premium-feature-tag {
-  padding: 2px 6px;
-  border-radius: 6px;
-  background: rgba(11, 31, 77, 0.06);
-  color: #0B1F4D;
+.hero-4k-tag {
+  padding: 3px 7px;
+  border-radius: 8px;
+  background: #E0F2FE;
+  color: #0369A1;
   font-size: 11px;
   font-weight: 900;
 }
 
-.premium-feature-icon {
-  width: 28px;
-  height: 28px;
+.hero-icon-box {
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
   display: grid;
   place-items: center;
   border-radius: 8px;
-  background: rgba(45, 140, 255, 0.08);
+  background: #E0F2FE;
 }
 
-.premium-feature-text strong {
-  display: block;
+.hero-item-title {
   color: #0B1F4D;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.2;
   font-weight: 800;
+  margin: 0;
 }
 
-.premium-feature-text small {
-  display: block;
-  color: #66819A;
-  font-size: 9px;
+.hero-item-sub {
+  color: #64748B;
+  font-size: 10px;
   font-weight: 600;
+  margin: 0;
 }
 
 /* ============================================================
-   RESPONSIVE DESIGN BREAKPOINTS
+   RESPONSIVE BREAKPOINTS
    ============================================================ */
 
 @media (max-width: 1024px) {
-  .premium-hero-content {
+  .premium-hero-left-content {
     padding-left: 36px;
   }
-  .premium-hero-gradient-overlay {
+  .premium-hero-fade-overlay {
     background: linear-gradient(
       90deg,
       #ffffff 0%,
-      rgba(255, 255, 255, 0.96) 45%,
-      rgba(255, 255, 255, 0.80) 65%,
-      rgba(255, 255, 255, 0.35) 100%
+      rgba(255, 255, 255, 0.97) 40%,
+      rgba(255, 255, 255, 0.82) 62%,
+      rgba(255, 255, 255, 0.30) 100%
     );
   }
 }
 
 @media (max-width: 768px) {
-  .premium-hero {
+  .premium-hero-card {
     min-height: auto;
-    border-radius: 26px;
+    border-radius: 28px;
   }
-  .premium-hero-content {
-    padding: 36px 20px;
+  .premium-hero-left-content {
+    padding: 38px 22px;
     max-width: 100%;
   }
-  .premium-hero-title {
-    font-size: clamp(32px, 8vw, 44px);
+  .hero-main-title {
+    font-size: clamp(34px, 8.5vw, 44px);
   }
-  .premium-hero-description {
-    font-size: 13px;
+  .hero-subtext {
+    font-size: 13.5px;
   }
-  .premium-hero-features {
+  .hero-feature-pill-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
-  .premium-hero-gradient-overlay {
-    background: rgba(255, 255, 255, 0.92);
+  .premium-hero-fade-overlay {
+    background: rgba(255, 255, 255, 0.94);
   }
 }

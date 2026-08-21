@@ -453,7 +453,7 @@ export default function Home() {
 
 
       {/* ========================================================
-          PREMIUM HERO (MATCHING SCREENSHOT 2)
+          HERO SECTION (EXACT MATCH REFERENCE #2)
           ======================================================== */}
 
       <section
@@ -462,94 +462,100 @@ export default function Home() {
           px-4
           sm:px-6
           lg:px-8
-          pt-6
+          pt-4
           pb-6
           max-w-[1440px]
           mx-auto
           w-full
         "
       >
-        <div className="premium-hero">
+        <div className="premium-hero-card">
 
-          {/* BACKGROUND DESK SETUP IMAGE */}
-          <div className="premium-hero-bg-wrapper">
+          {/* RIGHT SIDE WORKSPACE VISUAL */}
+          <div className="premium-hero-bg-container">
             <img
-              src="https://images.unsplash.com/photo-1593062096033-9a26b09da705?q=80&w=1800&auto=format&fit=crop"
-              alt="Ultra HD Workspace Desk Setup"
-              className="premium-hero-bg-img"
+              src="/hero-desk-setup.png"
+              alt="4K Ultra HD Workspace Setup"
+              className="premium-hero-workspace-img"
+              onError={(e) => {
+                // ফলব্যাক হিসেবে হাই-কোয়ালিটি ক্লিন সেটআপ লোড হবে
+                e.currentTarget.src = "https://images.unsplash.com/photo-1581291518655-9523c932deb4?q=80&w=1600&auto=format&fit=crop";
+              }}
             />
-            {/* SMOOTH OVERLAY FADE */}
-            <div className="premium-hero-gradient-overlay" />
+            {/* বামপাশের মসৃণ গ্রেডিয়েন্ট ওভারলে */}
+            <div className="premium-hero-fade-overlay" />
           </div>
 
-          {/* LEFT CONTENT */}
-          <div className="premium-hero-content">
+          {/* LEFT HERO CONTENT */}
+          <div className="premium-hero-left-content">
 
-            {/* BADGE */}
-            <div className="premium-hero-badge">
-              <Sparkles className="w-3.5 h-3.5 text-[#2D8CFF]" />
+            {/* TOP BADGE */}
+            <div className="hero-top-badge">
+              <Sparkles className="w-3.5 h-3.5 text-[#178DFF]" />
               <span>Discover &amp; Save Ultra HD 4K Pins</span>
             </div>
 
-            {/* TITLE */}
-            <h1 className="premium-hero-title">
+            {/* MAIN HEADING */}
+            <h1 className="hero-main-title">
               Explore Millions of
               <br />
-              <span className="premium-hero-highlight">
+              <span className="hero-gradient-text">
                 4K Ultra HD
               </span>
               <br />
-              Wallpapers
+              <span className="hero-gradient-text">
+                Wallpapers
+              </span>
             </h1>
 
-            {/* DESCRIPTION */}
-            <p className="premium-hero-description">
+            {/* SUBTITLE */}
+            <p className="hero-subtext">
               Free high-resolution vertical pins &amp; 4K wallpapers for Mobile,
               AMOLED, Desktop &amp; Laptop. Updated daily.
             </p>
 
             {/* 4 FEATURE PILLS */}
-            <div className="premium-hero-features">
+            <div className="hero-feature-pill-grid">
 
               {/* 1. 4K Ultra HD */}
-              <div className="premium-feature-pill">
-                <div className="premium-feature-tag">4K</div>
-                <div className="premium-feature-text">
-                  <strong>Ultra HD</strong>
-                  <small>High Quality</small>
+              <div className="hero-feature-item">
+                <span className="hero-4k-tag">4K</span>
+                <div>
+                  <h5 className="hero-item-title">Ultra HD</h5>
+                  <p className="hero-item-sub">High Quality</p>
                 </div>
               </div>
 
               {/* 2. Free Download */}
-              <div className="premium-feature-pill">
-                <div className="premium-feature-icon">
+              <div className="hero-feature-item">
+                <div className="hero-icon-box">
                   <Download className="w-3.5 h-3.5 text-[#178DFF]" />
                 </div>
-                <div className="premium-feature-text">
-                  <strong>Free</strong>
-                  <small>Download</small>
+                <div>
+                  <h5 className="hero-item-title">Free</h5>
+                  <p className="hero-item-sub">Download</p>
                 </div>
               </div>
 
               {/* 3. Curated Best Picks */}
-              <div className="premium-feature-pill">
-                <div className="premium-feature-icon">
-                  <Heart className="w-3.5 h-3.5 text-[#2D8CFF]" />
+              <div className="hero-feature-item">
+                <div className="hero-icon-box">
+                  <Heart className="w-3.5 h-3.5 text-[#178DFF]" />
                 </div>
-                <div className="premium-feature-text">
-                  <strong>Curated</strong>
-                  <small>Best Picks</small>
+                <div>
+                  <h5 className="hero-item-title">Curated</h5>
+                  <p className="hero-item-sub">Best Picks</p>
                 </div>
               </div>
 
               {/* 4. Updated Daily */}
-              <div className="premium-feature-pill">
-                <div className="premium-feature-icon">
+              <div className="hero-feature-item">
+                <div className="hero-icon-box">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#00BFA6]" />
                 </div>
-                <div className="premium-feature-text">
-                  <strong>Updated</strong>
-                  <small>Daily</small>
+                <div>
+                  <h5 className="hero-item-title">Updated</h5>
+                  <p className="hero-item-sub">Daily</p>
                 </div>
               </div>
 
