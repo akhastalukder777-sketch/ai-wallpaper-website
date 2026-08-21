@@ -453,7 +453,7 @@ export default function Home() {
 
 
       {/* ========================================================
-          HERO SECTION (100% MATCH REFERENCE #2)
+          >>> NEW PREMIUM HERO SECTION (START) <<<
           ======================================================== */}
 
       <section
@@ -471,19 +471,17 @@ export default function Home() {
       >
         <div className="premium-hero-card">
 
-          {/* ====================================================
-              RIGHT SIDE 3D WORKSPACE SETUP VISUAL
-              ==================================================== */}
+          {/* RIGHT SIDE 3D WORKSPACE BATTLESTATION SCENE */}
           <div className="hero-workspace-scene">
             
-            {/* Ambient Lighting */}
+            {/* Ambient Room Lighting */}
             <div className="hero-wall-ambient-light" />
 
             {/* 3 WALL MOUNTAIN PHOTO FRAMES */}
             <div className="hero-top-wall-frames">
               
               {/* Frame 1: Lake Dock */}
-              <div className="hero-picture-frame frame-left">
+              <div className="hero-picture-frame frame-left frame-floating-1">
                 <img
                   src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=600&auto=format&fit=crop"
                   alt="Mountain Lake Wallpaper"
@@ -491,8 +489,8 @@ export default function Home() {
                 />
               </div>
 
-              {/* Frame 2: Snowy Mountain Peak (Wide) */}
-              <div className="hero-picture-frame frame-center">
+              {/* Frame 2: Snowy Mountain Peak (Center Wide) */}
+              <div className="hero-picture-frame frame-center frame-floating-2">
                 <img
                   src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop"
                   alt="Snowy Peaks 4K"
@@ -501,7 +499,7 @@ export default function Home() {
               </div>
 
               {/* Frame 3: Alpine Lake Forest */}
-              <div className="hero-picture-frame frame-right">
+              <div className="hero-picture-frame frame-right frame-floating-1">
                 <img
                   src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=600&auto=format&fit=crop"
                   alt="Alpine Nature Wallpaper"
@@ -525,7 +523,7 @@ export default function Home() {
               <div className="hero-monitor-base-plate" />
             </div>
 
-            {/* SMALL FRAMED PHOTO LEANING ON WALL */}
+            {/* MINI LEANING ARTWORK FRAME */}
             <div className="hero-mini-wall-art">
               <img
                 src="https://images.unsplash.com/photo-1511497584788-87676104235f?q=80&w=300&auto=format&fit=crop"
@@ -553,14 +551,14 @@ export default function Home() {
               <div className="hero-headphone-stand-pole" />
             </div>
 
-            {/* DESK LAMP */}
+            {/* MODERN DESK LAMP */}
             <div className="hero-modern-desk-lamp">
               <div className="hero-lamp-conical-head" />
               <div className="hero-lamp-curved-stem" />
               <div className="hero-lamp-base-circle" />
             </div>
 
-            {/* DESK POTTED PLANT & SMARTPHONE */}
+            {/* DESK SUCCULENT PLANT & PHONE */}
             <div className="hero-desk-succulent-plant">
               <div className="hero-plant-greenery">🌿</div>
               <div className="hero-white-plant-pot" />
@@ -580,13 +578,13 @@ export default function Home() {
               <div className="hero-chair-seat-base" />
             </div>
 
-            {/* WHITE DESKTOP WITH AMBIENT CYAN LED */}
+            {/* WHITE DESK TABLE WITH AMBIENT CYAN LED */}
             <div className="hero-white-desk-top">
               <div className="hero-desk-cyan-led" />
               <div className="hero-desk-drawer-line" />
             </div>
 
-            {/* RIGHT SIDE TROPICAL LEAVES */}
+            {/* RIGHT SIDE TROPICAL FOLIAGE */}
             <div className="hero-far-right-foliage">
               <span className="foliage-leaf leaf-pos-1" />
               <span className="foliage-leaf leaf-pos-2" />
@@ -594,14 +592,12 @@ export default function Home() {
               <span className="foliage-leaf leaf-pos-4" />
             </div>
 
-            {/* SMOOTH FADE TO TEXT */}
+            {/* SMOOTH FEATHER GRADIENT FADE TO LEFT TEXT */}
             <div className="hero-left-feather-fade" />
           </div>
 
 
-          {/* ====================================================
-              LEFT SIDE HERO TEXT CONTENT
-              ==================================================== */}
+          {/* LEFT SIDE HERO TEXT CONTENT */}
           <div className="premium-hero-left-content">
 
             {/* TOP PILL BADGE */}
@@ -610,7 +606,7 @@ export default function Home() {
               <span>Discover &amp; Save Ultra HD 4K Pins</span>
             </div>
 
-            {/* MAIN TITLE */}
+            {/* MAIN TITLE (EXACT GRADIENT & COPY) */}
             <h1 className="hero-main-title">
               Explore Millions of
               <br />
@@ -680,6 +676,10 @@ export default function Home() {
 
         </div>
       </section>
+
+      {/* ========================================================
+          >>> NEW PREMIUM HERO SECTION (END) <<<
+          ======================================================== */}
 
 
       {/* ========================================================
