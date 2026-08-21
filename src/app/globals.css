@@ -848,202 +848,342 @@ h1,h2,h3,h4,h5,h6,button,a {
 ::-webkit-scrollbar-track { background: #F5FCFF; }
 ::-webkit-scrollbar-thumb { background: linear-gradient(#2D8CFF, #52D8FF); }
 * { scrollbar-color: #2D8CFF #F5FCFF; }
+
 /* ============================================================
-   PREMIUM DESK WORKSPACE HERO
+   PREMIUM DESKTOP HERO
    ============================================================ */
 
 .premium-hero {
   position: relative;
-  min-height: 500px;
+  min-height: 485px;
   width: 100%;
   overflow: hidden;
 
   display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-  align-items: center;
+  grid-template-columns: 48% 52%;
 
-  border-radius: 34px;
+  border-radius: 30px;
 
   background:
+    radial-gradient(
+      circle at 75% 40%,
+      rgba(82, 216, 255, .20),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 55% 100%,
+      rgba(127, 255, 212, .18),
+      transparent 30%
+    ),
     linear-gradient(
       135deg,
-      rgba(255,255,255,.90),
-      rgba(245,252,255,.72) 45%,
-      rgba(223,247,255,.58)
+      rgba(255,255,255,.95),
+      rgba(239,250,255,.92)
     );
 
   border: 1px solid rgba(255,255,255,.95);
 
   box-shadow:
-    0 25px 70px rgba(45,140,255,.12),
-    0 8px 25px rgba(7,27,77,.06),
-    inset 0 1px 2px rgba(255,255,255,.98);
+    0 22px 55px rgba(45,140,255,.13),
+    0 5px 20px rgba(7,27,77,.06),
+    inset 0 1px 2px rgba(255,255,255,1);
 
   isolation: isolate;
 }
 
 
 /* ============================================================
-   HERO BACKGROUND GLOW
+   HERO GLOW
    ============================================================ */
 
 .premium-hero-glow {
   position: absolute;
-  border-radius: 999px;
-  pointer-events: none;
-  z-index: -1;
-  filter: blur(70px);
-}
 
-.premium-hero-glow-one {
-  width: 330px;
-  height: 330px;
-
-  right: 5%;
-  top: 4%;
-
-  background: rgba(82,216,255,.20);
-}
-
-.premium-hero-glow-two {
-  width: 300px;
+  width: 520px;
   height: 300px;
 
-  left: 15%;
-  bottom: -20%;
+  right: 22%;
+  bottom: -100px;
 
-  background: rgba(127,255,212,.18);
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(82,216,255,.32),
+      rgba(127,255,212,.16),
+      transparent 70%
+    );
+
+  filter: blur(35px);
+
+  pointer-events: none;
 }
 
 
 /* ============================================================
-   HERO CONTENT
+   LEFT CONTENT
    ============================================================ */
 
 .premium-hero-content {
   position: relative;
-  z-index: 10;
+  z-index: 20;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   padding:
-    58px
+    55px
     20px
-    58px
-    70px;
+    55px
+    64px;
 }
 
 
 /* ============================================================
-   HERO FEATURES
+   BADGE
    ============================================================ */
 
-.premium-hero-feature {
-  min-height: 58px;
+.premium-hero-badge {
+  width: fit-content;
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 11px;
+  gap: 8px;
 
   padding: 8px 15px;
 
-  border-radius: 15px;
+  border-radius: 999px;
 
   background:
-    linear-gradient(
-      135deg,
-      rgba(255,255,255,.82),
-      rgba(255,255,255,.50)
-    );
+    rgba(255,255,255,.82);
 
-  border: 1px solid rgba(255,255,255,.95);
-
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  border:
+    1px solid rgba(45,140,255,.12);
 
   box-shadow:
-    0 5px 15px rgba(7,27,77,.055),
-    inset 0 1px 1px rgba(255,255,255,.95);
+    0 5px 15px rgba(7,27,77,.06),
+    inset 0 1px 1px rgba(255,255,255,1);
+
+  color: #0B1F4D;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  backdrop-filter: blur(12px);
 }
+
+.premium-hero-badge svg {
+  color: #178DFF;
+}
+
+
+/* ============================================================
+   HERO TITLE
+   ============================================================ */
+
+.premium-hero-title {
+  margin: 25px 0 0;
+
+  max-width: 610px;
+
+  color: #0B1F4D;
+
+  font-size:
+    clamp(42px, 4.2vw, 67px);
+
+  line-height: .98;
+
+  letter-spacing: -0.045em;
+
+  font-weight: 800;
+}
+
+.premium-hero-title span {
+  background:
+    linear-gradient(
+      90deg,
+      #0B1F4D 0%,
+      #178DFF 52%,
+      #00BFA6 100%
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  color: transparent;
+}
+
+
+/* ============================================================
+   DESCRIPTION
+   ============================================================ */
+
+.premium-hero-description {
+  margin-top: 24px;
+
+  max-width: 540px;
+
+  color: #46617D;
+
+  font-size: 15px;
+  line-height: 1.7;
+
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   FEATURE CARDS
+   ============================================================ */
+
+.premium-hero-features {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 28px;
+}
+
+
+.premium-feature {
+  min-height: 55px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 8px 12px;
+
+  border-radius: 14px;
+
+  background:
+    rgba(255,255,255,.82);
+
+  border:
+    1px solid rgba(255,255,255,.95);
+
+  box-shadow:
+    0 7px 18px rgba(7,27,77,.06),
+    inset 0 1px 1px rgba(255,255,255,1);
+
+  backdrop-filter: blur(12px);
+}
+
 
 .premium-feature-icon {
   width: 34px;
   height: 34px;
 
+  flex-shrink: 0;
+
   display: grid;
   place-items: center;
 
-  flex-shrink: 0;
-
   border-radius: 10px;
-
-  color: #0B1F4D;
 
   background:
     linear-gradient(
-      135deg,
-      rgba(82,216,255,.32),
+      145deg,
+      rgba(82,216,255,.24),
       rgba(127,255,212,.32)
     );
 
-  border: 1px solid rgba(82,216,255,.25);
-}
-
-.premium-feature-title {
-  font-size: 12px;
-  line-height: 1.1;
-
-  font-weight: 800;
+  border:
+    1px solid rgba(82,216,255,.22);
 
   color: #0B1F4D;
+
+  font-size: 12px;
+  font-weight: 900;
 }
 
-.premium-feature-subtitle {
-  margin-top: 3px;
 
-  font-size: 10px;
-  line-height: 1.1;
+.premium-feature strong {
+  display: block;
 
-  font-weight: 500;
+  color: #0B1F4D;
 
-  color: #6B8097;
+  font-size: 11px;
+  line-height: 1.2;
+
+  font-weight: 900;
+}
+
+
+.premium-feature small {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #66819A;
+
+  font-size: 9px;
+
+  font-weight: 600;
 }
 
 
 /* ============================================================
-   WORKSPACE
+   RIGHT VISUAL
    ============================================================ */
 
-.premium-workspace {
+.premium-hero-visual {
   position: relative;
 
-  min-height: 500px;
+  min-width: 0;
   height: 100%;
 
   overflow: hidden;
 }
 
 
-/* soft wall lighting */
+/* ============================================================
+   WALL
+   ============================================================ */
 
-.workspace-light {
+.hero-wall {
+  position: absolute;
+  inset: 0;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.28),
+      rgba(213,242,250,.45)
+    );
+}
+
+
+/* ============================================================
+   WALL GLOW
+   ============================================================ */
+
+.hero-wall::before {
+  content: "";
+
   position: absolute;
 
-  width: 430px;
-  height: 430px;
+  width: 420px;
+  height: 420px;
 
-  right: 4%;
-  top: 2%;
+  top: 15px;
+  right: 20px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      rgba(255,255,255,.95) 0%,
-      rgba(223,247,255,.48) 38%,
-      transparent 72%
+      rgba(255,255,255,.95),
+      rgba(82,216,255,.10),
+      transparent 68%
     );
 
-  filter: blur(2px);
+  filter: blur(8px);
 }
 
 
@@ -1051,122 +1191,185 @@ h1,h2,h3,h4,h5,h6,button,a {
    WALL FRAMES
    ============================================================ */
 
-.workspace-wall-frame {
+.hero-wall-frame {
   position: absolute;
 
-  width: 43%;
-  height: 52%;
+  background: #fff;
 
-  right: 8%;
-  top: 7%;
+  padding: 8px;
 
-  padding: 10px;
-
-  background: rgba(255,255,255,.90);
-
-  border: 1px solid rgba(255,255,255,.98);
+  border-radius: 2px;
 
   box-shadow:
-    0 18px 35px rgba(7,27,77,.13),
-    inset 0 1px 2px rgba(255,255,255,1);
+    0 15px 28px rgba(7,27,77,.13),
+    0 4px 10px rgba(7,27,77,.06);
 
-  transform:
-    perspective(900px)
-    rotateY(-5deg)
-    rotateX(1deg);
-
-  z-index: 3;
-}
-
-
-.wall-frame-top {
-  position: absolute;
-
-  left: 8%;
-  right: 8%;
-  top: 7%;
-  height: 43%;
-
-  padding: 6px;
-
-  background: #eef4f5;
-
-  box-shadow:
-    0 5px 12px rgba(7,27,77,.08);
-}
-
-
-.wall-frame-bottom {
-  position: absolute;
-
-  left: 8%;
-  right: 8%;
-  bottom: 7%;
-  height: 37%;
-
-  padding: 6px;
-
-  background: #eef4f5;
-
-  box-shadow:
-    0 5px 12px rgba(7,27,77,.08);
-}
-
-
-.workspace-small-frame {
-  position: absolute;
-
-  width: 25%;
-  height: 25%;
-
-  padding: 7px;
-
-  background: rgba(255,255,255,.92);
-
-  border: 1px solid rgba(255,255,255,.98);
-
-  box-shadow:
-    0 12px 28px rgba(7,27,77,.12);
-
-  z-index: 4;
-}
-
-
-.workspace-frame-two {
-  top: 18%;
-  left: 6%;
-
-  transform:
-    perspective(800px)
-    rotateY(5deg)
-    rotateZ(-2deg);
-}
-
-
-.workspace-frame-three {
-  top: 49%;
-  left: 15%;
-
-  transform:
-    perspective(800px)
-    rotateY(4deg)
-    rotateZ(2deg);
+  border:
+    1px solid rgba(11,31,77,.08);
 }
 
 
 /* ============================================================
-   WALLPAPER IMAGE
+   LARGE FRAME
    ============================================================ */
 
-.workspace-wallpaper {
-  width: 100%;
-  height: 100%;
+.hero-frame-large {
+  width: 285px;
 
+  right: 32px;
+  top: 32px;
+
+  padding: 15px;
+
+  transform:
+    perspective(900px)
+    rotateY(-2deg);
+}
+
+
+.hero-frame-header {
+  padding:
+    2px
+    6px
+    12px;
+
+  color: #203B62;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+
+.hero-frame-header small {
   display: block;
 
-  object-fit: cover;
+  margin-top: 3px;
 
-  border-radius: 2px;
+  font-size: 10px;
+
+  color: #66819A;
+}
+
+
+/* ============================================================
+   FRAME IMAGES
+   ============================================================ */
+
+.hero-frame-image {
+  width: 100%;
+
+  border-radius: 1px;
+
+  background-size: cover;
+  background-position: center;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,.08);
+}
+
+
+.hero-image-ocean {
+  height: 86px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #b7e4ee 0%,
+      #3a8fa8 35%,
+      #064a70 72%,
+      #03263f 100%
+    );
+}
+
+
+.hero-image-space {
+  height: 75px;
+
+  margin-top: 12px;
+
+  background:
+    radial-gradient(
+      circle at 60% 40%,
+      rgba(0,180,255,.8) 0 3%,
+      transparent 4%
+    ),
+    radial-gradient(
+      circle at 30% 55%,
+      rgba(255,255,255,.8) 0 2%,
+      transparent 3%
+    ),
+    linear-gradient(
+      145deg,
+      #08182e,
+      #00131f 55%,
+      #02060d
+    );
+}
+
+
+/* ============================================================
+   FLOATING FRAME 1
+   ============================================================ */
+
+.hero-frame-one {
+  width: 160px;
+
+  top: 62px;
+  left: 45px;
+
+  transform:
+    rotate(-2deg)
+    translateY(0);
+
+  animation:
+    heroFloatOne 6s ease-in-out infinite;
+}
+
+
+.hero-image-water {
+  height: 105px;
+
+  background:
+    linear-gradient(
+      150deg,
+      #bcecf7 0%,
+      #319fc4 30%,
+      #006a9b 58%,
+      #012f54 100%
+    );
+}
+
+
+/* ============================================================
+   FLOATING FRAME 2
+   ============================================================ */
+
+.hero-frame-two {
+  width: 190px;
+
+  top: 205px;
+  left: 100px;
+
+  transform:
+    rotate(2deg);
+
+  animation:
+    heroFloatTwo 7s ease-in-out infinite;
+}
+
+
+.hero-image-mountain {
+  height: 115px;
+
+  background:
+    linear-gradient(
+      155deg,
+      #eafaff 0%,
+      #b9d7e0 25%,
+      #728d9b 45%,
+      #304c60 65%,
+      #142f43 100%
+    );
 }
 
 
@@ -1174,68 +1377,54 @@ h1,h2,h3,h4,h5,h6,button,a {
    DESK
    ============================================================ */
 
-.workspace-desk {
+.hero-desk {
   position: absolute;
 
-  left: 2%;
-  right: 0;
+  left: -4%;
+  right: -4%;
 
-  bottom: 0;
+  bottom: -20px;
 
-  height: 35%;
-
-  z-index: 8;
-}
-
-
-/* desk surface */
-
-.workspace-desk::before {
-  content: "";
-
-  position: absolute;
-
-  left: -5%;
-  right: -5%;
-
-  top: 19%;
-
-  height: 18px;
-
-  border-radius: 8px;
+  height: 140px;
 
   background:
     linear-gradient(
       180deg,
-      #ffffff,
-      #e7f0f2
+      rgba(255,255,255,.95),
+      rgba(219,239,245,.94)
     );
 
-  border: 1px solid rgba(255,255,255,.98);
+  border-top:
+    8px solid rgba(255,255,255,.95);
 
   box-shadow:
-    0 12px 20px rgba(7,27,77,.12),
-    inset 0 1px 2px white;
+    0 -5px 20px rgba(7,27,77,.06);
 }
 
 
-/* desk legs */
+/* DESK FRONT LINES */
 
-.workspace-desk::after {
+.hero-desk::before,
+.hero-desk::after {
   content: "";
 
   position: absolute;
 
-  left: 12%;
-  right: 12%;
+  left: 0;
+  right: 0;
 
-  top: 30%;
-  bottom: -30%;
+  height: 1px;
 
-  border-left: 8px solid rgba(205,218,222,.85);
-  border-right: 8px solid rgba(205,218,222,.85);
+  background:
+    rgba(120,174,191,.25);
+}
 
-  opacity: .75;
+.hero-desk::before {
+  top: 35px;
+}
+
+.hero-desk::after {
+  top: 65px;
 }
 
 
@@ -1243,456 +1432,398 @@ h1,h2,h3,h4,h5,h6,button,a {
    MONITOR
    ============================================================ */
 
-.workspace-monitor {
+.hero-monitor {
   position: absolute;
 
-  width: 38%;
-  height: 55%;
+  width: 155px;
 
-  left: 31%;
-  bottom: 22%;
+  left: 42%;
+  top: -88px;
 
-  z-index: 10;
+  transform: translateX(-50%);
 }
 
 
-.monitor-screen {
-  position: relative;
+.hero-monitor-screen {
+  width: 155px;
+  height: 94px;
 
-  width: 100%;
-  height: 82%;
-
-  padding: 7px;
-
-  border-radius: 10px;
-
-  background: #dce5e7;
-
-  border: 1px solid rgba(255,255,255,.95);
-
-  box-shadow:
-    0 16px 32px rgba(7,27,77,.16),
-    inset 0 1px 2px white;
-
-  overflow: hidden;
-}
-
-
-.monitor-screen img {
-  border-radius: 6px;
-}
-
-
-.monitor-glass {
-  position: absolute;
-
-  inset: 7px;
-
-  border-radius: 6px;
-
-  background:
-    linear-gradient(
-      125deg,
-      rgba(255,255,255,.20),
-      transparent 32%,
-      transparent 68%,
-      rgba(82,216,255,.08)
-    );
-
-  pointer-events: none;
-}
-
-
-.monitor-neck {
-  position: absolute;
-
-  width: 12%;
-  height: 15%;
-
-  left: 44%;
-  bottom: 6%;
-
-  background:
-    linear-gradient(
-      90deg,
-      #d2dfe2,
-      #f8ffff,
-      #ccdadd
-    );
-
-  border-radius: 0 0 5px 5px;
-}
-
-
-.monitor-base {
-  position: absolute;
-
-  width: 42%;
-  height: 5%;
-
-  left: 29%;
-  bottom: 1%;
-
-  border-radius: 999px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #c8d7da,
-      #ffffff,
-      #c6d6d9
-    );
-
-  box-shadow:
-    0 4px 8px rgba(7,27,77,.08);
-}
-
-
-/* ============================================================
-   KEYBOARD
-   ============================================================ */
-
-.workspace-keyboard {
-  position: absolute;
-
-  width: 31%;
-  height: 8%;
-
-  left: 32%;
-  top: 27%;
+  padding: 5px;
 
   border-radius: 7px;
 
-  transform:
-    perspective(500px)
-    rotateX(48deg);
-
-  background:
-    linear-gradient(
-      135deg,
-      #e9f1f2,
-      #ffffff
-    );
-
-  border: 1px solid rgba(255,255,255,.95);
-
-  box-shadow:
-    0 5px 10px rgba(7,27,77,.10);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 4px;
-}
-
-.workspace-keyboard span {
-  width: 8%;
-  height: 35%;
-
-  border-radius: 2px;
-
-  background: #c8d5d8;
-}
-
-
-/* ============================================================
-   MOUSE
-   ============================================================ */
-
-.workspace-mouse {
-  position: absolute;
-
-  width: 5%;
-  height: 8%;
-
-  left: 65%;
-  top: 28%;
-
-  border-radius: 45% 45% 48% 48%;
-
-  background:
-    linear-gradient(
-      135deg,
-      #ffffff,
-      #d7e3e6
-    );
-
-  box-shadow:
-    0 5px 10px rgba(7,27,77,.10);
-
-  transform:
-    rotate(-8deg);
-}
-
-
-/* ============================================================
-   HEADPHONES
-   ============================================================ */
-
-.workspace-headphones {
-  position: absolute;
-
-  width: 11%;
-  height: 19%;
-
-  right: 7%;
-  bottom: 16%;
-
-  z-index: 12;
-}
-
-
-.headphone-band {
-  position: absolute;
-
-  width: 65%;
-  height: 72%;
-
-  left: 18%;
-  top: 4%;
+  background: #edf8fb;
 
   border:
-    6px solid #d7e4e6;
+    1px solid rgba(11,31,77,.15);
 
-  border-bottom: 0;
-
-  border-radius: 999px 999px 0 0;
+  box-shadow:
+    0 10px 20px rgba(7,27,77,.12);
 }
 
 
-.headphone-left,
-.headphone-right {
+.hero-monitor-screen::after {
+  content: "";
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: 4px;
+
+  background:
+    radial-gradient(
+      circle at 70% 30%,
+      rgba(127,255,212,.7),
+      transparent 24%
+    ),
+    linear-gradient(
+      145deg,
+      #051b2e,
+      #0c5974 50%,
+      #061b2c
+    );
+}
+
+
+.hero-screen-glow {
+  position: absolute;
+}
+
+
+.hero-monitor-stand {
+  width: 38px;
+  height: 25px;
+
+  margin: 0 auto;
+
+  border-left:
+    3px solid #c5dce4;
+
+  border-right:
+    3px solid #c5dce4;
+}
+
+
+/* ============================================================
+   LAMP
+   ============================================================ */
+
+.hero-desk-lamp {
   position: absolute;
 
-  width: 28%;
-  height: 42%;
+  left: 12%;
 
-  bottom: 3%;
+  top: -45px;
 
-  border-radius: 9px;
+  width: 45px;
+  height: 80px;
+}
+
+
+.hero-lamp-head {
+  position: absolute;
+
+  top: 0;
+  left: 5px;
+
+  width: 34px;
+  height: 20px;
+
+  border-radius:
+    20px 20px 5px 5px;
+
+  background: #fff;
+
+  box-shadow:
+    0 5px 12px rgba(7,27,77,.08);
+}
+
+
+.hero-lamp-arm {
+  position: absolute;
+
+  top: 18px;
+  left: 21px;
+
+  width: 3px;
+  height: 58px;
+
+  background: #b9d4dc;
+}
+
+
+/* ============================================================
+   PLANT
+   ============================================================ */
+
+.hero-desk-plant {
+  position: absolute;
+
+  right: 12%;
+
+  top: -55px;
+
+  width: 75px;
+  height: 80px;
+}
+
+
+.hero-desk-plant::after {
+  content: "";
+
+  position: absolute;
+
+  bottom: 0;
+  left: 25px;
+
+  width: 28px;
+  height: 22px;
+
+  border-radius:
+    3px 3px 10px 10px;
 
   background:
     linear-gradient(
       145deg,
-      #ffffff,
-      #cddcdf
-    );
-
-  box-shadow:
-    0 4px 8px rgba(7,27,77,.12);
-}
-
-
-.headphone-left {
-  left: 4%;
-}
-
-
-.headphone-right {
-  right: 4%;
-}
-
-
-/* ============================================================
-   SMALL PLANT
-   ============================================================ */
-
-.workspace-mini-plant {
-  position: absolute;
-
-  left: 7%;
-  bottom: 17%;
-
-  width: 12%;
-  height: 25%;
-
-  z-index: 11;
-}
-
-
-.mini-pot {
-  position: absolute;
-
-  width: 45%;
-  height: 30%;
-
-  left: 27%;
-  bottom: 0;
-
-  border-radius: 3px 3px 9px 9px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #d9e5df,
-      #ffffff,
-      #c9dad3
+      #d9eff1,
+      #a8d7d7
     );
 }
 
 
-.workspace-mini-plant span {
+.hero-desk-plant span {
   position: absolute;
 
-  width: 28%;
-  height: 48%;
+  display: block;
 
-  bottom: 22%;
-  left: 36%;
+  width: 22px;
+  height: 38px;
 
   border-radius:
     100% 0 100% 0;
 
   background:
     linear-gradient(
-      135deg,
-      #8bd8b2,
-      #43ad83
+      145deg,
+      #91dfbd,
+      #45b88c
     );
 
-  transform-origin: bottom;
+  transform-origin: bottom center;
 }
 
-
-.workspace-mini-plant span:nth-child(2) {
+.hero-desk-plant span:nth-child(1) {
+  left: 20px;
+  top: 15px;
   transform: rotate(-35deg);
 }
 
-.workspace-mini-plant span:nth-child(3) {
-  transform: rotate(30deg);
+.hero-desk-plant span:nth-child(2) {
+  left: 35px;
+  top: 4px;
+  transform: rotate(5deg);
 }
 
-.workspace-mini-plant span:nth-child(4) {
-  transform: rotate(65deg);
+.hero-desk-plant span:nth-child(3) {
+  left: 45px;
+  top: 18px;
+  transform: rotate(35deg);
+}
+
+.hero-desk-plant span:nth-child(4) {
+  left: 10px;
+  top: 32px;
+  transform: rotate(-55deg);
 }
 
 
 /* ============================================================
-   BIG PLANT
+   HEADPHONE
    ============================================================ */
 
-.workspace-plant {
+.hero-desk-headphone {
   position: absolute;
 
-  right: -1%;
-  bottom: 19%;
+  right: 27%;
 
-  width: 14%;
-  height: 43%;
+  top: -35px;
 
-  z-index: 7;
+  width: 45px;
+  height: 55px;
+
+  border:
+    4px solid rgba(88,133,149,.65);
+
+  border-bottom-color: transparent;
+
+  border-radius:
+    50% 50% 0 0;
 }
 
 
-.plant-stem {
+.hero-desk-headphone::before,
+.hero-desk-headphone::after {
+  content: "";
+
   position: absolute;
 
-  width: 4px;
-  height: 72%;
+  bottom: -3px;
 
-  left: 48%;
-  bottom: 17%;
+  width: 13px;
+  height: 22px;
 
-  background: #71ad8b;
+  border-radius: 8px;
 
-  border-radius: 999px;
+  background: #d9e9ed;
+}
+
+.hero-desk-headphone::before {
+  left: -7px;
+}
+
+.hero-desk-headphone::after {
+  right: -7px;
 }
 
 
-.plant-leaf {
+/* ============================================================
+   FRONT WALLPAPER FRAME
+   ============================================================ */
+
+.hero-front-frame {
   position: absolute;
 
-  width: 38%;
-  height: 22%;
+  width: 235px;
+
+  right: 90px;
+  bottom: 72px;
+
+  padding: 7px;
+
+  border-radius: 8px;
+
+  background: rgba(255,255,255,.88);
+
+  border:
+    1px solid rgba(255,255,255,.95);
+
+  box-shadow:
+    0 12px 25px rgba(7,27,77,.14);
+
+  transform:
+    rotate(-1deg);
+
+  z-index: 8;
+}
+
+
+.hero-front-image {
+  height: 66px;
+
+  border-radius: 4px;
 
   background:
     linear-gradient(
-      135deg,
-      #9fe2ba,
-      #4daf82
+      145deg,
+      #222b27,
+      #6e6a52 40%,
+      #222f2d 72%,
+      #0c191b
     );
+}
+
+
+/* ============================================================
+   LEAVES
+   ============================================================ */
+
+.hero-leaves {
+  position: absolute;
+
+  right: -15px;
+  bottom: 60px;
+
+  width: 90px;
+  height: 150px;
+
+  z-index: 9;
+}
+
+
+.hero-leaves span {
+  position: absolute;
+
+  width: 30px;
+  height: 60px;
 
   border-radius:
     100% 0 100% 0;
+
+  background:
+    linear-gradient(
+      145deg,
+      #82dfb0,
+      #42b987
+    );
 
   transform-origin: bottom center;
 }
 
 
-.leaf-1 {
-  left: 10%;
-  top: 30%;
-  transform: rotate(-38deg);
-}
-
-.leaf-2 {
-  left: 44%;
-  top: 20%;
-  transform: rotate(28deg);
-}
-
-.leaf-3 {
-  left: 55%;
-  top: 42%;
-  transform: rotate(48deg);
-}
-
-.leaf-4 {
-  left: 8%;
-  top: 50%;
-  transform: rotate(-55deg);
-}
-
-.leaf-5 {
-  left: 35%;
-  top: 60%;
-  transform: rotate(15deg);
-}
-
-
-/* ============================================================
-   DESK FRONT
-   ============================================================ */
-
-.workspace-desk-front {
-  position: absolute;
-
-  left: 0;
-  right: 0;
+.hero-leaves span:nth-child(1) {
+  right: 10px;
   bottom: 0;
+  transform: rotate(45deg);
+}
 
-  height: 18%;
+.hero-leaves span:nth-child(2) {
+  right: 35px;
+  bottom: 35px;
+  transform: rotate(-35deg);
+}
 
-  z-index: 13;
+.hero-leaves span:nth-child(3) {
+  right: 3px;
+  bottom: 65px;
+  transform: rotate(55deg);
+}
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(231,240,242,.55),
-      rgba(210,225,228,.78)
-    );
+.hero-leaves span:nth-child(4) {
+  right: 38px;
+  bottom: 88px;
+  transform: rotate(-45deg);
+}
 
-  border-top:
-    1px solid rgba(255,255,255,.9);
-
-  box-shadow:
-    0 -8px 18px rgba(7,27,77,.04);
+.hero-leaves span:nth-child(5) {
+  right: 4px;
+  bottom: 110px;
+  transform: rotate(55deg);
 }
 
 
 /* ============================================================
-   ANIMATION
+   FLOAT ANIMATIONS
    ============================================================ */
 
-@keyframes premiumSparkle {
-  0%,
-  100% {
-    transform: rotate(0deg) scale(1);
+@keyframes heroFloatOne {
+  0%, 100% {
+    transform: rotate(-2deg) translateY(0);
   }
 
   50% {
-    transform: rotate(12deg) scale(1.12);
+    transform: rotate(-2deg) translateY(-7px);
+  }
+}
+
+@keyframes heroFloatTwo {
+  0%, 100% {
+    transform: rotate(2deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(2deg) translateY(8px);
   }
 }
 
@@ -1704,26 +1835,40 @@ h1,h2,h3,h4,h5,h6,button,a {
 @media (max-width: 1100px) {
 
   .premium-hero {
-    grid-template-columns: 1fr 1fr;
-    min-height: 470px;
+    grid-template-columns: 50% 50%;
   }
 
   .premium-hero-content {
-    padding:
-      45px
-      10px
-      45px
-      45px;
+    padding-left: 42px;
   }
 
-  .premium-workspace {
-    min-height: 470px;
+  .premium-hero-title {
+    font-size: 45px;
   }
 
-  .premium-hero-content h1 {
-    font-size: 46px;
+  .premium-feature {
+    padding: 7px 8px;
   }
 
+  .premium-feature small {
+    font-size: 8px;
+  }
+
+  .hero-frame-large {
+    right: 10px;
+  }
+
+  .hero-frame-one {
+    left: 20px;
+  }
+
+  .hero-frame-two {
+    left: 70px;
+  }
+
+  .hero-front-frame {
+    right: 45px;
+  }
 }
 
 
@@ -1734,129 +1879,38 @@ h1,h2,h3,h4,h5,h6,button,a {
 @media (max-width: 767px) {
 
   .premium-hero {
-    grid-template-columns: 1fr;
-
     min-height: auto;
 
-    border-radius: 26px;
+    display: block;
+
+    border-radius: 24px;
   }
 
   .premium-hero-content {
     padding:
       38px
-      25px
-      12px;
+      24px
+      34px;
   }
 
-  .premium-hero-content h1 {
-    font-size: 38px;
+  .premium-hero-title {
+    font-size: clamp(34px, 9vw, 48px);
   }
 
-  .premium-workspace {
-    min-height: 360px;
-
-    margin-top: -5px;
-  }
-
-  .workspace-wall-frame {
-    width: 43%;
-    height: 48%;
-
-    right: 7%;
-    top: 8%;
-  }
-
-  .workspace-small-frame {
-    width: 27%;
-    height: 25%;
-  }
-
-  .workspace-monitor {
-    width: 40%;
-    height: 48%;
-
-    left: 30%;
-    bottom: 21%;
-  }
-
-  .workspace-plant {
-    width: 17%;
-  }
-
-  .premium-hero-feature {
-    min-height: 54px;
-    padding: 7px 11px;
-  }
-
-}
-
-
-/* ============================================================
-   SMALL MOBILE
-   ============================================================ */
-
-@media (max-width: 480px) {
-
-  .premium-hero-content {
-    padding:
-      32px
-      20px
-      8px;
-  }
-
-  .premium-hero-content h1 {
-    font-size: 34px;
-  }
-
-  .premium-hero-content p {
+  .premium-hero-description {
     font-size: 13px;
   }
 
-  .premium-hero-feature {
-    flex: 1 1 calc(50% - 8px);
+  .premium-hero-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
-  .premium-workspace {
-    min-height: 300px;
+  .premium-feature {
+    width: 100%;
   }
 
-  .workspace-wall-frame {
-    width: 47%;
-    height: 45%;
+  .premium-hero-visual {
+    display: none;
   }
-
-  .workspace-monitor {
-    width: 43%;
-    height: 46%;
-
-    left: 28%;
-  }
-
-  .workspace-frame-two {
-    left: 4%;
-  }
-
-  .workspace-frame-three {
-    left: 10%;
-  }
-
-  .workspace-headphones {
-    right: 3%;
-  }
-
-}
-
-
-/* ============================================================
-   REDUCED MOTION
-   ============================================================ */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .premium-hero *,
-  .premium-hero {
-    animation: none !important;
-    transition: none !important;
-  }
-
 }

@@ -457,391 +457,183 @@ export default function Home() {
 <section
   className="
     relative
-    max-w-[1600px]
-    mx-auto
-    w-full
-    px-3
+    px-4
     sm:px-6
     lg:px-8
-    pt-5
-    pb-7
+    pt-8
+    pb-8
+    max-w-[1400px]
+    mx-auto
+    w-full
   "
 >
   <div className="premium-hero">
-    
-    {/* Background glow */}
-    <div className="premium-hero-glow premium-hero-glow-one" />
-    <div className="premium-hero-glow premium-hero-glow-two" />
 
-    {/* ====================================================
-        LEFT CONTENT
-        ==================================================== */}
+    {/* SOFT BACKGROUND GLOW */}
+    <div className="premium-hero-glow" />
 
+    {/* LEFT CONTENT */}
     <div className="premium-hero-content">
 
-      {/* Badge */}
-      <div
-        className="
-          inline-flex
-          items-center
-          gap-2
-          px-4
-          py-2
-          rounded-full
-          bg-white/65
-          border
-          border-white/90
-          backdrop-blur-xl
-          shadow-sm
-          text-[#0B1F4D]
-          text-xs
-          font-bold
-          w-fit
-        "
-      >
-        <Sparkles
-          className="w-4 h-4 text-[#2D8CFF]"
-          style={{
-            animation: "premiumSparkle 4s ease-in-out infinite",
-          }}
-        />
-
-        <span>
-          Discover & Save Ultra HD 4K Pins
-        </span>
+      {/* BADGE */}
+      <div className="premium-hero-badge">
+        <Sparkles className="w-4 h-4" />
+        <span>Discover &amp; Save Ultra HD 4K Pins</span>
       </div>
 
-
-      {/* Title */}
-      <h1
-        className="
-          mt-6
-          text-4xl
-          sm:text-5xl
-          lg:text-[58px]
-          xl:text-[64px]
-          font-black
-          tracking-tight
-          text-[#0B1F4D]
-          leading-[1.02]
-          max-w-[650px]
-        "
-      >
+      {/* TITLE */}
+      <h1 className="premium-hero-title">
         Explore Millions of
-
         <br />
 
-        <span
-          className="
-            bg-gradient-to-r
-            from-[#0B1F4D]
-            via-[#178DFF]
-            to-[#00BFA6]
-            bg-clip-text
-            text-transparent
-          "
-        >
+        <span>
           4K Ultra HD Wallpapers
         </span>
       </h1>
 
-
-      {/* Description */}
-      <p
-        className="
-          mt-5
-          text-sm
-          sm:text-base
-          lg:text-[17px]
-          text-[#46617D]
-          font-medium
-          max-w-[560px]
-          leading-relaxed
-        "
-      >
-        Free high-resolution vertical pins & 4K wallpapers for
-        Mobile, AMOLED, Desktop & Laptop. Updated daily.
+      {/* DESCRIPTION */}
+      <p className="premium-hero-description">
+        Free high-resolution vertical pins &amp; 4K wallpapers for Mobile,
+        AMOLED, Desktop &amp; Laptop. Updated daily.
       </p>
 
+      {/* FEATURE CARDS */}
+      <div className="premium-hero-features">
 
-      {/* Features */}
-      <div
-        className="
-          mt-7
-          flex
-          flex-wrap
-          items-center
-          gap-2
-          sm:gap-3
-        "
-      >
-
-        {/* Ultra HD */}
-        <div className="premium-hero-feature">
+        <div className="premium-feature">
           <div className="premium-feature-icon">
             4K
           </div>
 
           <div>
-            <div className="premium-feature-title">
-              Ultra HD
-            </div>
-
-            <div className="premium-feature-subtitle">
-              High Quality
-            </div>
+            <strong>Ultra HD</strong>
+            <small>High Quality</small>
           </div>
         </div>
 
-
-        {/* Download */}
-        <div className="premium-hero-feature">
+        <div className="premium-feature">
           <div className="premium-feature-icon">
-            <Sparkles className="w-5 h-5" />
+            <Sparkles className="w-4 h-4" />
           </div>
 
           <div>
-            <div className="premium-feature-title">
-              Free
-            </div>
-
-            <div className="premium-feature-subtitle">
-              Download
-            </div>
+            <strong>Free</strong>
+            <small>Download</small>
           </div>
         </div>
 
-
-        {/* Curated */}
-        <div className="premium-hero-feature">
+        <div className="premium-feature">
           <div className="premium-feature-icon">
-            <Flame className="w-5 h-5" />
+            <Flame className="w-4 h-4" />
           </div>
 
           <div>
-            <div className="premium-feature-title">
-              Curated
-            </div>
-
-            <div className="premium-feature-subtitle">
-              Best Picks
-            </div>
+            <strong>Curated</strong>
+            <small>Best Picks</small>
           </div>
         </div>
 
-
-        {/* Updated */}
-        <div className="premium-hero-feature">
+        <div className="premium-feature">
           <div className="premium-feature-icon">
-            <ShieldCheck className="w-5 h-5" />
+            <ShieldCheck className="w-4 h-4" />
           </div>
 
           <div>
-            <div className="premium-feature-title">
-              Updated
-            </div>
-
-            <div className="premium-feature-subtitle">
-              Daily
-            </div>
+            <strong>Updated</strong>
+            <small>Daily</small>
           </div>
         </div>
 
-      </div>
-
-
-      {/* MOBILE SEARCH */}
-      <div
-        className="
-          md:hidden
-          pt-5
-          max-w-md
-        "
-      >
-        <div className="relative">
-
-          <Search
-            className="
-              absolute
-              left-4
-              top-1/2
-              -translate-y-1/2
-              w-4
-              h-4
-              text-slate-500
-            "
-          />
-
-          <input
-            type="text"
-            placeholder="Search pins, cars, anime, nature..."
-            value={searchQuery}
-            onChange={(e) =>
-              setSearchQuery(e.target.value)
-            }
-            className="
-              w-full
-              pl-11
-              pr-4
-              py-3
-              bg-white/90
-              border
-              border-white
-              rounded-2xl
-              text-sm
-              text-[#0B1F4D]
-              placeholder-slate-500
-              focus:outline-none
-              focus:border-[#2D8CFF]
-              shadow-sm
-            "
-          />
-
-        </div>
       </div>
 
     </div>
 
 
     {/* ====================================================
-        RIGHT WORKSPACE VISUAL
+        RIGHT DESKTOP DESK / WALLPAPER FRAME VISUAL
         ==================================================== */}
 
-    <div className="premium-workspace">
+    <div className="premium-hero-visual">
 
-      {/* Soft background */}
-      <div className="workspace-light" />
+      {/* BACK WALL */}
+      <div className="hero-wall">
 
-      {/* Decorative plant */}
-      <div className="workspace-plant">
-        <span className="plant-stem" />
-        <span className="plant-leaf leaf-1" />
-        <span className="plant-leaf leaf-2" />
-        <span className="plant-leaf leaf-3" />
-        <span className="plant-leaf leaf-4" />
-        <span className="plant-leaf leaf-5" />
-      </div>
+        {/* LARGE WALL FRAME */}
+        <div className="hero-wall-frame hero-frame-large">
 
-
-      {/* ==================================================
-          MAIN WALL FRAME
-          ================================================== */}
-
-      <div className="workspace-wall-frame">
-
-        <div className="wall-frame-top">
-          {wallpapers[0] && (
-            <img
-              src={wallpapers[0].imageUrl}
-              alt={wallpapers[0].title || "Wallpaper"}
-              className="workspace-wallpaper"
-            />
-          )}
-        </div>
-
-        <div className="wall-frame-bottom">
-          {wallpapers[1] && (
-            <img
-              src={wallpapers[1].imageUrl}
-              alt={wallpapers[1].title || "Wallpaper"}
-              className="workspace-wallpaper"
-            />
-          )}
-        </div>
-
-      </div>
-
-
-      {/* Second wall frame */}
-      <div className="workspace-small-frame workspace-frame-two">
-        {wallpapers[2] && (
-          <img
-            src={wallpapers[2].imageUrl}
-            alt={wallpapers[2].title || "Wallpaper"}
-            className="workspace-wallpaper"
-          />
-        )}
-      </div>
-
-
-      {/* Third wall frame */}
-      <div className="workspace-small-frame workspace-frame-three">
-        {wallpapers[3] && (
-          <img
-            src={wallpapers[3].imageUrl}
-            alt={wallpapers[3].title || "Wallpaper"}
-            className="workspace-wallpaper"
-          />
-        )}
-      </div>
-
-
-      {/* ==================================================
-          DESK
-          ================================================== */}
-
-      <div className="workspace-desk">
-
-        {/* Monitor */}
-        <div className="workspace-monitor">
-
-          <div className="monitor-screen">
-            {wallpapers[4] && (
-              <img
-                src={wallpapers[4].imageUrl}
-                alt={wallpapers[4].title || "Wallpaper"}
-                className="workspace-wallpaper"
-              />
-            )}
-
-            <div className="monitor-glass" />
+          <div className="hero-frame-header">
+            <span>Nature Ultra HD Wallpaper</span>
+            <small>#7dyq-90101</small>
           </div>
 
-          <div className="monitor-neck" />
-          <div className="monitor-base" />
+          <div className="hero-frame-image hero-image-ocean" />
+
+          <div className="hero-frame-image hero-image-space" />
 
         </div>
 
 
-        {/* Keyboard */}
-        <div className="workspace-keyboard">
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
+        {/* SMALL FLOATING FRAME */}
+        <div className="hero-wall-frame hero-frame-floating hero-frame-one">
+          <div className="hero-frame-image hero-image-water" />
         </div>
 
 
-        {/* Mouse */}
-        <div className="workspace-mouse" />
-
-
-        {/* Headphones */}
-        <div className="workspace-headphones">
-          <div className="headphone-band" />
-          <div className="headphone-left" />
-          <div className="headphone-right" />
+        {/* MOUNTAIN FRAME */}
+        <div className="hero-wall-frame hero-frame-floating hero-frame-two">
+          <div className="hero-frame-image hero-image-mountain" />
         </div>
 
 
-        {/* Small plant */}
-        <div className="workspace-mini-plant">
-          <div className="mini-pot" />
+        {/* DESK */}
+        <div className="hero-desk">
+
+          {/* MONITOR */}
+          <div className="hero-monitor">
+            <div className="hero-monitor-screen">
+              <div className="hero-screen-glow" />
+            </div>
+
+            <div className="hero-monitor-stand" />
+          </div>
+
+
+          {/* DESK ITEMS */}
+          <div className="hero-desk-lamp">
+            <div className="hero-lamp-head" />
+            <div className="hero-lamp-arm" />
+          </div>
+
+          <div className="hero-desk-plant">
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+
+          <div className="hero-desk-headphone">
+            <div />
+          </div>
+
+        </div>
+
+
+        {/* FRONT FLOATING WALLPAPER */}
+        <div className="hero-front-frame">
+          <div className="hero-front-image" />
+        </div>
+
+
+        {/* DECORATIVE LEAVES */}
+        <div className="hero-leaves">
+          <span />
+          <span />
           <span />
           <span />
           <span />
         </div>
 
       </div>
-
-
-      {/* Desk front */}
-      <div className="workspace-desk-front" />
 
     </div>
 
