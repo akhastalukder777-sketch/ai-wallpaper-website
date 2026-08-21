@@ -453,7 +453,7 @@ export default function Home() {
 
 
       {/* ========================================================
-          >>> NEW HERO SECTION (GUARANTEED IMAGE DISPLAY) <<<
+          >>> NEW HERO SECTION (LARGER & BALANCED VIEW) <<<
           ======================================================== */}
 
       <section
@@ -464,26 +464,26 @@ export default function Home() {
           lg:px-8
           pt-4
           pb-6
-          max-w-[1440px]
+          max-w-[1520px]
           mx-auto
           w-full
         "
       >
-        <div className="relative w-full min-h-[520px] rounded-[40px] bg-white border-[1.5px] border-white/95 shadow-2xl shadow-sky-900/10 overflow-hidden flex items-center isolate">
+        <div className="relative w-full min-h-[560px] lg:min-h-[600px] rounded-[44px] bg-white border-[1.5px] border-white/95 shadow-2xl shadow-sky-900/10 overflow-hidden flex items-center isolate">
 
-          {/* RIGHT SIDE ORIGINAL WORKSPACE SETUP IMAGE */}
+          {/* RIGHT SIDE ORIGINAL WORKSPACE SETUP IMAGE (LARGER COVERAGE) */}
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden flex justify-end">
             <img
               src="/hero-setup.png"
               alt="Anime Desk Setup Workspace"
-              className="w-full md:w-[65%] h-full object-cover object-[center_36%] md:object-right"
+              className="w-full md:w-[70%] lg:w-[68%] h-full object-cover object-[center_32%] md:object-right"
             />
-            {/* SMOOTH FEATHER GRADIENT OVERLAY (Text Clarity) */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 md:via-white/80 to-transparent" />
+            {/* SMOOTH FEATHER GRADIENT OVERLAY */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 md:via-white/70 to-transparent" />
           </div>
 
           {/* LEFT HERO CONTENT */}
-          <div className="relative z-10 p-8 sm:p-12 md:p-14 max-w-[650px] flex flex-col justify-center">
+          <div className="relative z-10 p-8 sm:p-12 lg:p-16 max-w-[680px] flex flex-col justify-center">
 
             {/* TOP PILL BADGE */}
             <div className="inline-flex items-center gap-2 bg-white/90 border border-[#2D8CFF]/20 rounded-full px-4 py-1.5 mb-5 text-[12px] font-bold text-[#0B1F4D] shadow-sm backdrop-blur-md w-fit">
@@ -492,7 +492,7 @@ export default function Home() {
             </div>
 
             {/* MAIN TITLE */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold text-[#0B1F4D] tracking-tight leading-[1.08] mb-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.8rem] font-extrabold text-[#0B1F4D] tracking-tight leading-[1.08] mb-4">
               Explore Millions of
               <br />
               <span className="bg-gradient-to-r from-[#178DFF] via-[#00B4D8] to-[#00BFA6] bg-clip-text text-transparent inline-block">
@@ -501,13 +501,13 @@ export default function Home() {
             </h1>
 
             {/* SUBTITLE */}
-            <p className="text-[#46617D] text-sm sm:text-base font-semibold max-w-md mb-8 leading-relaxed">
+            <p className="text-[#46617D] text-sm sm:text-base font-semibold max-w-lg mb-8 leading-relaxed">
               Free high-resolution vertical pins &amp; 4K wallpapers for Mobile,
               AMOLED, Desktop &amp; Laptop. Updated daily.
             </p>
 
             {/* 4 FEATURE PILLS */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-[540px]">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-[560px]">
 
               {/* 1. 4K Ultra HD */}
               <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2.5 px-3.5 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
