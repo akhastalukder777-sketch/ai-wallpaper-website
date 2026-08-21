@@ -453,7 +453,7 @@ export default function Home() {
 
 
       {/* ========================================================
-          HERO SECTION (EXACT MATCH REFERENCE #2)
+          HERO SECTION (100% MATCH REFERENCE #2)
           ======================================================== */}
 
       <section
@@ -471,31 +471,146 @@ export default function Home() {
       >
         <div className="premium-hero-card">
 
-          {/* RIGHT SIDE WORKSPACE VISUAL */}
-          <div className="premium-hero-bg-container">
-            <img
-              src="/hero-desk-setup.png"
-              alt="4K Ultra HD Workspace Setup"
-              className="premium-hero-workspace-img"
-              onError={(e) => {
-                // ফলব্যাক হিসেবে হাই-কোয়ালিটি ক্লিন সেটআপ লোড হবে
-                e.currentTarget.src = "https://images.unsplash.com/photo-1581291518655-9523c932deb4?q=80&w=1600&auto=format&fit=crop";
-              }}
-            />
-            {/* বামপাশের মসৃণ গ্রেডিয়েন্ট ওভারলে */}
-            <div className="premium-hero-fade-overlay" />
+          {/* ====================================================
+              RIGHT SIDE 3D WORKSPACE SETUP VISUAL
+              ==================================================== */}
+          <div className="hero-workspace-scene">
+            
+            {/* Ambient Lighting */}
+            <div className="hero-wall-ambient-light" />
+
+            {/* 3 WALL MOUNTAIN PHOTO FRAMES */}
+            <div className="hero-top-wall-frames">
+              
+              {/* Frame 1: Lake Dock */}
+              <div className="hero-picture-frame frame-left">
+                <img
+                  src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=600&auto=format&fit=crop"
+                  alt="Mountain Lake Wallpaper"
+                  className="hero-frame-img"
+                />
+              </div>
+
+              {/* Frame 2: Snowy Mountain Peak (Wide) */}
+              <div className="hero-picture-frame frame-center">
+                <img
+                  src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop"
+                  alt="Snowy Peaks 4K"
+                  className="hero-frame-img"
+                />
+              </div>
+
+              {/* Frame 3: Alpine Lake Forest */}
+              <div className="hero-picture-frame frame-right">
+                <img
+                  src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=600&auto=format&fit=crop"
+                  alt="Alpine Nature Wallpaper"
+                  className="hero-frame-img"
+                />
+              </div>
+
+            </div>
+
+            {/* CURVED ULTRAWIDE MONITOR */}
+            <div className="hero-curved-monitor">
+              <div className="hero-monitor-screen-wrapper">
+                <img
+                  src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1000&auto=format&fit=crop"
+                  alt="Ocean Coastline 4K Wallpaper"
+                  className="hero-monitor-display-img"
+                />
+                <div className="hero-screen-specular-glare" />
+              </div>
+              <div className="hero-monitor-stand-leg" />
+              <div className="hero-monitor-base-plate" />
+            </div>
+
+            {/* SMALL FRAMED PHOTO LEANING ON WALL */}
+            <div className="hero-mini-wall-art">
+              <img
+                src="https://images.unsplash.com/photo-1511497584788-87676104235f?q=80&w=300&auto=format&fit=crop"
+                alt="Forest Art"
+                className="w-full h-full object-cover rounded-sm"
+              />
+            </div>
+
+            {/* WHITE CUSTOM RGB GAMING PC */}
+            <div className="hero-white-gaming-pc">
+              <div className="hero-pc-glass-panel">
+                <div className="hero-pc-blue-glow" />
+                <div className="hero-pc-cooling-tubes" />
+                <div className="hero-pc-gpu-block" />
+                <div className="hero-pc-fan-rgb fan-top" />
+                <div className="hero-pc-fan-rgb fan-mid" />
+              </div>
+            </div>
+
+            {/* WHITE HEADPHONES ON STAND */}
+            <div className="hero-white-headphone-stand">
+              <div className="hero-headphone-arch" />
+              <div className="hero-headphone-cup-l" />
+              <div className="hero-headphone-cup-r" />
+              <div className="hero-headphone-stand-pole" />
+            </div>
+
+            {/* DESK LAMP */}
+            <div className="hero-modern-desk-lamp">
+              <div className="hero-lamp-conical-head" />
+              <div className="hero-lamp-curved-stem" />
+              <div className="hero-lamp-base-circle" />
+            </div>
+
+            {/* DESK POTTED PLANT & SMARTPHONE */}
+            <div className="hero-desk-succulent-plant">
+              <div className="hero-plant-greenery">🌿</div>
+              <div className="hero-white-plant-pot" />
+            </div>
+
+            <div className="hero-phone-on-stand">
+              <div className="hero-phone-screen-display" />
+              <div className="hero-phone-stand-metal" />
+            </div>
+
+            {/* WHITE ERGONOMIC MESH CHAIR */}
+            <div className="hero-white-ergo-chair">
+              <div className="hero-chair-headrest-pad" />
+              <div className="hero-chair-mesh-spine" />
+              <div className="hero-chair-arm-left" />
+              <div className="hero-chair-arm-right" />
+              <div className="hero-chair-seat-base" />
+            </div>
+
+            {/* WHITE DESKTOP WITH AMBIENT CYAN LED */}
+            <div className="hero-white-desk-top">
+              <div className="hero-desk-cyan-led" />
+              <div className="hero-desk-drawer-line" />
+            </div>
+
+            {/* RIGHT SIDE TROPICAL LEAVES */}
+            <div className="hero-far-right-foliage">
+              <span className="foliage-leaf leaf-pos-1" />
+              <span className="foliage-leaf leaf-pos-2" />
+              <span className="foliage-leaf leaf-pos-3" />
+              <span className="foliage-leaf leaf-pos-4" />
+            </div>
+
+            {/* SMOOTH FADE TO TEXT */}
+            <div className="hero-left-feather-fade" />
           </div>
 
-          {/* LEFT HERO CONTENT */}
+
+          {/* ====================================================
+              LEFT SIDE HERO TEXT CONTENT
+              ==================================================== */}
           <div className="premium-hero-left-content">
 
-            {/* TOP BADGE */}
+            {/* TOP PILL BADGE */}
             <div className="hero-top-badge">
               <Sparkles className="w-3.5 h-3.5 text-[#178DFF]" />
               <span>Discover &amp; Save Ultra HD 4K Pins</span>
             </div>
 
-            {/* MAIN HEADING */}
+            {/* MAIN TITLE */}
             <h1 className="hero-main-title">
               Explore Millions of
               <br />
