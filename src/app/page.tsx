@@ -453,7 +453,7 @@ export default function Home() {
 
 
       {/* ========================================================
-          >>> NEW HERO SECTION (WITH REAL WORKSPACE PHOTO) <<<
+          >>> NEW HERO SECTION (GUARANTEED IMAGE DISPLAY) <<<
           ======================================================== */}
 
       <section
@@ -469,92 +469,85 @@ export default function Home() {
           w-full
         "
       >
-        <div className="premium-hero-card">
+        <div className="relative w-full min-h-[520px] rounded-[40px] bg-white border-[1.5px] border-white/95 shadow-2xl shadow-sky-900/10 overflow-hidden flex items-center isolate">
 
           {/* RIGHT SIDE ORIGINAL WORKSPACE SETUP IMAGE */}
-          <div className="premium-hero-workspace-wrapper">
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden flex justify-end">
             <img
-              src="/hero-setup.webp"
+              src="/hero-setup.png"
               alt="Anime Desk Setup Workspace"
-              className="premium-hero-workspace-img"
-              onError={(e) => {
-                // png বা jpg থাকলে স্বয়ংক্রিয়ভাবে ফলব্যাক হবে
-                const target = e.currentTarget;
-                if (!target.src.endsWith('.png')) {
-                  target.src = '/hero-setup.png';
-                }
-              }}
+              className="w-full md:w-[65%] h-full object-cover object-[center_36%] md:object-right"
             />
-            {/* SMOOTH FEATHER GRADIENT OVERLAY */}
-            <div className="premium-hero-workspace-overlay" />
+            {/* SMOOTH FEATHER GRADIENT OVERLAY (Text Clarity) */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 md:via-white/80 to-transparent" />
           </div>
 
           {/* LEFT HERO CONTENT */}
-          <div className="premium-hero-content">
+          <div className="relative z-10 p-8 sm:p-12 md:p-14 max-w-[650px] flex flex-col justify-center">
 
             {/* TOP PILL BADGE */}
-            <div className="premium-hero-badge">
+            <div className="inline-flex items-center gap-2 bg-white/90 border border-[#2D8CFF]/20 rounded-full px-4 py-1.5 mb-5 text-[12px] font-bold text-[#0B1F4D] shadow-sm backdrop-blur-md w-fit">
               <Sparkles className="w-3.5 h-3.5 text-[#178DFF]" />
               <span>Discover &amp; Save Ultra HD 4K Pins</span>
             </div>
 
-            {/* MAIN TITLE (PRESERVING EXACT TEXT & EXISTING GRADIENT) */}
-            <h1 className="premium-hero-title">
+            {/* MAIN TITLE */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold text-[#0B1F4D] tracking-tight leading-[1.08] mb-4">
               Explore Millions of
               <br />
-              <span className="hero-gradient-text">
+              <span className="bg-gradient-to-r from-[#178DFF] via-[#00B4D8] to-[#00BFA6] bg-clip-text text-transparent inline-block">
                 4K Ultra HD Wallpapers
               </span>
             </h1>
 
             {/* SUBTITLE */}
-            <p className="premium-hero-description">
+            <p className="text-[#46617D] text-sm sm:text-base font-semibold max-w-md mb-8 leading-relaxed">
               Free high-resolution vertical pins &amp; 4K wallpapers for Mobile,
               AMOLED, Desktop &amp; Laptop. Updated daily.
             </p>
 
             {/* 4 FEATURE PILLS */}
-            <div className="premium-hero-features">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-[540px]">
 
               {/* 1. 4K Ultra HD */}
-              <div className="premium-feature-pill">
-                <div className="premium-feature-tag">4K</div>
-                <div className="premium-feature-text">
-                  <strong>Ultra HD</strong>
-                  <small>High Quality</small>
+              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2.5 px-3.5 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
+                <span className="text-[11px] font-extrabold text-[#0369A1] bg-[#E0F2FE] px-2 py-1 rounded-md">4K</span>
+                <div>
+                  <p className="text-xs font-extrabold text-[#0B1F4D] leading-tight">Ultra HD</p>
+                  <p className="text-[10px] text-[#64748B] font-medium leading-tight">High Quality</p>
                 </div>
               </div>
 
               {/* 2. Free Download */}
-              <div className="premium-feature-pill">
-                <div className="premium-feature-icon">
-                  <Download className="w-3.5 h-3.5 text-[#178DFF]" />
+              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2.5 px-3.5 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
+                <div className="w-7 h-7 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#178DFF]">
+                  <Download className="w-3.5 h-3.5" />
                 </div>
-                <div className="premium-feature-text">
-                  <strong>Free</strong>
-                  <small>Download</small>
+                <div>
+                  <p className="text-xs font-extrabold text-[#0B1F4D] leading-tight">Free</p>
+                  <p className="text-[10px] text-[#64748B] font-medium leading-tight">Download</p>
                 </div>
               </div>
 
               {/* 3. Curated Best Picks */}
-              <div className="premium-feature-pill">
-                <div className="premium-feature-icon">
-                  <Heart className="w-3.5 h-3.5 text-[#2D8CFF]" />
+              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2.5 px-3.5 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
+                <div className="w-7 h-7 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#2D8CFF]">
+                  <Heart className="w-3.5 h-3.5" />
                 </div>
-                <div className="premium-feature-text">
-                  <strong>Curated</strong>
-                  <small>Best Picks</small>
+                <div>
+                  <p className="text-xs font-extrabold text-[#0B1F4D] leading-tight">Curated</p>
+                  <p className="text-[10px] text-[#64748B] font-medium leading-tight">Best Picks</p>
                 </div>
               </div>
 
               {/* 4. Updated Daily */}
-              <div className="premium-feature-pill">
-                <div className="premium-feature-icon">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#00BFA6]" />
+              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2.5 px-3.5 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
+                <div className="w-7 h-7 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#00BFA6]">
+                  <ShieldCheck className="w-3.5 h-3.5" />
                 </div>
-                <div className="premium-feature-text">
-                  <strong>Updated</strong>
-                  <small>Daily</small>
+                <div>
+                  <p className="text-xs font-extrabold text-[#0B1F4D] leading-tight">Updated</p>
+                  <p className="text-[10px] text-[#64748B] font-medium leading-tight">Daily</p>
                 </div>
               </div>
 
