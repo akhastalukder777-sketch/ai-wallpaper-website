@@ -453,7 +453,7 @@ export default function Home() {
 
 
       {/* ========================================================
-          >>> NEW HERO SECTION (RECREATED FROM REFERENCE) <<<
+          >>> NEW HERO SECTION (WITH REAL WORKSPACE PHOTO) <<<
           ======================================================== */}
 
       <section
@@ -471,147 +471,35 @@ export default function Home() {
       >
         <div className="premium-hero-card">
 
-          {/* ====================================================
-              RIGHT SIDE 3D WORKSPACE VISUAL
-              ==================================================== */}
-          <div className="hero-workspace-scene">
-            
-            {/* Ambient Lighting */}
-            <div className="hero-wall-ambient-light" />
-
-            {/* 3 WALL MOUNTAIN PHOTO FRAMES */}
-            <div className="hero-top-wall-frames">
-              
-              {/* Frame 1: Lake Dock */}
-              <div className="hero-picture-frame frame-left frame-floating-1">
-                <img
-                  src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=600&auto=format&fit=crop"
-                  alt="Mountain Lake Wallpaper"
-                  className="hero-frame-img"
-                />
-              </div>
-
-              {/* Frame 2: Snowy Mountain Peak (Center Wide) */}
-              <div className="hero-picture-frame frame-center frame-floating-2">
-                <img
-                  src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop"
-                  alt="Snowy Peaks 4K"
-                  className="hero-frame-img"
-                />
-              </div>
-
-              {/* Frame 3: Alpine Lake Forest */}
-              <div className="hero-picture-frame frame-right frame-floating-1">
-                <img
-                  src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=600&auto=format&fit=crop"
-                  alt="Alpine Nature Wallpaper"
-                  className="hero-frame-img"
-                />
-              </div>
-
-            </div>
-
-            {/* CURVED ULTRAWIDE MONITOR */}
-            <div className="hero-curved-monitor">
-              <div className="hero-monitor-screen-wrapper">
-                <img
-                  src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1000&auto=format&fit=crop"
-                  alt="Ocean Coastline 4K Wallpaper"
-                  className="hero-monitor-display-img"
-                />
-                <div className="hero-screen-specular-glare" />
-              </div>
-              <div className="hero-monitor-stand-leg" />
-              <div className="hero-monitor-base-plate" />
-            </div>
-
-            {/* MINI LEANING ARTWORK FRAME */}
-            <div className="hero-mini-wall-art">
-              <img
-                src="https://images.unsplash.com/photo-1511497584788-87676104235f?q=80&w=300&auto=format&fit=crop"
-                alt="Forest Art"
-                className="w-full h-full object-cover rounded-sm"
-              />
-            </div>
-
-            {/* WHITE CUSTOM RGB GAMING PC */}
-            <div className="hero-white-gaming-pc">
-              <div className="hero-pc-glass-panel">
-                <div className="hero-pc-blue-glow" />
-                <div className="hero-pc-cooling-tubes" />
-                <div className="hero-pc-gpu-block" />
-                <div className="hero-pc-fan-rgb fan-top" />
-                <div className="hero-pc-fan-rgb fan-mid" />
-              </div>
-            </div>
-
-            {/* WHITE HEADPHONES ON STAND */}
-            <div className="hero-white-headphone-stand">
-              <div className="hero-headphone-arch" />
-              <div className="hero-headphone-cup-l" />
-              <div className="hero-headphone-cup-r" />
-              <div className="hero-headphone-stand-pole" />
-            </div>
-
-            {/* MODERN DESK LAMP */}
-            <div className="hero-modern-desk-lamp">
-              <div className="hero-lamp-conical-head" />
-              <div className="hero-lamp-curved-stem" />
-              <div className="hero-lamp-base-circle" />
-            </div>
-
-            {/* DESK SUCCULENT PLANT & SMARTPHONE */}
-            <div className="hero-desk-succulent-plant">
-              <div className="hero-plant-greenery">🌿</div>
-              <div className="hero-white-plant-pot" />
-            </div>
-
-            <div className="hero-phone-on-stand">
-              <div className="hero-phone-screen-display" />
-              <div className="hero-phone-stand-metal" />
-            </div>
-
-            {/* WHITE ERGONOMIC MESH CHAIR */}
-            <div className="hero-white-ergo-chair">
-              <div className="hero-chair-headrest-pad" />
-              <div className="hero-chair-mesh-spine" />
-              <div className="hero-chair-arm-left" />
-              <div className="hero-chair-arm-right" />
-              <div className="hero-chair-seat-base" />
-            </div>
-
-            {/* WHITE DESK WITH AMBIENT CYAN LED */}
-            <div className="hero-white-desk-top">
-              <div className="hero-desk-cyan-led" />
-              <div className="hero-desk-drawer-line" />
-            </div>
-
-            {/* RIGHT SIDE TROPICAL FOLIAGE */}
-            <div className="hero-far-right-foliage">
-              <span className="foliage-leaf leaf-pos-1" />
-              <span className="foliage-leaf leaf-pos-2" />
-              <span className="foliage-leaf leaf-pos-3" />
-              <span className="foliage-leaf leaf-pos-4" />
-            </div>
-
-            {/* SMOOTH FEATHER GRADIENT FADE TO LEFT TEXT */}
-            <div className="hero-left-feather-fade" />
+          {/* RIGHT SIDE ORIGINAL WORKSPACE SETUP IMAGE */}
+          <div className="premium-hero-workspace-wrapper">
+            <img
+              src="/hero-setup.webp"
+              alt="Anime Desk Setup Workspace"
+              className="premium-hero-workspace-img"
+              onError={(e) => {
+                // png বা jpg থাকলে স্বয়ংক্রিয়ভাবে ফলব্যাক হবে
+                const target = e.currentTarget;
+                if (!target.src.endsWith('.png')) {
+                  target.src = '/hero-setup.png';
+                }
+              }}
+            />
+            {/* SMOOTH FEATHER GRADIENT OVERLAY */}
+            <div className="premium-hero-workspace-overlay" />
           </div>
 
-
-          {/* ====================================================
-              LEFT SIDE HERO TEXT CONTENT
-              ==================================================== */}
-          <div className="premium-hero-left-content">
+          {/* LEFT HERO CONTENT */}
+          <div className="premium-hero-content">
 
             {/* TOP PILL BADGE */}
-            <div className="hero-top-badge">
+            <div className="premium-hero-badge">
               <Sparkles className="w-3.5 h-3.5 text-[#178DFF]" />
               <span>Discover &amp; Save Ultra HD 4K Pins</span>
             </div>
 
             {/* MAIN TITLE (PRESERVING EXACT TEXT & EXISTING GRADIENT) */}
-            <h1 className="hero-main-title">
+            <h1 className="premium-hero-title">
               Explore Millions of
               <br />
               <span className="hero-gradient-text">
@@ -620,53 +508,53 @@ export default function Home() {
             </h1>
 
             {/* SUBTITLE */}
-            <p className="hero-subtext">
+            <p className="premium-hero-description">
               Free high-resolution vertical pins &amp; 4K wallpapers for Mobile,
               AMOLED, Desktop &amp; Laptop. Updated daily.
             </p>
 
             {/* 4 FEATURE PILLS */}
-            <div className="hero-feature-pill-grid">
+            <div className="premium-hero-features">
 
               {/* 1. 4K Ultra HD */}
-              <div className="hero-feature-item">
-                <span className="hero-4k-tag">4K</span>
-                <div>
-                  <h5 className="hero-item-title">Ultra HD</h5>
-                  <p className="hero-item-sub">High Quality</p>
+              <div className="premium-feature-pill">
+                <div className="premium-feature-tag">4K</div>
+                <div className="premium-feature-text">
+                  <strong>Ultra HD</strong>
+                  <small>High Quality</small>
                 </div>
               </div>
 
               {/* 2. Free Download */}
-              <div className="hero-feature-item">
-                <div className="hero-icon-box">
+              <div className="premium-feature-pill">
+                <div className="premium-feature-icon">
                   <Download className="w-3.5 h-3.5 text-[#178DFF]" />
                 </div>
-                <div>
-                  <h5 className="hero-item-title">Free</h5>
-                  <p className="hero-item-sub">Download</p>
+                <div className="premium-feature-text">
+                  <strong>Free</strong>
+                  <small>Download</small>
                 </div>
               </div>
 
               {/* 3. Curated Best Picks */}
-              <div className="hero-feature-item">
-                <div className="hero-icon-box">
-                  <Heart className="w-3.5 h-3.5 text-[#178DFF]" />
+              <div className="premium-feature-pill">
+                <div className="premium-feature-icon">
+                  <Heart className="w-3.5 h-3.5 text-[#2D8CFF]" />
                 </div>
-                <div>
-                  <h5 className="hero-item-title">Curated</h5>
-                  <p className="hero-item-sub">Best Picks</p>
+                <div className="premium-feature-text">
+                  <strong>Curated</strong>
+                  <small>Best Picks</small>
                 </div>
               </div>
 
               {/* 4. Updated Daily */}
-              <div className="hero-feature-item">
-                <div className="hero-icon-box">
+              <div className="premium-feature-pill">
+                <div className="premium-feature-icon">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#00BFA6]" />
                 </div>
-                <div>
-                  <h5 className="hero-item-title">Updated</h5>
-                  <p className="hero-item-sub">Daily</p>
+                <div className="premium-feature-text">
+                  <strong>Updated</strong>
+                  <small>Daily</small>
                 </div>
               </div>
 
