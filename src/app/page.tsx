@@ -40,6 +40,8 @@ import {
   Compass,
   AlertCircle,
   ChevronDown,
+  Download,
+  Heart,
 } from 'lucide-react';
 
 
@@ -450,195 +452,113 @@ export default function Home() {
       </div>
 
 
-     {/* ========================================================
-    PREMIUM HERO
-    ======================================================== */}
+      {/* ========================================================
+          PREMIUM HERO (MATCHING SCREENSHOT 2)
+          ======================================================== */}
 
-<section
-  className="
-    relative
-    px-4
-    sm:px-6
-    lg:px-8
-    pt-8
-    pb-8
-    max-w-[1400px]
-    mx-auto
-    w-full
-  "
->
-  <div className="premium-hero">
+      <section
+        className="
+          relative
+          px-4
+          sm:px-6
+          lg:px-8
+          pt-6
+          pb-6
+          max-w-[1440px]
+          mx-auto
+          w-full
+        "
+      >
+        <div className="premium-hero">
 
-    {/* SOFT BACKGROUND GLOW */}
-    <div className="premium-hero-glow" />
-
-    {/* LEFT CONTENT */}
-    <div className="premium-hero-content">
-
-      {/* BADGE */}
-      <div className="premium-hero-badge">
-        <Sparkles className="w-4 h-4" />
-        <span>Discover &amp; Save Ultra HD 4K Pins</span>
-      </div>
-
-      {/* TITLE */}
-      <h1 className="premium-hero-title">
-        Explore Millions of
-        <br />
-
-        <span>
-          4K Ultra HD Wallpapers
-        </span>
-      </h1>
-
-      {/* DESCRIPTION */}
-      <p className="premium-hero-description">
-        Free high-resolution vertical pins &amp; 4K wallpapers for Mobile,
-        AMOLED, Desktop &amp; Laptop. Updated daily.
-      </p>
-
-      {/* FEATURE CARDS */}
-      <div className="premium-hero-features">
-
-        <div className="premium-feature">
-          <div className="premium-feature-icon">
-            4K
+          {/* BACKGROUND DESK SETUP IMAGE */}
+          <div className="premium-hero-bg-wrapper">
+            <img
+              src="https://images.unsplash.com/photo-1593062096033-9a26b09da705?q=80&w=1800&auto=format&fit=crop"
+              alt="Ultra HD Workspace Desk Setup"
+              className="premium-hero-bg-img"
+            />
+            {/* SMOOTH OVERLAY FADE */}
+            <div className="premium-hero-gradient-overlay" />
           </div>
 
-          <div>
-            <strong>Ultra HD</strong>
-            <small>High Quality</small>
-          </div>
-        </div>
+          {/* LEFT CONTENT */}
+          <div className="premium-hero-content">
 
-        <div className="premium-feature">
-          <div className="premium-feature-icon">
-            <Sparkles className="w-4 h-4" />
-          </div>
-
-          <div>
-            <strong>Free</strong>
-            <small>Download</small>
-          </div>
-        </div>
-
-        <div className="premium-feature">
-          <div className="premium-feature-icon">
-            <Flame className="w-4 h-4" />
-          </div>
-
-          <div>
-            <strong>Curated</strong>
-            <small>Best Picks</small>
-          </div>
-        </div>
-
-        <div className="premium-feature">
-          <div className="premium-feature-icon">
-            <ShieldCheck className="w-4 h-4" />
-          </div>
-
-          <div>
-            <strong>Updated</strong>
-            <small>Daily</small>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-
-    {/* ====================================================
-        RIGHT DESKTOP DESK / WALLPAPER FRAME VISUAL
-        ==================================================== */}
-
-    <div className="premium-hero-visual">
-
-      {/* BACK WALL */}
-      <div className="hero-wall">
-
-        {/* LARGE WALL FRAME */}
-        <div className="hero-wall-frame hero-frame-large">
-
-          <div className="hero-frame-header">
-            <span>Nature Ultra HD Wallpaper</span>
-            <small>#7dyq-90101</small>
-          </div>
-
-          <div className="hero-frame-image hero-image-ocean" />
-
-          <div className="hero-frame-image hero-image-space" />
-
-        </div>
-
-
-        {/* SMALL FLOATING FRAME */}
-        <div className="hero-wall-frame hero-frame-floating hero-frame-one">
-          <div className="hero-frame-image hero-image-water" />
-        </div>
-
-
-        {/* MOUNTAIN FRAME */}
-        <div className="hero-wall-frame hero-frame-floating hero-frame-two">
-          <div className="hero-frame-image hero-image-mountain" />
-        </div>
-
-
-        {/* DESK */}
-        <div className="hero-desk">
-
-          {/* MONITOR */}
-          <div className="hero-monitor">
-            <div className="hero-monitor-screen">
-              <div className="hero-screen-glow" />
+            {/* BADGE */}
+            <div className="premium-hero-badge">
+              <Sparkles className="w-3.5 h-3.5 text-[#2D8CFF]" />
+              <span>Discover &amp; Save Ultra HD 4K Pins</span>
             </div>
 
-            <div className="hero-monitor-stand" />
-          </div>
+            {/* TITLE */}
+            <h1 className="premium-hero-title">
+              Explore Millions of
+              <br />
+              <span className="premium-hero-highlight">
+                4K Ultra HD
+              </span>
+              <br />
+              Wallpapers
+            </h1>
 
+            {/* DESCRIPTION */}
+            <p className="premium-hero-description">
+              Free high-resolution vertical pins &amp; 4K wallpapers for Mobile,
+              AMOLED, Desktop &amp; Laptop. Updated daily.
+            </p>
 
-          {/* DESK ITEMS */}
-          <div className="hero-desk-lamp">
-            <div className="hero-lamp-head" />
-            <div className="hero-lamp-arm" />
-          </div>
+            {/* 4 FEATURE PILLS */}
+            <div className="premium-hero-features">
 
-          <div className="hero-desk-plant">
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
+              {/* 1. 4K Ultra HD */}
+              <div className="premium-feature-pill">
+                <div className="premium-feature-tag">4K</div>
+                <div className="premium-feature-text">
+                  <strong>Ultra HD</strong>
+                  <small>High Quality</small>
+                </div>
+              </div>
 
-          <div className="hero-desk-headphone">
-            <div />
+              {/* 2. Free Download */}
+              <div className="premium-feature-pill">
+                <div className="premium-feature-icon">
+                  <Download className="w-3.5 h-3.5 text-[#178DFF]" />
+                </div>
+                <div className="premium-feature-text">
+                  <strong>Free</strong>
+                  <small>Download</small>
+                </div>
+              </div>
+
+              {/* 3. Curated Best Picks */}
+              <div className="premium-feature-pill">
+                <div className="premium-feature-icon">
+                  <Heart className="w-3.5 h-3.5 text-[#2D8CFF]" />
+                </div>
+                <div className="premium-feature-text">
+                  <strong>Curated</strong>
+                  <small>Best Picks</small>
+                </div>
+              </div>
+
+              {/* 4. Updated Daily */}
+              <div className="premium-feature-pill">
+                <div className="premium-feature-icon">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#00BFA6]" />
+                </div>
+                <div className="premium-feature-text">
+                  <strong>Updated</strong>
+                  <small>Daily</small>
+                </div>
+              </div>
+
+            </div>
+
           </div>
 
         </div>
-
-
-        {/* FRONT FLOATING WALLPAPER */}
-        <div className="hero-front-frame">
-          <div className="hero-front-image" />
-        </div>
-
-
-        {/* DECORATIVE LEAVES */}
-        <div className="hero-leaves">
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-</section>
+      </section>
 
 
       {/* ========================================================
