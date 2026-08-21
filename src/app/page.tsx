@@ -453,7 +453,7 @@ export default function Home() {
 
 
       {/* ========================================================
-          >>> NEW PREMIUM HERO SECTION (START) <<<
+          >>> NEW HERO SECTION (RECREATED FROM REFERENCE) <<<
           ======================================================== */}
 
       <section
@@ -471,10 +471,12 @@ export default function Home() {
       >
         <div className="premium-hero-card">
 
-          {/* RIGHT SIDE 3D WORKSPACE BATTLESTATION SCENE */}
+          {/* ====================================================
+              RIGHT SIDE 3D WORKSPACE VISUAL
+              ==================================================== */}
           <div className="hero-workspace-scene">
             
-            {/* Ambient Room Lighting */}
+            {/* Ambient Lighting */}
             <div className="hero-wall-ambient-light" />
 
             {/* 3 WALL MOUNTAIN PHOTO FRAMES */}
@@ -558,7 +560,7 @@ export default function Home() {
               <div className="hero-lamp-base-circle" />
             </div>
 
-            {/* DESK SUCCULENT PLANT & PHONE */}
+            {/* DESK SUCCULENT PLANT & SMARTPHONE */}
             <div className="hero-desk-succulent-plant">
               <div className="hero-plant-greenery">🌿</div>
               <div className="hero-white-plant-pot" />
@@ -578,7 +580,7 @@ export default function Home() {
               <div className="hero-chair-seat-base" />
             </div>
 
-            {/* WHITE DESK TABLE WITH AMBIENT CYAN LED */}
+            {/* WHITE DESK WITH AMBIENT CYAN LED */}
             <div className="hero-white-desk-top">
               <div className="hero-desk-cyan-led" />
               <div className="hero-desk-drawer-line" />
@@ -597,7 +599,9 @@ export default function Home() {
           </div>
 
 
-          {/* LEFT SIDE HERO TEXT CONTENT */}
+          {/* ====================================================
+              LEFT SIDE HERO TEXT CONTENT
+              ==================================================== */}
           <div className="premium-hero-left-content">
 
             {/* TOP PILL BADGE */}
@@ -606,16 +610,12 @@ export default function Home() {
               <span>Discover &amp; Save Ultra HD 4K Pins</span>
             </div>
 
-            {/* MAIN TITLE (EXACT GRADIENT & COPY) */}
+            {/* MAIN TITLE (PRESERVING EXACT TEXT & EXISTING GRADIENT) */}
             <h1 className="hero-main-title">
               Explore Millions of
               <br />
               <span className="hero-gradient-text">
-                4K Ultra HD
-              </span>
-              <br />
-              <span className="hero-gradient-text">
-                Wallpapers
+                4K Ultra HD Wallpapers
               </span>
             </h1>
 
@@ -678,7 +678,7 @@ export default function Home() {
       </section>
 
       {/* ========================================================
-          >>> NEW PREMIUM HERO SECTION (END) <<<
+          >>> END OF HERO SECTION <<<
           ======================================================== */}
 
 
