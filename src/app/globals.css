@@ -848,3 +848,1015 @@ h1,h2,h3,h4,h5,h6,button,a {
 ::-webkit-scrollbar-track { background: #F5FCFF; }
 ::-webkit-scrollbar-thumb { background: linear-gradient(#2D8CFF, #52D8FF); }
 * { scrollbar-color: #2D8CFF #F5FCFF; }
+/* ============================================================
+   PREMIUM DESK WORKSPACE HERO
+   ============================================================ */
+
+.premium-hero {
+  position: relative;
+  min-height: 500px;
+  width: 100%;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  align-items: center;
+
+  border-radius: 34px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.90),
+      rgba(245,252,255,.72) 45%,
+      rgba(223,247,255,.58)
+    );
+
+  border: 1px solid rgba(255,255,255,.95);
+
+  box-shadow:
+    0 25px 70px rgba(45,140,255,.12),
+    0 8px 25px rgba(7,27,77,.06),
+    inset 0 1px 2px rgba(255,255,255,.98);
+
+  isolation: isolate;
+}
+
+
+/* ============================================================
+   HERO BACKGROUND GLOW
+   ============================================================ */
+
+.premium-hero-glow {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(70px);
+}
+
+.premium-hero-glow-one {
+  width: 330px;
+  height: 330px;
+
+  right: 5%;
+  top: 4%;
+
+  background: rgba(82,216,255,.20);
+}
+
+.premium-hero-glow-two {
+  width: 300px;
+  height: 300px;
+
+  left: 15%;
+  bottom: -20%;
+
+  background: rgba(127,255,212,.18);
+}
+
+
+/* ============================================================
+   HERO CONTENT
+   ============================================================ */
+
+.premium-hero-content {
+  position: relative;
+  z-index: 10;
+
+  padding:
+    58px
+    20px
+    58px
+    70px;
+}
+
+
+/* ============================================================
+   HERO FEATURES
+   ============================================================ */
+
+.premium-hero-feature {
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  padding: 8px 15px;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.82),
+      rgba(255,255,255,.50)
+    );
+
+  border: 1px solid rgba(255,255,255,.95);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 5px 15px rgba(7,27,77,.055),
+    inset 0 1px 1px rgba(255,255,255,.95);
+}
+
+.premium-feature-icon {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  color: #0B1F4D;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(82,216,255,.32),
+      rgba(127,255,212,.32)
+    );
+
+  border: 1px solid rgba(82,216,255,.25);
+}
+
+.premium-feature-title {
+  font-size: 12px;
+  line-height: 1.1;
+
+  font-weight: 800;
+
+  color: #0B1F4D;
+}
+
+.premium-feature-subtitle {
+  margin-top: 3px;
+
+  font-size: 10px;
+  line-height: 1.1;
+
+  font-weight: 500;
+
+  color: #6B8097;
+}
+
+
+/* ============================================================
+   WORKSPACE
+   ============================================================ */
+
+.premium-workspace {
+  position: relative;
+
+  min-height: 500px;
+  height: 100%;
+
+  overflow: hidden;
+}
+
+
+/* soft wall lighting */
+
+.workspace-light {
+  position: absolute;
+
+  width: 430px;
+  height: 430px;
+
+  right: 4%;
+  top: 2%;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.95) 0%,
+      rgba(223,247,255,.48) 38%,
+      transparent 72%
+    );
+
+  filter: blur(2px);
+}
+
+
+/* ============================================================
+   WALL FRAMES
+   ============================================================ */
+
+.workspace-wall-frame {
+  position: absolute;
+
+  width: 43%;
+  height: 52%;
+
+  right: 8%;
+  top: 7%;
+
+  padding: 10px;
+
+  background: rgba(255,255,255,.90);
+
+  border: 1px solid rgba(255,255,255,.98);
+
+  box-shadow:
+    0 18px 35px rgba(7,27,77,.13),
+    inset 0 1px 2px rgba(255,255,255,1);
+
+  transform:
+    perspective(900px)
+    rotateY(-5deg)
+    rotateX(1deg);
+
+  z-index: 3;
+}
+
+
+.wall-frame-top {
+  position: absolute;
+
+  left: 8%;
+  right: 8%;
+  top: 7%;
+  height: 43%;
+
+  padding: 6px;
+
+  background: #eef4f5;
+
+  box-shadow:
+    0 5px 12px rgba(7,27,77,.08);
+}
+
+
+.wall-frame-bottom {
+  position: absolute;
+
+  left: 8%;
+  right: 8%;
+  bottom: 7%;
+  height: 37%;
+
+  padding: 6px;
+
+  background: #eef4f5;
+
+  box-shadow:
+    0 5px 12px rgba(7,27,77,.08);
+}
+
+
+.workspace-small-frame {
+  position: absolute;
+
+  width: 25%;
+  height: 25%;
+
+  padding: 7px;
+
+  background: rgba(255,255,255,.92);
+
+  border: 1px solid rgba(255,255,255,.98);
+
+  box-shadow:
+    0 12px 28px rgba(7,27,77,.12);
+
+  z-index: 4;
+}
+
+
+.workspace-frame-two {
+  top: 18%;
+  left: 6%;
+
+  transform:
+    perspective(800px)
+    rotateY(5deg)
+    rotateZ(-2deg);
+}
+
+
+.workspace-frame-three {
+  top: 49%;
+  left: 15%;
+
+  transform:
+    perspective(800px)
+    rotateY(4deg)
+    rotateZ(2deg);
+}
+
+
+/* ============================================================
+   WALLPAPER IMAGE
+   ============================================================ */
+
+.workspace-wallpaper {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  border-radius: 2px;
+}
+
+
+/* ============================================================
+   DESK
+   ============================================================ */
+
+.workspace-desk {
+  position: absolute;
+
+  left: 2%;
+  right: 0;
+
+  bottom: 0;
+
+  height: 35%;
+
+  z-index: 8;
+}
+
+
+/* desk surface */
+
+.workspace-desk::before {
+  content: "";
+
+  position: absolute;
+
+  left: -5%;
+  right: -5%;
+
+  top: 19%;
+
+  height: 18px;
+
+  border-radius: 8px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #e7f0f2
+    );
+
+  border: 1px solid rgba(255,255,255,.98);
+
+  box-shadow:
+    0 12px 20px rgba(7,27,77,.12),
+    inset 0 1px 2px white;
+}
+
+
+/* desk legs */
+
+.workspace-desk::after {
+  content: "";
+
+  position: absolute;
+
+  left: 12%;
+  right: 12%;
+
+  top: 30%;
+  bottom: -30%;
+
+  border-left: 8px solid rgba(205,218,222,.85);
+  border-right: 8px solid rgba(205,218,222,.85);
+
+  opacity: .75;
+}
+
+
+/* ============================================================
+   MONITOR
+   ============================================================ */
+
+.workspace-monitor {
+  position: absolute;
+
+  width: 38%;
+  height: 55%;
+
+  left: 31%;
+  bottom: 22%;
+
+  z-index: 10;
+}
+
+
+.monitor-screen {
+  position: relative;
+
+  width: 100%;
+  height: 82%;
+
+  padding: 7px;
+
+  border-radius: 10px;
+
+  background: #dce5e7;
+
+  border: 1px solid rgba(255,255,255,.95);
+
+  box-shadow:
+    0 16px 32px rgba(7,27,77,.16),
+    inset 0 1px 2px white;
+
+  overflow: hidden;
+}
+
+
+.monitor-screen img {
+  border-radius: 6px;
+}
+
+
+.monitor-glass {
+  position: absolute;
+
+  inset: 7px;
+
+  border-radius: 6px;
+
+  background:
+    linear-gradient(
+      125deg,
+      rgba(255,255,255,.20),
+      transparent 32%,
+      transparent 68%,
+      rgba(82,216,255,.08)
+    );
+
+  pointer-events: none;
+}
+
+
+.monitor-neck {
+  position: absolute;
+
+  width: 12%;
+  height: 15%;
+
+  left: 44%;
+  bottom: 6%;
+
+  background:
+    linear-gradient(
+      90deg,
+      #d2dfe2,
+      #f8ffff,
+      #ccdadd
+    );
+
+  border-radius: 0 0 5px 5px;
+}
+
+
+.monitor-base {
+  position: absolute;
+
+  width: 42%;
+  height: 5%;
+
+  left: 29%;
+  bottom: 1%;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #c8d7da,
+      #ffffff,
+      #c6d6d9
+    );
+
+  box-shadow:
+    0 4px 8px rgba(7,27,77,.08);
+}
+
+
+/* ============================================================
+   KEYBOARD
+   ============================================================ */
+
+.workspace-keyboard {
+  position: absolute;
+
+  width: 31%;
+  height: 8%;
+
+  left: 32%;
+  top: 27%;
+
+  border-radius: 7px;
+
+  transform:
+    perspective(500px)
+    rotateX(48deg);
+
+  background:
+    linear-gradient(
+      135deg,
+      #e9f1f2,
+      #ffffff
+    );
+
+  border: 1px solid rgba(255,255,255,.95);
+
+  box-shadow:
+    0 5px 10px rgba(7,27,77,.10);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 4px;
+}
+
+.workspace-keyboard span {
+  width: 8%;
+  height: 35%;
+
+  border-radius: 2px;
+
+  background: #c8d5d8;
+}
+
+
+/* ============================================================
+   MOUSE
+   ============================================================ */
+
+.workspace-mouse {
+  position: absolute;
+
+  width: 5%;
+  height: 8%;
+
+  left: 65%;
+  top: 28%;
+
+  border-radius: 45% 45% 48% 48%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff,
+      #d7e3e6
+    );
+
+  box-shadow:
+    0 5px 10px rgba(7,27,77,.10);
+
+  transform:
+    rotate(-8deg);
+}
+
+
+/* ============================================================
+   HEADPHONES
+   ============================================================ */
+
+.workspace-headphones {
+  position: absolute;
+
+  width: 11%;
+  height: 19%;
+
+  right: 7%;
+  bottom: 16%;
+
+  z-index: 12;
+}
+
+
+.headphone-band {
+  position: absolute;
+
+  width: 65%;
+  height: 72%;
+
+  left: 18%;
+  top: 4%;
+
+  border:
+    6px solid #d7e4e6;
+
+  border-bottom: 0;
+
+  border-radius: 999px 999px 0 0;
+}
+
+
+.headphone-left,
+.headphone-right {
+  position: absolute;
+
+  width: 28%;
+  height: 42%;
+
+  bottom: 3%;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #cddcdf
+    );
+
+  box-shadow:
+    0 4px 8px rgba(7,27,77,.12);
+}
+
+
+.headphone-left {
+  left: 4%;
+}
+
+
+.headphone-right {
+  right: 4%;
+}
+
+
+/* ============================================================
+   SMALL PLANT
+   ============================================================ */
+
+.workspace-mini-plant {
+  position: absolute;
+
+  left: 7%;
+  bottom: 17%;
+
+  width: 12%;
+  height: 25%;
+
+  z-index: 11;
+}
+
+
+.mini-pot {
+  position: absolute;
+
+  width: 45%;
+  height: 30%;
+
+  left: 27%;
+  bottom: 0;
+
+  border-radius: 3px 3px 9px 9px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #d9e5df,
+      #ffffff,
+      #c9dad3
+    );
+}
+
+
+.workspace-mini-plant span {
+  position: absolute;
+
+  width: 28%;
+  height: 48%;
+
+  bottom: 22%;
+  left: 36%;
+
+  border-radius:
+    100% 0 100% 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8bd8b2,
+      #43ad83
+    );
+
+  transform-origin: bottom;
+}
+
+
+.workspace-mini-plant span:nth-child(2) {
+  transform: rotate(-35deg);
+}
+
+.workspace-mini-plant span:nth-child(3) {
+  transform: rotate(30deg);
+}
+
+.workspace-mini-plant span:nth-child(4) {
+  transform: rotate(65deg);
+}
+
+
+/* ============================================================
+   BIG PLANT
+   ============================================================ */
+
+.workspace-plant {
+  position: absolute;
+
+  right: -1%;
+  bottom: 19%;
+
+  width: 14%;
+  height: 43%;
+
+  z-index: 7;
+}
+
+
+.plant-stem {
+  position: absolute;
+
+  width: 4px;
+  height: 72%;
+
+  left: 48%;
+  bottom: 17%;
+
+  background: #71ad8b;
+
+  border-radius: 999px;
+}
+
+
+.plant-leaf {
+  position: absolute;
+
+  width: 38%;
+  height: 22%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #9fe2ba,
+      #4daf82
+    );
+
+  border-radius:
+    100% 0 100% 0;
+
+  transform-origin: bottom center;
+}
+
+
+.leaf-1 {
+  left: 10%;
+  top: 30%;
+  transform: rotate(-38deg);
+}
+
+.leaf-2 {
+  left: 44%;
+  top: 20%;
+  transform: rotate(28deg);
+}
+
+.leaf-3 {
+  left: 55%;
+  top: 42%;
+  transform: rotate(48deg);
+}
+
+.leaf-4 {
+  left: 8%;
+  top: 50%;
+  transform: rotate(-55deg);
+}
+
+.leaf-5 {
+  left: 35%;
+  top: 60%;
+  transform: rotate(15deg);
+}
+
+
+/* ============================================================
+   DESK FRONT
+   ============================================================ */
+
+.workspace-desk-front {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 18%;
+
+  z-index: 13;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(231,240,242,.55),
+      rgba(210,225,228,.78)
+    );
+
+  border-top:
+    1px solid rgba(255,255,255,.9);
+
+  box-shadow:
+    0 -8px 18px rgba(7,27,77,.04);
+}
+
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+
+@keyframes premiumSparkle {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(12deg) scale(1.12);
+  }
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+  .premium-hero {
+    grid-template-columns: 1fr 1fr;
+    min-height: 470px;
+  }
+
+  .premium-hero-content {
+    padding:
+      45px
+      10px
+      45px
+      45px;
+  }
+
+  .premium-workspace {
+    min-height: 470px;
+  }
+
+  .premium-hero-content h1 {
+    font-size: 46px;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 767px) {
+
+  .premium-hero {
+    grid-template-columns: 1fr;
+
+    min-height: auto;
+
+    border-radius: 26px;
+  }
+
+  .premium-hero-content {
+    padding:
+      38px
+      25px
+      12px;
+  }
+
+  .premium-hero-content h1 {
+    font-size: 38px;
+  }
+
+  .premium-workspace {
+    min-height: 360px;
+
+    margin-top: -5px;
+  }
+
+  .workspace-wall-frame {
+    width: 43%;
+    height: 48%;
+
+    right: 7%;
+    top: 8%;
+  }
+
+  .workspace-small-frame {
+    width: 27%;
+    height: 25%;
+  }
+
+  .workspace-monitor {
+    width: 40%;
+    height: 48%;
+
+    left: 30%;
+    bottom: 21%;
+  }
+
+  .workspace-plant {
+    width: 17%;
+  }
+
+  .premium-hero-feature {
+    min-height: 54px;
+    padding: 7px 11px;
+  }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+  .premium-hero-content {
+    padding:
+      32px
+      20px
+      8px;
+  }
+
+  .premium-hero-content h1 {
+    font-size: 34px;
+  }
+
+  .premium-hero-content p {
+    font-size: 13px;
+  }
+
+  .premium-hero-feature {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .premium-workspace {
+    min-height: 300px;
+  }
+
+  .workspace-wall-frame {
+    width: 47%;
+    height: 45%;
+  }
+
+  .workspace-monitor {
+    width: 43%;
+    height: 46%;
+
+    left: 28%;
+  }
+
+  .workspace-frame-two {
+    left: 4%;
+  }
+
+  .workspace-frame-three {
+    left: 10%;
+  }
+
+  .workspace-headphones {
+    right: 3%;
+  }
+
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .premium-hero *,
+  .premium-hero {
+    animation: none !important;
+    transition: none !important;
+  }
+
+}
