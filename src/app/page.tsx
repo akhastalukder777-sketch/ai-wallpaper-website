@@ -453,46 +453,64 @@ export default function Home() {
 
 
       {/* ========================================================
-          >>> NEW HERO SECTION (LARGER & BALANCED VIEW) <<<
+          >>> NEW HERO SECTION (SEAMLESS BLEND & BALANCED SIZE) <<<
           ======================================================== */}
 
       <section
         className="
           relative
-          px-4
+          px-3
           sm:px-6
           lg:px-8
-          pt-4
-          pb-6
-          max-w-[1520px]
+          pt-2
+          pb-4
+          max-w-[1400px]
           mx-auto
           w-full
         "
       >
-        <div className="relative w-full min-h-[560px] lg:min-h-[600px] rounded-[44px] bg-white border-[1.5px] border-white/95 shadow-2xl shadow-sky-900/10 overflow-hidden flex items-center isolate">
+        <div className="relative w-full min-h-[460px] lg:min-h-[485px] rounded-[36px] bg-white border border-white/90 shadow-xl shadow-sky-950/5 overflow-hidden flex items-center isolate">
 
-          {/* RIGHT SIDE ORIGINAL WORKSPACE SETUP IMAGE (LARGER COVERAGE) */}
-          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden flex justify-end">
+          {/* RIGHT SIDE ORIGINAL WORKSPACE SETUP WITH ULTRA-SMOOTH MASK BLEND */}
+          <div
+            className="
+              absolute
+              top-0
+              right-0
+              bottom-0
+              w-full
+              md:w-[68%]
+              lg:w-[65%]
+              z-0
+              pointer-events-none
+              overflow-hidden
+              flex
+              justify-end
+              [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.05)_15%,rgba(0,0,0,0.45)_38%,rgba(0,0,0,0.9)_65%,black_90%)]
+              [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.05)_15%,rgba(0,0,0,0.45)_38%,rgba(0,0,0,0.9)_65%,black_90%)]
+            "
+          >
             <img
               src="/hero-setup.png"
-              alt="Anime Desk Setup Workspace"
-              className="w-full md:w-[70%] lg:w-[68%] h-full object-cover object-[center_32%] md:object-right"
+              alt="Workspace Setup"
+              className="w-full h-full object-cover object-[center_34%] md:object-right"
             />
-            {/* SMOOTH FEATHER GRADIENT OVERLAY */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 md:via-white/70 to-transparent" />
           </div>
 
+          {/* SOFT AMBIENT LIGHT LAYER */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none" />
+
           {/* LEFT HERO CONTENT */}
-          <div className="relative z-10 p-8 sm:p-12 lg:p-16 max-w-[680px] flex flex-col justify-center">
+          <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-[620px] flex flex-col justify-center">
 
             {/* TOP PILL BADGE */}
-            <div className="inline-flex items-center gap-2 bg-white/90 border border-[#2D8CFF]/20 rounded-full px-4 py-1.5 mb-5 text-[12px] font-bold text-[#0B1F4D] shadow-sm backdrop-blur-md w-fit">
+            <div className="inline-flex items-center gap-2 bg-white/90 border border-[#2D8CFF]/20 rounded-full px-3.5 py-1 mb-4 text-[11.5px] font-bold text-[#0B1F4D] shadow-sm backdrop-blur-md w-fit">
               <Sparkles className="w-3.5 h-3.5 text-[#178DFF]" />
               <span>Discover &amp; Save Ultra HD 4K Pins</span>
             </div>
 
             {/* MAIN TITLE */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[3.8rem] font-extrabold text-[#0B1F4D] tracking-tight leading-[1.08] mb-4">
+            <h1 className="text-3xl sm:text-4xl lg:text-[3.2rem] font-extrabold text-[#0B1F4D] tracking-tight leading-[1.08] mb-3.5">
               Explore Millions of
               <br />
               <span className="bg-gradient-to-r from-[#178DFF] via-[#00B4D8] to-[#00BFA6] bg-clip-text text-transparent inline-block">
@@ -501,53 +519,53 @@ export default function Home() {
             </h1>
 
             {/* SUBTITLE */}
-            <p className="text-[#46617D] text-sm sm:text-base font-semibold max-w-lg mb-8 leading-relaxed">
+            <p className="text-[#46617D] text-xs sm:text-sm font-semibold max-w-md mb-6 leading-relaxed">
               Free high-resolution vertical pins &amp; 4K wallpapers for Mobile,
               AMOLED, Desktop &amp; Laptop. Updated daily.
             </p>
 
             {/* 4 FEATURE PILLS */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-[560px]">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-[500px]">
 
               {/* 1. 4K Ultra HD */}
-              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2.5 px-3.5 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
-                <span className="text-[11px] font-extrabold text-[#0369A1] bg-[#E0F2FE] px-2 py-1 rounded-md">4K</span>
+              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2 px-3 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
+                <span className="text-[10px] font-extrabold text-[#0369A1] bg-[#E0F2FE] px-1.5 py-0.5 rounded-md">4K</span>
                 <div>
-                  <p className="text-xs font-extrabold text-[#0B1F4D] leading-tight">Ultra HD</p>
-                  <p className="text-[10px] text-[#64748B] font-medium leading-tight">High Quality</p>
+                  <p className="text-[11px] font-extrabold text-[#0B1F4D] leading-tight">Ultra HD</p>
+                  <p className="text-[9px] text-[#64748B] font-medium leading-tight">High Quality</p>
                 </div>
               </div>
 
               {/* 2. Free Download */}
-              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2.5 px-3.5 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
-                <div className="w-7 h-7 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#178DFF]">
-                  <Download className="w-3.5 h-3.5" />
+              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2 px-3 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
+                <div className="w-6 h-6 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#178DFF]">
+                  <Download className="w-3 h-3" />
                 </div>
                 <div>
-                  <p className="text-xs font-extrabold text-[#0B1F4D] leading-tight">Free</p>
-                  <p className="text-[10px] text-[#64748B] font-medium leading-tight">Download</p>
+                  <p className="text-[11px] font-extrabold text-[#0B1F4D] leading-tight">Free</p>
+                  <p className="text-[9px] text-[#64748B] font-medium leading-tight">Download</p>
                 </div>
               </div>
 
               {/* 3. Curated Best Picks */}
-              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2.5 px-3.5 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
-                <div className="w-7 h-7 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#2D8CFF]">
-                  <Heart className="w-3.5 h-3.5" />
+              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2 px-3 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
+                <div className="w-6 h-6 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#2D8CFF]">
+                  <Heart className="w-3 h-3" />
                 </div>
                 <div>
-                  <p className="text-xs font-extrabold text-[#0B1F4D] leading-tight">Curated</p>
-                  <p className="text-[10px] text-[#64748B] font-medium leading-tight">Best Picks</p>
+                  <p className="text-[11px] font-extrabold text-[#0B1F4D] leading-tight">Curated</p>
+                  <p className="text-[9px] text-[#64748B] font-medium leading-tight">Best Picks</p>
                 </div>
               </div>
 
               {/* 4. Updated Daily */}
-              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2.5 px-3.5 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
-                <div className="w-7 h-7 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#00BFA6]">
-                  <ShieldCheck className="w-3.5 h-3.5" />
+              <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2 px-3 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
+                <div className="w-6 h-6 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#00BFA6]">
+                  <ShieldCheck className="w-3 h-3" />
                 </div>
                 <div>
-                  <p className="text-xs font-extrabold text-[#0B1F4D] leading-tight">Updated</p>
-                  <p className="text-[10px] text-[#64748B] font-medium leading-tight">Daily</p>
+                  <p className="text-[11px] font-extrabold text-[#0B1F4D] leading-tight">Updated</p>
+                  <p className="text-[9px] text-[#64748B] font-medium leading-tight">Daily</p>
                 </div>
               </div>
 
