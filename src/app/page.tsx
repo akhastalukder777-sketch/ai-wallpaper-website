@@ -453,7 +453,7 @@ export default function Home() {
 
 
       {/* ========================================================
-          >>> NEW HERO SECTION (SEAMLESS BLEND & BALANCED SIZE) <<<
+          >>> NEW HERO SECTION (WIDER ALIGNED TO CATEGORIES) <<<
           ======================================================== */}
 
       <section
@@ -464,7 +464,7 @@ export default function Home() {
           lg:px-8
           pt-2
           pb-4
-          max-w-[1400px]
+          max-w-[1600px]
           mx-auto
           w-full
         "
@@ -479,8 +479,8 @@ export default function Home() {
               right-0
               bottom-0
               w-full
-              md:w-[68%]
-              lg:w-[65%]
+              md:w-[65%]
+              lg:w-[62%]
               z-0
               pointer-events-none
               overflow-hidden
