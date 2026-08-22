@@ -453,7 +453,7 @@ export default function Home() {
 
 
       {/* ========================================================
-          >>> NEW HERO SECTION (CRYSTAL CLEAR PHOTO & PERFECT BLEND) <<<
+          >>> NEW HERO SECTION ("MAKE YOUR SCREEN BEAUTIFUL.") <<<
           ======================================================== */}
 
       <section
@@ -471,7 +471,7 @@ export default function Home() {
       >
         <div className="relative w-full min-h-[460px] lg:min-h-[485px] rounded-[36px] bg-white border border-white/90 shadow-xl shadow-sky-950/5 overflow-hidden flex items-center isolate">
 
-          {/* RIGHT SIDE ORIGINAL WORKSPACE SETUP (100% SHARP & ONLY BLENDS BEHIND TEXT) */}
+          {/* RIGHT SIDE ORIGINAL WORKSPACE SETUP */}
           <div
             className="
               absolute
@@ -497,34 +497,56 @@ export default function Home() {
             />
           </div>
 
-          {/* SOFT CLEAN WHITE BASE FOR TEXT (ONLY BEHIND LEFT TEXT AREA) */}
-          <div className="absolute inset-y-0 left-0 w-[46%] bg-gradient-to-r from-white via-white/95 to-transparent pointer-events-none z-0" />
+          {/* SOFT CLEAN WHITE BASE FOR TEXT */}
+          <div className="absolute inset-y-0 left-0 w-[48%] bg-gradient-to-r from-white via-white/95 to-transparent pointer-events-none z-0" />
 
           {/* LEFT HERO CONTENT */}
-          <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-[620px] flex flex-col justify-center">
+          <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-[640px] flex flex-col justify-center">
 
-            {/* TOP PILL BADGE */}
-            <div className="inline-flex items-center gap-2 bg-white/90 border border-[#2D8CFF]/20 rounded-full px-3.5 py-1 mb-4 text-[11.5px] font-bold text-[#0B1F4D] shadow-sm backdrop-blur-md w-fit">
-              <Sparkles className="w-3.5 h-3.5 text-[#178DFF]" />
-              <span>Discover &amp; Save Ultra HD 4K Pins</span>
+            {/* TOP GLOWING 8K BADGE */}
+            <div className="relative inline-flex items-center gap-2 px-3.5 py-1.5 mb-4 text-[12px] font-extrabold text-white rounded-full bg-gradient-to-r from-[#0066FF] via-[#00B4D8] to-[#00E5FF] shadow-[0_0_18px_rgba(0,180,216,0.4)] border border-white/40 backdrop-blur-md w-fit">
+              <Sparkles className="w-3.5 h-3.5 text-white" />
+              <span>Discover &amp; Save Ultra HD 8K Pins</span>
             </div>
 
-            {/* MAIN TITLE */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[3.2rem] font-extrabold text-[#0B1F4D] tracking-tight leading-[1.08] mb-3.5">
-              Explore Millions of
+            {/* MAIN TITLE: "Make Your Screen Beautiful." WITH SIGNATURE UNDERLINE */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.6rem] font-black text-[#0B1F4D] tracking-tight leading-[1.06] mb-3">
+              Make Your
               <br />
-              <span className="bg-gradient-to-r from-[#178DFF] via-[#00B4D8] to-[#00BFA6] bg-clip-text text-transparent inline-block">
-                4K Ultra HD Wallpapers
+              <span className="text-[#00A3FF]">Screen </span>
+              <span className="relative inline-block bg-gradient-to-r from-[#00B4D8] via-[#178DFF] to-[#7928CA] bg-clip-text text-transparent">
+                Beautiful.
+                {/* SIGNATURE BRUSH STROKE UNDERLINE */}
+                <svg
+                  className="absolute -bottom-2.5 left-0 w-full h-[14px] pointer-events-none"
+                  viewBox="0 0 250 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 14C55 4 145 2 247 11C200 6 120 7 60 17"
+                    stroke="url(#brush_gradient)"
+                    strokeWidth="4.5"
+                    strokeLinecap="round"
+                  />
+                  <defs>
+                    <linearGradient id="brush_gradient" x1="0" y1="0" x2="250" y2="0" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#00E5FF" />
+                      <stop offset="0.5" stopColor="#178DFF" />
+                      <stop offset="1" stopColor="#7928CA" />
+                    </linearGradient>
+                  </defs>
+                </svg>
               </span>
             </h1>
 
             {/* SUBTITLE */}
-            <p className="text-[#46617D] text-xs sm:text-sm font-semibold max-w-md mb-6 leading-relaxed">
-              Free high-resolution vertical pins &amp; 4K wallpapers for Mobile,
-              AMOLED, Desktop &amp; Laptop. Updated daily.
+            <p className="text-[#46617D] text-xs sm:text-[14px] font-semibold max-w-lg mb-6 leading-relaxed mt-2">
+              Discover stunning wallpapers selected for Mobile, AMOLED, Desktop &amp; Laptop. Fresh, high-quality visuals added{' '}
+              <span className="text-[#0099FF] font-bold">every day</span>.
             </p>
 
-            {/* 4 FEATURE PILLS */}
+            {/* 4 FEATURE PILLS (100% PRESERVED) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-[500px]">
 
               {/* 1. 4K Ultra HD */}
@@ -550,7 +572,7 @@ export default function Home() {
               {/* 3. Curated Best Picks */}
               <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2 px-3 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
                 <div className="w-6 h-6 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#2D8CFF]">
-                  <Heart className="w-3.5 h-3.5" />
+                  <Heart className="w-3 h-3" />
                 </div>
                 <div>
                   <p className="text-[11px] font-extrabold text-[#0B1F4D] leading-tight">Curated</p>
@@ -561,7 +583,7 @@ export default function Home() {
               {/* 4. Updated Daily */}
               <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2 px-3 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
                 <div className="w-6 h-6 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#00BFA6]">
-                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <ShieldCheck className="w-3 h-3" />
                 </div>
                 <div>
                   <p className="text-[11px] font-extrabold text-[#0B1F4D] leading-tight">Updated</p>
