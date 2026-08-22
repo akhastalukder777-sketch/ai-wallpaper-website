@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CATEGORIES } from '../data/wallpapers';
 import { Layers } from 'lucide-react';
 
@@ -40,6 +40,44 @@ export default function CategoryBar({
   selectedCategory,
   onSelectCategory,
 }: CategoryBarProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const [bubbleStyle, setBubbleStyle] = useState({
+    left: 0,
+    width: 0,
+    height: 0,
+    opacity: 0,
+  });
+
+  /* ============================================================
+     ONE MOVING BUBBLE POSITION CALCULATION
+  ============================================================ */
+
+  useEffect(() => {
+    const updateBubble = () => {
+      const activeButton = buttonRefs.current[selectedCategory];
+      const container = containerRef.current;
+
+      if (activeButton && container) {
+        setBubbleStyle({
+          left: activeButton.offsetLeft,
+          width: activeButton.offsetWidth,
+          height: activeButton.offsetHeight,
+          opacity: 1,
+        });
+      }
+    };
+
+    updateBubble();
+    const timer = setTimeout(updateBubble, 50);
+
+    window.addEventListener('resize', updateBubble);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateBubble);
+    };
+  }, [selectedCategory]);
+
   return (
     <div id="categories" className="w-full py-6">
       {/* CATEGORY TITLE */}
@@ -52,7 +90,7 @@ export default function CategoryBar({
         </h2>
       </div>
 
-      {/* HORIZONTAL CATEGORY PILLS */}
+      {/* HORIZONTAL CATEGORY PILLS WITH ONE MOVING BUBBLE */}
 
       <div
         className="
@@ -71,14 +109,27 @@ export default function CategoryBar({
         "
       >
         <div
+          ref={containerRef}
           className="
             flex
             items-center
             gap-2
             min-w-max
             py-1
+            relative
           "
         >
+          {/* SINGLE MOVING ACTIVE PILL BUBBLE */}
+          <div
+            className="category-active-bubble absolute top-1/2 -translate-y-1/2 rounded-full pointer-events-none z-0"
+            style={{
+              left: `${bubbleStyle.left}px`,
+              width: `${bubbleStyle.width}px`,
+              height: `${bubbleStyle.height}px`,
+              opacity: bubbleStyle.opacity,
+            }}
+          />
+
           {CATEGORIES.map((category) => {
             const isActive = selectedCategory === category;
             const icon = CATEGORY_ICONS[category] || '✨';
@@ -86,6 +137,9 @@ export default function CategoryBar({
             return (
               <button
                 key={category}
+                ref={(el) => {
+                  buttonRefs.current[category] = el;
+                }}
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => onSelectCategory(category)}
@@ -102,17 +156,16 @@ export default function CategoryBar({
                   items-center
                   gap-1.5
                   cursor-pointer
+                  transition-colors
+                  duration-200
                   ${
                     isActive
-                      ? 'glass-category-pill-active premium-category-active'
-                      : 'glass-category-pill'
+                      ? 'text-white font-extrabold'
+                      : 'glass-category-pill text-[#0B1F4D]'
                   }
                 `}
               >
-                <span className="text-sm leading-none">
-                  {icon}
-                </span>
-
+                <span className="text-sm leading-none">{icon}</span>
                 <span>{category}</span>
               </button>
             );

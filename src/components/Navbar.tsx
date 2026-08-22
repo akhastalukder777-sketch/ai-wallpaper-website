@@ -53,6 +53,19 @@ export default function Navbar({
   const lastScrollY = useRef(0);
 
   /* ============================================================
+     DESKTOP MOVING ACTIVE BUBBLE REFS & STATE
+  ============================================================ */
+
+  const desktopNavContainerRef = useRef<HTMLElement | null>(null);
+  const desktopNavRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const [desktopBubbleStyle, setDesktopBubbleStyle] = useState({
+    left: 0,
+    width: 0,
+    height: 0,
+    opacity: 0,
+  });
+
+  /* ============================================================
      NAV ITEMS
   ============================================================ */
 
@@ -112,6 +125,38 @@ export default function Navbar({
       icon: MoreHorizontal,
     },
   ];
+
+  /* ============================================================
+     DESKTOP ACTIVE BUBBLE POSITION CALCULATION
+  ============================================================ */
+
+  useEffect(() => {
+    const updateDesktopBubble = () => {
+      const activeEl = desktopNavRefs.current[activeNav];
+      const container = desktopNavContainerRef.current;
+
+      if (activeEl && container) {
+        setDesktopBubbleStyle({
+          left: activeEl.offsetLeft,
+          width: activeEl.offsetWidth,
+          height: activeEl.offsetHeight,
+          opacity: 1,
+        });
+      } else {
+        setDesktopBubbleStyle((prev) => ({ ...prev, opacity: 0 }));
+      }
+    };
+
+    // Initial and deferred animation frame for layout accuracy
+    updateDesktopBubble();
+    const timer = setTimeout(updateDesktopBubble, 50);
+
+    window.addEventListener('resize', updateDesktopBubble);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateDesktopBubble);
+    };
+  }, [activeNav]);
 
   /* ============================================================
      SCROLL BEHAVIOR
@@ -356,17 +401,34 @@ export default function Navbar({
                 </div>
               </Link>
 
-              {/* DESKTOP NAV */}
+              {/* DESKTOP NAV WITH ONE MOVING ACTIVE BUBBLE */}
 
-              <nav className="hidden lg:flex items-center justify-center gap-2 flex-1">
+              <nav
+                ref={desktopNavContainerRef}
+                className="hidden lg:flex items-center justify-center gap-2 flex-1 relative py-1"
+              >
+                {/* SINGLE MOVING ACTIVE PILL BUBBLE */}
+                <div
+                  className="desktop-nav-active-bubble absolute top-1/2 -translate-y-1/2 rounded-full pointer-events-none z-0"
+                  style={{
+                    left: `${desktopBubbleStyle.left}px`,
+                    width: `${desktopBubbleStyle.width}px`,
+                    height: `${desktopBubbleStyle.height}px`,
+                    opacity: desktopBubbleStyle.opacity,
+                  }}
+                />
+
                 {desktopNavItems.map((item) => {
                   const isActive = activeNav === item.id;
                   const Icon = item.icon;
 
                   if (item.hasDropdown) {
                     return (
-                      <div key={item.id} className="relative">
+                      <div key={item.id} className="relative z-10">
                         <button
+                          ref={(el) => {
+                            desktopNavRefs.current[item.id] = el;
+                          }}
                           type="button"
                           aria-pressed={isActive}
                           onClick={() => {
@@ -383,10 +445,12 @@ export default function Navbar({
                             gap-2
                             cursor-pointer
                             whitespace-nowrap
+                            transition-colors
+                            duration-200
                             ${
                               isActive
-                                ? 'nav-pill-chip-active'
-                                : 'nav-pill-chip'
+                                ? 'text-white font-extrabold'
+                                : 'nav-pill-chip text-[#23212c]'
                             }
                           `}
                         >
@@ -470,10 +534,15 @@ export default function Navbar({
                   return (
                     <button
                       key={item.id}
+                      ref={(el) => {
+                        desktopNavRefs.current[item.id] = el;
+                      }}
                       type="button"
                       aria-current={isActive ? 'page' : undefined}
                       onClick={() => handleNavClick(item.id)}
                       className={`
+                        relative
+                        z-10
                         px-4 py-2.5
                         rounded-full
                         text-xs
@@ -483,10 +552,12 @@ export default function Navbar({
                         gap-2
                         cursor-pointer
                         whitespace-nowrap
+                        transition-colors
+                        duration-200
                         ${
                           isActive
-                            ? 'nav-pill-chip-active'
-                            : 'nav-pill-chip'
+                            ? 'text-white font-extrabold'
+                            : 'nav-pill-chip text-[#23212c]'
                         }
                       `}
                     >
@@ -566,7 +637,7 @@ export default function Navbar({
       </header>
 
       {/* ========================================================
-          MOBILE BOTTOM FLOATING GLASS NAVBAR
+          MOBILE BOTTOM FLOATING GLASS NAVBAR (100% UNCHANGED)
       ======================================================== */}
 
       <div
