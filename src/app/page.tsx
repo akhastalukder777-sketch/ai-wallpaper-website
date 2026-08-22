@@ -94,7 +94,7 @@ export default function Home() {
      ============================================================ */
 
   const [visibleCount, setVisibleCount] =
-    useState(30);
+    useState(60);
 
 
   /* ============================================================
@@ -177,7 +177,7 @@ export default function Home() {
 
   useEffect(() => {
 
-    setVisibleCount(30);
+    setVisibleCount(60);
 
   }, [
     searchQuery,
@@ -809,7 +809,7 @@ export default function Home() {
                   onClick={() =>
                     setVisibleCount(
                       (prev) =>
-                        prev + 30
+                        prev + 60
                     )
                   }
                   className="
