@@ -453,7 +453,7 @@ export default function Home() {
 
 
       {/* ========================================================
-          >>> NEW HERO SECTION (WIDER ALIGNED TO CATEGORIES) <<<
+          >>> NEW HERO SECTION (CRYSTAL CLEAR PHOTO & PERFECT BLEND) <<<
           ======================================================== */}
 
       <section
@@ -471,7 +471,7 @@ export default function Home() {
       >
         <div className="relative w-full min-h-[460px] lg:min-h-[485px] rounded-[36px] bg-white border border-white/90 shadow-xl shadow-sky-950/5 overflow-hidden flex items-center isolate">
 
-          {/* RIGHT SIDE ORIGINAL WORKSPACE SETUP WITH ULTRA-SMOOTH MASK BLEND */}
+          {/* RIGHT SIDE ORIGINAL WORKSPACE SETUP (100% SHARP & ONLY BLENDS BEHIND TEXT) */}
           <div
             className="
               absolute
@@ -479,15 +479,15 @@ export default function Home() {
               right-0
               bottom-0
               w-full
-              md:w-[65%]
-              lg:w-[62%]
+              md:w-[68%]
+              lg:w-[65%]
               z-0
               pointer-events-none
               overflow-hidden
               flex
               justify-end
-              [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.05)_15%,rgba(0,0,0,0.45)_38%,rgba(0,0,0,0.9)_65%,black_90%)]
-              [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.05)_15%,rgba(0,0,0,0.45)_38%,rgba(0,0,0,0.9)_65%,black_90%)]
+              [mask-image:linear-gradient(to_right,transparent_0%,transparent_6%,rgba(0,0,0,0.6)_18%,black_32%,black_100%)]
+              [-webkit-mask-image:linear-gradient(to_right,transparent_0%,transparent_6%,rgba(0,0,0,0.6)_18%,black_32%,black_100%)]
             "
           >
             <img
@@ -497,8 +497,8 @@ export default function Home() {
             />
           </div>
 
-          {/* SOFT AMBIENT LIGHT LAYER */}
-          <div className="absolute inset-0 z-0 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none" />
+          {/* SOFT CLEAN WHITE BASE FOR TEXT (ONLY BEHIND LEFT TEXT AREA) */}
+          <div className="absolute inset-y-0 left-0 w-[46%] bg-gradient-to-r from-white via-white/95 to-transparent pointer-events-none z-0" />
 
           {/* LEFT HERO CONTENT */}
           <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-[620px] flex flex-col justify-center">
@@ -550,7 +550,7 @@ export default function Home() {
               {/* 3. Curated Best Picks */}
               <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2 px-3 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
                 <div className="w-6 h-6 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#2D8CFF]">
-                  <Heart className="w-3 h-3" />
+                  <Heart className="w-3.5 h-3.5" />
                 </div>
                 <div>
                   <p className="text-[11px] font-extrabold text-[#0B1F4D] leading-tight">Curated</p>
@@ -561,7 +561,7 @@ export default function Home() {
               {/* 4. Updated Daily */}
               <div className="bg-white/85 backdrop-blur-md border border-white/90 rounded-2xl p-2 px-3 flex items-center gap-2.5 shadow-sm shadow-blue-500/5">
                 <div className="w-6 h-6 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#00BFA6]">
-                  <ShieldCheck className="w-3 h-3" />
+                  <ShieldCheck className="w-3.5 h-3.5" />
                 </div>
                 <div>
                   <p className="text-[11px] font-extrabold text-[#0B1F4D] leading-tight">Updated</p>
