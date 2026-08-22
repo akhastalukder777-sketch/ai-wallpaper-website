@@ -127,7 +127,7 @@ export default function Navbar({
   ];
 
   /* ============================================================
-     DESKTOP ACTIVE BUBBLE POSITION CALCULATION
+     DESKTOP ACTIVE BUBBLE POSITION CALCULATION (FIXED BUG)
   ============================================================ */
 
   useEffect(() => {
@@ -136,10 +136,14 @@ export default function Navbar({
       const container = desktopNavContainerRef.current;
 
       if (activeEl && container) {
+        // getBoundingClientRect দিয়ে কন্টেইনারের সাপেক্ষে নিখুঁত পজিশন নির্ণয়
+        const activeRect = activeEl.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
         setDesktopBubbleStyle({
-          left: activeEl.offsetLeft,
-          width: activeEl.offsetWidth,
-          height: activeEl.offsetHeight,
+          left: activeRect.left - containerRect.left,
+          width: activeRect.width,
+          height: activeRect.height,
           opacity: 1,
         });
       } else {
@@ -147,7 +151,6 @@ export default function Navbar({
       }
     };
 
-    // Initial and deferred animation frame for layout accuracy
     updateDesktopBubble();
     const timer = setTimeout(updateDesktopBubble, 50);
 
@@ -156,7 +159,7 @@ export default function Navbar({
       clearTimeout(timer);
       window.removeEventListener('resize', updateDesktopBubble);
     };
-  }, [activeNav]);
+  }, [activeNav, isCategoryDropdownOpen]);
 
   /* ============================================================
      SCROLL BEHAVIOR
