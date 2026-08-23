@@ -290,7 +290,7 @@ export default function Navbar({
         className={`
           sticky top-3 z-50
           px-2 sm:px-6 lg:px-8
-          max-w-[1240px] mx-auto
+          max-w-[1280px] mx-auto
           w-full
           transition-all duration-300
           transform
@@ -306,8 +306,8 @@ export default function Navbar({
             glass-navbar-desktop
             rounded-full
             px-4 sm:px-5 lg:px-6
-            py-2
-            min-h-[62px]
+            py-1.5
+            min-h-[66px]
             flex
             items-center
             justify-between
@@ -374,7 +374,7 @@ export default function Navbar({
           ) : (
             <>
               {/* ====================================================
-                  AUTO-DETECTING 8K BRAND LOGO
+                  LARGE & CLEAR BRAND LOGO
                   ==================================================== */}
 
               <Link
@@ -392,12 +392,12 @@ export default function Navbar({
                 "
               >
                 {/* Subtle Ambient Pulse Glow Behind Logo */}
-                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#2D8CFF]/20 via-[#52D8FF]/25 to-[#7FFFD4]/20 blur-md opacity-70 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-[#2D8CFF]/20 via-[#52D8FF]/25 to-[#7FFFD4]/20 blur-md opacity-70 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                {/* Logo Image with Auto-Extension Fallback */}
+                {/* Logo Image - Enlarged for Maximum Text Clarity */}
                 <img
                   src="/logo.png"
-                  alt=""
+                  alt="Wallpaper 8K & Ultra HD"
                   onError={(e) => {
                     const target = e.currentTarget;
                     if (target.src.endsWith('/logo.png')) {
@@ -411,13 +411,13 @@ export default function Navbar({
                   className="
                     relative
                     z-10
-                    h-8
-                    sm:h-9
-                    lg:h-[40px]
+                    h-10
+                    sm:h-11
+                    lg:h-[48px]
                     w-auto
-                    max-w-[170px]
-                    sm:max-w-[200px]
-                    lg:max-w-[230px]
+                    max-w-[200px]
+                    sm:max-w-[240px]
+                    lg:max-w-[280px]
                     object-contain
                     shrink-0
                     transition-all
@@ -425,8 +425,8 @@ export default function Navbar({
                     ease-[cubic-bezier(0.34,1.56,0.64,1)]
                     group-hover:scale-[1.04]
                     group-hover:-translate-y-0.5
-                    drop-shadow-[0_2px_8px_rgba(45,140,255,0.2)]
-                    group-hover:drop-shadow-[0_6px_20px_rgba(82,216,255,0.45)]
+                    drop-shadow-[0_2px_10px_rgba(45,140,255,0.25)]
+                    group-hover:drop-shadow-[0_6px_22px_rgba(82,216,255,0.5)]
                   "
                 />
               </Link>
