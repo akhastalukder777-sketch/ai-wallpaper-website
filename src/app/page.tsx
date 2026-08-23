@@ -620,7 +620,7 @@ export default function Home() {
         "
       >
 
-        {/* CATEGORY BAR */}
+        {/* CATEGORY BAR WITH DYNAMIC WALLPAPER THUMBNAILS */}
 
         <CategoryBar
           selectedCategory={
@@ -628,6 +628,9 @@ export default function Home() {
           }
           onSelectCategory={
             setSelectedCategory
+          }
+          wallpapers={
+            wallpapers
           }
         />
 

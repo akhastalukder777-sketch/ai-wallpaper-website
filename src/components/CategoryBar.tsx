@@ -1,44 +1,19 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { CATEGORIES } from '../data/wallpapers';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { CATEGORIES, Wallpaper } from '../data/wallpapers';
 import { Layers } from 'lucide-react';
 
 interface CategoryBarProps {
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
+  wallpapers?: Wallpaper[];
 }
-
-// Category Icon Mapping
-const CATEGORY_ICONS: Record<string, string> = {
-  All: '✨',
-  Anime: '⛩️',
-  AMOLED: '📱',
-  Dark: '🌙',
-  Nature: '🌿',
-  Cars: '🚗',
-  Bikes: '🏍️',
-  Space: '🌌',
-  Gaming: '🎮',
-  Minimal: '✨',
-  Technology: '💻',
-  Animals: '🦁',
-  Flowers: '🌸',
-  Mountains: '⛰️',
-  Cities: '🏙️',
-  Abstract: '🎨',
-  Aesthetic: '✨',
-  Fantasy: '🔮',
-  Cyberpunk: '🌆',
-  Architecture: '🏛️',
-  Ocean: '🌊',
-  Sunset: '🌅',
-  Mixed: '🔀',
-};
 
 export default function CategoryBar({
   selectedCategory,
   onSelectCategory,
+  wallpapers = [],
 }: CategoryBarProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -48,6 +23,33 @@ export default function CategoryBar({
     height: 0,
     opacity: 0,
   });
+
+  /* ============================================================
+     DYNAMIC FIRST WALLPAPER THUMBNAIL MAPPING
+  ============================================================ */
+
+  const categoryThumbnails = useMemo(() => {
+    const thumbMap: Record<string, string> = {};
+
+    // 'All' category uses the first wallpaper from the list
+    if (wallpapers.length > 0) {
+      thumbMap['All'] =
+        wallpapers[0].thumbnailUrl || wallpapers[0].imageUrl || '';
+    }
+
+    // For each specific category, find the first matching wallpaper
+    CATEGORIES.forEach((cat) => {
+      if (cat === 'All') return;
+      const match = wallpapers.find(
+        (w) => w.category?.trim().toLowerCase() === cat.trim().toLowerCase()
+      );
+      if (match) {
+        thumbMap[cat] = match.thumbnailUrl || match.imageUrl || '';
+      }
+    });
+
+    return thumbMap;
+  }, [wallpapers]);
 
   /* ============================================================
      ONE MOVING BUBBLE POSITION CALCULATION
@@ -69,14 +71,14 @@ export default function CategoryBar({
     };
 
     updateBubble();
-    const timer = setTimeout(updateBubble, 50);
+    const timer = setTimeout(updateBubble, 60);
 
     window.addEventListener('resize', updateBubble);
     return () => {
       clearTimeout(timer);
       window.removeEventListener('resize', updateBubble);
     };
-  }, [selectedCategory]);
+  }, [selectedCategory, wallpapers]);
 
   return (
     <div id="categories" className="w-full py-6">
@@ -90,7 +92,7 @@ export default function CategoryBar({
         </h2>
       </div>
 
-      {/* HORIZONTAL CATEGORY PILLS WITH ONE MOVING BUBBLE */}
+      {/* HORIZONTAL CATEGORY PILLS WITH CIRCULAR THUMBNAILS & MOVING BUBBLE */}
 
       <div
         className="
@@ -113,7 +115,7 @@ export default function CategoryBar({
           className="
             flex
             items-center
-            gap-2
+            gap-2.5
             min-w-max
             py-1
             relative
@@ -132,7 +134,7 @@ export default function CategoryBar({
 
           {CATEGORIES.map((category) => {
             const isActive = selectedCategory === category;
-            const icon = CATEGORY_ICONS[category] || '✨';
+            const thumbUrl = categoryThumbnails[category];
 
             return (
               <button
@@ -147,14 +149,15 @@ export default function CategoryBar({
                   relative
                   z-10
                   whitespace-nowrap
-                  px-4
-                  py-2
+                  pl-1.5
+                  pr-4
+                  py-1.5
                   rounded-full
                   text-xs
                   font-bold
                   flex
                   items-center
-                  gap-1.5
+                  gap-2
                   cursor-pointer
                   transition-colors
                   duration-200
@@ -165,7 +168,22 @@ export default function CategoryBar({
                   }
                 `}
               >
-                <span className="text-sm leading-none">{icon}</span>
+                {/* CIRCULAR THUMBNAIL OF FIRST WALLPAPER */}
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden shrink-0 border border-white/90 shadow-sm bg-slate-200 flex items-center justify-center">
+                  {thumbUrl ? (
+                    <img
+                      src={thumbUrl}
+                      alt={category}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span className="text-[11px] font-black text-slate-600 uppercase">
+                      {category.slice(0, 1)}
+                    </span>
+                  )}
+                </div>
+
                 <span>{category}</span>
               </button>
             );
