@@ -374,7 +374,7 @@ export default function Navbar({
           ) : (
             <>
               {/* ====================================================
-                  ORIGINAL 8K BRAND LOGO (/public/logo.png)
+                  AUTO-DETECTING 8K BRAND LOGO
                   ==================================================== */}
 
               <Link
@@ -394,10 +394,20 @@ export default function Navbar({
                 {/* Subtle Ambient Pulse Glow Behind Logo */}
                 <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#2D8CFF]/20 via-[#52D8FF]/25 to-[#7FFFD4]/20 blur-md opacity-70 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                {/* Logo Image */}
+                {/* Logo Image with Auto-Extension Fallback */}
                 <img
                   src="/logo.png"
-                  alt="Wallpaper 8K & Ultra HD"
+                  alt=""
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (target.src.endsWith('/logo.png')) {
+                      target.src = '/logo.webp';
+                    } else if (target.src.endsWith('/logo.webp')) {
+                      target.src = '/logo.jpg';
+                    } else if (target.src.endsWith('/logo.jpg')) {
+                      target.src = '/logo.png.png';
+                    }
+                  }}
                   className="
                     relative
                     z-10
@@ -405,9 +415,9 @@ export default function Navbar({
                     sm:h-9
                     lg:h-[40px]
                     w-auto
-                    max-w-[160px]
-                    sm:max-w-[190px]
-                    lg:max-w-[220px]
+                    max-w-[170px]
+                    sm:max-w-[200px]
+                    lg:max-w-[230px]
                     object-contain
                     shrink-0
                     transition-all
