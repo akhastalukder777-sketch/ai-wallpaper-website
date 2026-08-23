@@ -127,7 +127,7 @@ export default function Navbar({
   ];
 
   /* ============================================================
-     DESKTOP ACTIVE BUBBLE POSITION CALCULATION (FIXED BUG)
+     DESKTOP ACTIVE BUBBLE POSITION CALCULATION
   ============================================================ */
 
   useEffect(() => {
@@ -136,7 +136,6 @@ export default function Navbar({
       const container = desktopNavContainerRef.current;
 
       if (activeEl && container) {
-        // getBoundingClientRect দিয়ে কন্টেইনারের সাপেক্ষে নিখুঁত পজিশন নির্ণয়
         const activeRect = activeEl.getBoundingClientRect();
         const containerRect = container.getBoundingClientRect();
 
@@ -307,7 +306,7 @@ export default function Navbar({
             glass-navbar-desktop
             rounded-full
             px-4 sm:px-5 lg:px-6
-            py-2.5
+            py-2
             min-h-[62px]
             flex
             items-center
@@ -374,34 +373,48 @@ export default function Navbar({
             </div>
           ) : (
             <>
-              {/* LOGO */}
+              {/* ====================================================
+                  NEW ANIMATED BRAND LOGO (/public/logo.png)
+                  ==================================================== */}
 
               <Link
                 href="/"
                 onClick={() => handleNavClick('Home')}
                 className="
+                  relative
                   flex
                   items-center
-                  gap-2.5
                   group
                   shrink-0
                   pr-2
                   lg:pr-4
+                  cursor-pointer
                 "
               >
-                <div className="premium-logo-mark group-hover:scale-105 transition-transform duration-300">
-                  <div className="premium-logo-w">W</div>
-                </div>
+                {/* Subtle Ambient Pulse Glow Behind Logo */}
+                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#2D8CFF]/15 via-[#52D8FF]/20 to-[#7FFFD4]/15 blur-md opacity-60 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                <div>
-                  <span className="premium-brand-name text-base sm:text-lg font-extrabold tracking-tight">
-                    Wallpapers<span className="premium-brand-dot">.</span>
-                  </span>
-
-                  <span className="hidden xl:block text-[9px] font-bold text-slate-700 uppercase tracking-widest -mt-1">
-                    4K & Ultra HD
-                  </span>
-                </div>
+                {/* Animated Logo Image */}
+                <img
+                  src="/logo.png"
+                  alt="Wallpaper 4K & Ultra HD"
+                  className="
+                    relative
+                    z-10
+                    h-9
+                    sm:h-10
+                    lg:h-[42px]
+                    w-auto
+                    object-contain
+                    transition-all
+                    duration-300
+                    ease-[cubic-bezier(0.34,1.56,0.64,1)]
+                    group-hover:scale-[1.04]
+                    group-hover:-translate-y-0.5
+                    drop-shadow-[0_2px_8px_rgba(45,140,255,0.2)]
+                    group-hover:drop-shadow-[0_6px_20px_rgba(82,216,255,0.45)]
+                  "
+                />
               </Link>
 
               {/* DESKTOP NAV WITH ONE MOVING ACTIVE BUBBLE */}
