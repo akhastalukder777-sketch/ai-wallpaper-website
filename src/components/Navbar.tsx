@@ -374,7 +374,7 @@ export default function Navbar({
           ) : (
             <>
               {/* ====================================================
-                  NEW ANIMATED BRAND LOGO (/public/logo.png)
+                  ORIGINAL 8K BRAND LOGO (/public/logo.png)
                   ==================================================== */}
 
               <Link
@@ -392,20 +392,24 @@ export default function Navbar({
                 "
               >
                 {/* Subtle Ambient Pulse Glow Behind Logo */}
-                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#2D8CFF]/15 via-[#52D8FF]/20 to-[#7FFFD4]/15 blur-md opacity-60 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#2D8CFF]/20 via-[#52D8FF]/25 to-[#7FFFD4]/20 blur-md opacity-70 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                {/* Animated Logo Image */}
+                {/* Logo Image */}
                 <img
                   src="/logo.png"
-                  alt="Wallpaper 4K & Ultra HD"
+                  alt="Wallpaper 8K & Ultra HD"
                   className="
                     relative
                     z-10
-                    h-9
-                    sm:h-10
-                    lg:h-[42px]
+                    h-8
+                    sm:h-9
+                    lg:h-[40px]
                     w-auto
+                    max-w-[160px]
+                    sm:max-w-[190px]
+                    lg:max-w-[220px]
                     object-contain
+                    shrink-0
                     transition-all
                     duration-300
                     ease-[cubic-bezier(0.34,1.56,0.64,1)]
