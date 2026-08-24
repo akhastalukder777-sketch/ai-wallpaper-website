@@ -77,9 +77,9 @@ export default function WallpaperCard({
           className="w-full h-auto object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
         />
 
-        {/* Ultra-Clear 20-30% Subtle Ambient Overlay Layer */}
+        {/* 100% Crystal Clear Overlay (Zero Background Blur) */}
         <div
-          className={`absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/35 backdrop-blur-[2px] transition-all duration-300 ease-out flex flex-col justify-between p-3 sm:p-3.5 ${
+          className={`absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/35 transition-all duration-300 ease-out flex flex-col justify-between p-3 sm:p-3.5 ${
             isOverlayVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
           }`}
         >
