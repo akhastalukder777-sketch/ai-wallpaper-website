@@ -63,10 +63,10 @@ export default function WallpaperCard({
         setIsHovered(false);
         setIsMobileTapped(false);
       }}
-      className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] hover:z-30 hover:shadow-2xl hover:shadow-[#0B1F4D]/30 break-inside-avoid mb-4 flex flex-col"
+      className="group relative rounded-3xl overflow-hidden glass-card cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] hover:z-30 hover:shadow-2xl hover:shadow-[#0B1F4D]/25 break-inside-avoid mb-4 flex flex-col"
     >
       {/* Natural Aspect Ratio Image Container */}
-      <div className="relative w-full overflow-hidden bg-[#0B1F4D] rounded-3xl">
+      <div className="relative w-full overflow-hidden bg-[#0B1F4D]/10 rounded-3xl">
         <img
           src={imgSrc}
           alt={wallpaper.title}
@@ -77,53 +77,59 @@ export default function WallpaperCard({
           className="w-full h-auto object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
         />
 
-        {/* Pixabay-Style Glass Hover Action Overlay Panel */}
+        {/* Ultra-Clear 20-30% Subtle Ambient Overlay Layer */}
         <div
-          className={`absolute inset-0 glass-hover-panel transition-all duration-300 ease-out flex flex-col justify-between p-3.5 ${
+          className={`absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/35 backdrop-blur-[2px] transition-all duration-300 ease-out flex flex-col justify-between p-3 sm:p-3.5 ${
             isOverlayVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
           }`}
         >
           {/* Top Panel Controls */}
           <div className="flex items-center justify-between gap-2">
-            <span className="px-3 py-1 rounded-full premium-category-badge text-[11px] font-semibold tracking-wide border border-[#DFF7FF]/20 shadow-md">
+            
+            {/* Category Glass Pill */}
+            <span className="px-3 py-1.5 rounded-full bg-white/20 hover:bg-white/35 backdrop-blur-md hover:backdrop-blur-2xl border border-white/35 text-white text-[11px] font-bold tracking-wide shadow-md transition-all duration-300">
               {wallpaper.category}
             </span>
 
-            {/* Save 4K Button */}
+            {/* Save Button (Glass Pill with only "Save" text) */}
             <button
               onClick={handleDownload}
-              className="px-4 py-2 rounded-full premium-save-btn text-[#0B1F4D] text-xs font-bold flex items-center gap-1.5 transition-transform active:scale-95"
+              className="px-3.5 py-1.5 rounded-full bg-white/25 hover:bg-white/40 backdrop-blur-md hover:backdrop-blur-2xl border border-white/40 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
             >
-              <Download className="w-3.5 h-3.5 text-[#0B1F4D]" />
-              Save 4K
+              <Download className="w-3.5 h-3.5 text-white" />
+              Save
             </button>
           </div>
 
-          {/* Center Hover Preview Button */}
+          {/* Center Hover Preview Button (Glass Pill) */}
           <div className="flex justify-center">
-            <span className="px-4 py-2 rounded-full premium-view-pill text-white text-xs font-semibold backdrop-blur-md border border-[#DFF7FF]/30 shadow-xl flex items-center gap-2">
-              <Maximize2 className="w-3.5 h-3.5 text-[#DFF7FF]" /> View Pin
+            <span className="px-4 py-2 rounded-full bg-white/20 hover:bg-white/35 backdrop-blur-md hover:backdrop-blur-2xl border border-white/40 text-white text-xs font-extrabold shadow-lg flex items-center gap-2 transition-all duration-300 hover:scale-105">
+              <Maximize2 className="w-3.5 h-3.5 text-white" /> View Pin
             </span>
           </div>
 
           {/* Bottom Action Footer */}
           <div className="flex items-center justify-between text-xs text-white">
-            <div className="flex items-center gap-2 premium-views-pill px-2.5 py-1 rounded-full backdrop-blur-md text-[11px]">
-              <Eye className="w-3.5 h-3.5 text-slate-400" />
+            
+            {/* Views Count Glass Pill */}
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 hover:bg-white/35 backdrop-blur-md hover:backdrop-blur-2xl border border-white/30 text-white text-[11px] font-bold shadow-md transition-all duration-300">
+              <Eye className="w-3.5 h-3.5 text-white" />
               <span>{(wallpaper.views || 100).toLocaleString()}</span>
             </div>
 
+            {/* Favorite / Like Glass Button */}
             <button
               onClick={handleLike}
-              className={`p-2.5 rounded-full backdrop-blur-md transition-all ${
+              className={`p-2.5 rounded-full backdrop-blur-md hover:backdrop-blur-2xl border border-white/40 shadow-md transition-all duration-300 hover:scale-110 active:scale-95 ${
                 isFavorite
-                  ? 'premium-favorite-active text-[#0B1F4D]'
-                  : 'premium-favorite-btn text-slate-200'
+                  ? 'bg-white text-red-500 shadow-red-500/20'
+                  : 'bg-white/20 hover:bg-white/35 text-white'
               }`}
               aria-label="Favorite Pin"
             >
-              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#0B1F4D]' : ''}`} />
+              <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-red-500' : 'text-white'}`} />
             </button>
+
           </div>
         </div>
       </div>
