@@ -1,6 +1,7 @@
+// src/lib/db.ts
 // Production Database Persistence Engine (Supabase Client)
 import { ImportedWallpaper } from './wallpaperImporter';
-import { Wallpaper } from '../data/wallpapers';
+import { Wallpaper, INITIAL_WALLPAPERS } from '../data/wallpapers';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -16,16 +17,15 @@ export async function getWallpapersFromDb(): Promise<Wallpaper[]> {
       const limit = 1000;
       let hasMore = true;
 
-      // লুপের মাধ্যমে ১০০০ করে সমস্ত ৫,৩৮০+ ডেটা ফেচ করা হচ্ছে
       while (hasMore) {
         const res = await fetch(
           `${cleanUrl}/rest/v1/wallpapers?select=*&order=createdAt.desc&limit=${limit}&offset=${offset}`,
           {
             headers: {
-              'apikey': SUPABASE_ANON_KEY,
-              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
             },
-            cache: 'no-store',
+            next: { revalidate: 3600 },
           }
         );
 
@@ -38,8 +38,6 @@ export async function getWallpapersFromDb(): Promise<Wallpaper[]> {
 
         if (Array.isArray(data) && data.length > 0) {
           allWallpapers = allWallpapers.concat(data as Wallpaper[]);
-          
-          // যদি প্রাপ্ত ডেটা ১০০০ এর কম হয়, তার মানে সব ডেটা নেওয়া শেষ
           if (data.length < limit) {
             hasMore = false;
           } else {
@@ -54,6 +52,107 @@ export async function getWallpapersFromDb(): Promise<Wallpaper[]> {
     }
   } catch (err) {
     console.warn('Supabase DB fetch error', err);
+  }
+  return [];
+}
+
+// Fetch a Single Wallpaper by Slug (with ID and Local Fallback)
+export async function getWallpaperBySlug(slug: string): Promise<Wallpaper | null> {
+  if (!slug) return null;
+  const cleanSlug = decodeURIComponent(slug).trim();
+
+  try {
+    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+      const cleanUrl = SUPABASE_URL.replace(/\/$/, '');
+
+      // 1. Query by slug
+      const res = await fetch(
+        `${cleanUrl}/rest/v1/wallpapers?slug=eq.${encodeURIComponent(cleanSlug)}&limit=1`,
+        {
+          headers: {
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          },
+          next: { revalidate: 3600 },
+        }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          return data[0] as Wallpaper;
+        }
+      }
+
+      // 2. Fallback: Query by id in case slug is an id
+      const idRes = await fetch(
+        `${cleanUrl}/rest/v1/wallpapers?id=eq.${encodeURIComponent(cleanSlug)}&limit=1`,
+        {
+          headers: {
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          },
+          next: { revalidate: 3600 },
+        }
+      );
+
+      if (idRes.ok) {
+        const data = await idRes.json();
+        if (Array.isArray(data) && data.length > 0) {
+          return data[0] as Wallpaper;
+        }
+      }
+    }
+
+    // 3. Fallback to initial local dataset
+    const localMatch = INITIAL_WALLPAPERS.find(
+      (w) => w.slug === cleanSlug || w.id === cleanSlug
+    );
+    if (localMatch) return localMatch;
+
+  } catch (err) {
+    console.warn('Error fetching wallpaper by slug:', err);
+  }
+  return null;
+}
+
+// Fetch Related Wallpapers by Category
+export async function getRelatedWallpapers(
+  category: string,
+  excludeSlugOrId: string,
+  limit: number = 8
+): Promise<Wallpaper[]> {
+  try {
+    if (SUPABASE_URL && SUPABASE_ANON_KEY && category) {
+      const cleanUrl = SUPABASE_URL.replace(/\/$/, '');
+      const encodedCat = encodeURIComponent(category);
+
+      const res = await fetch(
+        `${cleanUrl}/rest/v1/wallpapers?category=eq.${encodedCat}&order=createdAt.desc&limit=${limit + 2}`,
+        {
+          headers: {
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          },
+          next: { revalidate: 3600 },
+        }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          return data
+            .filter((w: Wallpaper) => w.slug !== excludeSlugOrId && w.id !== excludeSlugOrId)
+            .slice(0, limit) as Wallpaper[];
+        }
+      }
+    }
+
+    return INITIAL_WALLPAPERS
+      .filter((w) => w.category === category && w.slug !== excludeSlugOrId && w.id !== excludeSlugOrId)
+      .slice(0, limit);
+  } catch (err) {
+    console.warn('Error fetching related wallpapers:', err);
   }
   return [];
 }
@@ -89,9 +188,9 @@ export async function saveWallpapersToDb(wallpapers: ImportedWallpaper[]): Promi
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Prefer': 'resolution=merge-duplicates',
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          Prefer: 'resolution=merge-duplicates',
         },
         body: JSON.stringify(formattedWallpapers),
       });

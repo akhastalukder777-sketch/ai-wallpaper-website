@@ -1,12 +1,13 @@
+// src/app/sitemap.ts
 import { MetadataRoute } from 'next';
 import { getWallpapersFromDb } from '../lib/db';
 import { INITIAL_WALLPAPERS } from '../data/wallpapers';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai-wallpaper-website.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aiwallpapershub.com';
 
-  // Base essential pages
-  const routes = [
+  // 1. Base essential static routes
+  const staticRoutes = [
     '',
     '/privacy-policy',
     '/terms-of-service',
@@ -20,16 +21,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route === '' ? 1.0 : 0.6,
   }));
 
-  // Fetch wallpapers for dynamic sitemap indexing
+  // 2. Fetch all wallpapers from Supabase database
   const dbWallpapers = await getWallpapersFromDb();
   const wallpapers = dbWallpapers.length > 0 ? dbWallpapers : INITIAL_WALLPAPERS;
 
-  const wallpaperRoutes = wallpapers.map((wallpaper) => ({
-    url: `${baseUrl}/?wallpaper=${wallpaper.slug || wallpaper.id}`,
-    lastModified: new Date(wallpaper.createdAt || Date.now()),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }));
+  // 3. Prevent duplicate URLs using a Set
+  const seenUrls = new Set<string>();
+  const wallpaperRoutes: MetadataRoute.Sitemap = [];
 
-  return [...routes, ...wallpaperRoutes];
+  for (const wallpaper of wallpapers) {
+    const rawSlug = wallpaper.slug || wallpaper.id;
+    if (!rawSlug) continue;
+
+    const cleanSlug = encodeURIComponent(rawSlug.trim());
+    const fullUrl = `${baseUrl}/wallpaper/${cleanSlug}`;
+
+    if (!seenUrls.has(fullUrl)) {
+      seenUrls.add(fullUrl);
+      wallpaperRoutes.push({
+        url: fullUrl,
+        lastModified: new Date(wallpaper.createdAt || Date.now()),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      });
+    }
+  }
+
+  return [...staticRoutes, ...wallpaperRoutes];
 }
